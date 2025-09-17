@@ -1,12 +1,17 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { useState } from "react";
 
 const ProjectsSection = () => {
+  const [selectedType, setSelectedType] = useState("tous");
+
   const projects = [
     {
       title: "E-commerce Platform",
       description: "Plateforme e-commerce complète avec gestion des stocks, paiements et analytics en temps réel.",
       image: "🛒",
+      type: "web",
       technologies: ["React", "Node.js", "PostgreSQL", "Stripe"],
       skillHighlight: "React",
       github: "#",
@@ -22,6 +27,7 @@ const ProjectsSection = () => {
       title: "Task Management App",
       description: "Application de gestion de tâches collaborative avec synchronisation temps réel.",
       image: "📋",
+      type: "mobile",
       technologies: ["TypeScript", "Socket.io", "MongoDB", "Express"],
       skillHighlight: "TypeScript",
       github: "#",
@@ -37,6 +43,7 @@ const ProjectsSection = () => {
       title: "Portfolio Generator",
       description: "Outil permettant de créer des portfolios personnalisés avec des templates modernes.",
       image: "🎨",
+      type: "web",
       technologies: ["CSS", "SASS", "JavaScript", "Webpack"],
       skillHighlight: "CSS/SASS",
       github: "#",
@@ -52,6 +59,7 @@ const ProjectsSection = () => {
       title: "API REST Microservice",
       description: "Architecture microservices avec API RESTful pour une application de réservation.",
       image: "⚡",
+      type: "autres",
       technologies: ["Python", "FastAPI", "Docker", "Redis"],
       skillHighlight: "Python",
       github: "#",
@@ -67,6 +75,7 @@ const ProjectsSection = () => {
       title: "Design System",
       description: "Système de design complet avec composants réutilisables et documentation.",
       image: "🎯",
+      type: "autres",
       technologies: ["Figma", "Storybook", "React", "Tailwind"],
       skillHighlight: "Figma",
       github: "#",
@@ -82,6 +91,7 @@ const ProjectsSection = () => {
       title: "DevOps Pipeline",
       description: "Pipeline CI/CD complet avec déploiement automatisé sur AWS.",
       image: "🚀",
+      type: "autres",
       technologies: ["Docker", "AWS", "Jenkins", "Terraform"],
       skillHighlight: "Docker",
       github: "#",
@@ -95,6 +105,10 @@ const ProjectsSection = () => {
     }
   ];
 
+  const filteredProjects = selectedType === "tous" 
+    ? projects 
+    : projects.filter(project => project.type === selectedType);
+
   return (
     <section id="projets" className="py-20 section-gradient">
       <div className="container mx-auto px-6">
@@ -102,13 +116,33 @@ const ProjectsSection = () => {
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
             Mes <span className="hero-gradient bg-clip-text text-transparent">Projets</span>
           </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
             Découvrez mes réalisations qui mettent en valeur mes compétences techniques
           </p>
+          
+          <ToggleGroup 
+            type="single" 
+            value={selectedType} 
+            onValueChange={(value) => setSelectedType(value || "tous")}
+            className="justify-center mb-8"
+          >
+            <ToggleGroupItem value="tous" variant="outline">
+              Tous
+            </ToggleGroupItem>
+            <ToggleGroupItem value="web" variant="outline">
+              Web
+            </ToggleGroupItem>
+            <ToggleGroupItem value="mobile" variant="outline">
+              Mobile
+            </ToggleGroupItem>
+            <ToggleGroupItem value="autres" variant="outline">
+              Autres
+            </ToggleGroupItem>
+          </ToggleGroup>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {projects.map((project, index) => (
+          {filteredProjects.map((project, index) => (
             <Card key={project.title} className={`card-gradient border-border overflow-hidden group hover:shadow-lg hover:shadow-primary/10 transition-all duration-500 scale-in`} style={{ animationDelay: `${index * 0.1}s` }}>
               {/* Project Image/Icon */}
               <div className="h-48 bg-muted/20 flex items-center justify-center text-6xl border-b border-border group-hover:bg-muted/30 transition-colors">

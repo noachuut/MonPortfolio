@@ -4,29 +4,29 @@ const SkillsSection = () => {
   const skillCategories = [
     {
       title: "Frontend",
-      skills: [
-        { name: "React", level: 90, icon: "⚛️" },
-        { name: "TypeScript", level: 85, icon: "📘" },
-        { name: "CSS/SASS", level: 88, icon: "🎨" },
-        { name: "Tailwind CSS", level: 92, icon: "💨" },
+        skills: [
+        { name: "React", icon: "⚛️" },
+        { name: "TypeScript", icon: "📘" },
+        { name: "CSS/SASS", icon: "🎨" },
+        { name: "Tailwind CSS", icon: "💨" },
       ]
     },
     {
       title: "Backend",
-      skills: [
-        { name: "Node.js", level: 85, icon: "🟢" },
-        { name: "Python", level: 80, icon: "🐍" },
-        { name: "Express", level: 82, icon: "🚀" },
-        { name: "PostgreSQL", level: 78, icon: "🐘" },
+        skills: [
+        { name: "Node.js", icon: "🟢" },
+        { name: "Python", icon: "🐍" },
+        { name: "Express", icon: "🚀" },
+        { name: "PostgreSQL", icon: "🐘" },
       ]
     },
     {
       title: "Outils",
-      skills: [
-        { name: "Git", level: 88, icon: "🔧" },
-        { name: "Docker", level: 75, icon: "🐳" },
-        { name: "AWS", level: 70, icon: "☁️" },
-        { name: "Figma", level: 85, icon: "🎯" },
+        skills: [
+        { name: "Git", icon: "🔧" },
+        { name: "Docker", icon: "🐳" },
+        { name: "AWS", icon: "☁️" },
+        { name: "Figma", icon: "🎯" },
       ]
     }
   ];
@@ -50,23 +50,11 @@ const SkillsSection = () => {
                 {category.title}
               </h3>
               
-              <div className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
                 {category.skills.map((skill) => (
-                  <div key={skill.name} className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <span className="text-lg">{skill.icon}</span>
-                        <span className="font-medium">{skill.name}</span>
-                      </div>
-                      <span className="text-sm text-muted-foreground">{skill.level}%</span>
-                    </div>
-                    
-                    <div className="w-full bg-muted rounded-full h-2">
-                      <div 
-                        className="hero-gradient h-2 rounded-full transition-all duration-1000 ease-out"
-                        style={{ width: `${skill.level}%` }}
-                      ></div>
-                    </div>
+                  <div key={skill.name} className="flex items-center gap-3 p-3 rounded-lg bg-muted/20 hover:bg-muted/30 transition-colors">
+                    <span className="text-2xl">{skill.icon}</span>
+                    <span className="font-medium">{skill.name}</span>
                   </div>
                 ))}
               </div>
