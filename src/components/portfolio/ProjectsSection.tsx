@@ -143,7 +143,7 @@ const ProjectsSection = () => {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredProjects.map((project, index) => (
-            <Card key={project.title} className={`card-gradient border-border overflow-hidden group hover:shadow-lg hover:shadow-primary/10 transition-all duration-500 scale-in`} style={{ animationDelay: `${index * 0.1}s` }}>
+            <Card key={`${selectedType}-${project.title}`} className={`card-gradient border-border overflow-hidden group hover:shadow-lg hover:shadow-primary/10 transition-all duration-500 animate-fade-in`} style={{ animationDelay: `${index * 0.1}s` }}>
               {/* Project Image/Icon */}
               <div className="h-48 bg-muted/20 flex items-center justify-center text-6xl border-b border-border group-hover:bg-muted/30 transition-colors">
                 {project.image}
