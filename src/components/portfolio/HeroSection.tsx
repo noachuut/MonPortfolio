@@ -1,20 +1,14 @@
 import { Button } from "@/components/ui/button";
+import { heroContent } from "@/data/portfolio";
+
+const scrollToSection = (targetId: string) => {
+  const element = document.getElementById(targetId);
+  if (element) {
+    element.scrollIntoView({ behavior: "smooth" });
+  }
+};
 
 const HeroSection = () => {
-  const scrollToContact = () => {
-    const element = document.getElementById("contact");
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
-  };
-
-  const scrollToProjects = () => {
-    const element = document.getElementById("projets");
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
-  };
-
   return (
     <section id="accueil" className="min-h-screen flex items-center justify-center section-gradient relative overflow-hidden">
       {/* Background effects */}
@@ -25,30 +19,36 @@ const HeroSection = () => {
       
       <div className="container mx-auto px-6 text-center relative z-10">
         <div className="fade-in">
-          <h1 className="text-5xl md:text-7xl font-bold mb-6">
-            <span className="block text-foreground">Développeur</span>
-            <span className="hero-gradient bg-clip-text text-transparent">Full Stack</span>
+          <h1 className="text-5xl md:text-7xl font-bold mb-4">
+            <span className="block text-foreground">{heroContent.intro}</span>
+            <span className="hero-gradient bg-clip-text text-transparent">
+              {heroContent.name}
+            </span>
           </h1>
-          
-          <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Passionné par la création d'expériences numériques innovantes et performantes
+
+          <h2 className="text-2xl md:text-3xl font-semibold text-primary mb-4">
+            {heroContent.highlight}
+          </h2>
+
+          <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+            {heroContent.tagline}
           </p>
-          
+
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Button 
-              onClick={scrollToProjects}
-              size="lg" 
+            <Button
+              onClick={() => scrollToSection(heroContent.primaryCta.targetId)}
+              size="lg"
               className="hero-gradient text-white hover:shadow-lg hover:shadow-primary/25 transition-all duration-300 px-8 py-6 text-lg font-semibold"
             >
-              Voir mes projets
+              {heroContent.primaryCta.label}
             </Button>
-            <Button 
-              onClick={scrollToContact}
-              variant="outline" 
+            <Button
+              onClick={() => scrollToSection(heroContent.secondaryCta.targetId)}
+              variant="outline"
               size="lg"
               className="border-primary text-primary hover:bg-primary hover:text-white transition-all duration-300 px-8 py-6 text-lg"
             >
-              Me contacter
+              {heroContent.secondaryCta.label}
             </Button>
           </div>
         </div>
