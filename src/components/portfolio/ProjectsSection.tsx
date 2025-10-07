@@ -1,113 +1,44 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { projects as defaultProjects, type Project } from "@/data/portfolio";
+import {
+  loadCustomProjects,
+  subscribeToProjectUpdates
+} from "@/lib/portfolioStorage";
+
+const formatProjectType = (type: string) =>
+  type.charAt(0).toUpperCase() + type.slice(1);
 
 const ProjectsSection = () => {
   const [selectedType, setSelectedType] = useState("tous");
+  const [customProjects, setCustomProjects] = useState<Project[]>([]);
 
-  const projects = [
-    {
-      title: "E-commerce Platform",
-      description: "Plateforme e-commerce complète avec gestion des stocks, paiements et analytics en temps réel.",
-      image: "🛒",
-      type: "web",
-      technologies: ["React", "Node.js", "PostgreSQL", "Stripe"],
-      skillHighlight: "React",
-      github: "#",
-      demo: "#",
-      features: [
-        "Interface utilisateur moderne",
-        "Paiements sécurisés",
-        "Dashboard administrateur",
-        "Analytics avancées"
-      ]
-    },
-    {
-      title: "Task Management App",
-      description: "Application de gestion de tâches collaborative avec synchronisation temps réel.",
-      image: "📋",
-      type: "mobile",
-      technologies: ["TypeScript", "Socket.io", "MongoDB", "Express"],
-      skillHighlight: "TypeScript",
-      github: "#",
-      demo: "#",
-      features: [
-        "Collaboration en temps réel",
-        "Notifications push",
-        "Glisser-déposer",
-        "Rapports de productivité"
-      ]
-    },
-    {
-      title: "Portfolio Generator",
-      description: "Outil permettant de créer des portfolios personnalisés avec des templates modernes.",
-      image: "🎨",
-      type: "web",
-      technologies: ["CSS", "SASS", "JavaScript", "Webpack"],
-      skillHighlight: "CSS/SASS",
-      github: "#",
-      demo: "#",
-      features: [
-        "Templates personnalisables",
-        "Éditeur visuel",
-        "Export statique",
-        "Responsive design"
-      ]
-    },
-    {
-      title: "API REST Microservice",
-      description: "Architecture microservices avec API RESTful pour une application de réservation.",
-      image: "⚡",
-      type: "autres",
-      technologies: ["Python", "FastAPI", "Docker", "Redis"],
-      skillHighlight: "Python",
-      github: "#",
-      demo: "#",
-      features: [
-        "Architecture scalable",
-        "Cache intelligent",
-        "Documentation automatique",
-        "Tests automatisés"
-      ]
-    },
-    {
-      title: "Design System",
-      description: "Système de design complet avec composants réutilisables et documentation.",
-      image: "🎯",
-      type: "autres",
-      technologies: ["Figma", "Storybook", "React", "Tailwind"],
-      skillHighlight: "Figma",
-      github: "#",
-      demo: "#",
-      features: [
-        "Composants réutilisables",
-        "Documentation interactive",
-        "Tokens de design",
-        "Accessibilité intégrée"
-      ]
-    },
-    {
-      title: "DevOps Pipeline",
-      description: "Pipeline CI/CD complet avec déploiement automatisé sur AWS.",
-      image: "🚀",
-      type: "autres",
-      technologies: ["Docker", "AWS", "Jenkins", "Terraform"],
-      skillHighlight: "Docker",
-      github: "#",
-      demo: "#",
-      features: [
-        "Déploiement automatisé",
-        "Monitoring intégré",
-        "Rollback automatique",
-        "Infrastructure as Code"
-      ]
-    }
-  ];
+  useEffect(() => {
+    setCustomProjects(loadCustomProjects());
+    const unsubscribe = subscribeToProjectUpdates(() => {
+      setCustomProjects(loadCustomProjects());
+    });
 
-  const filteredProjects = selectedType === "tous" 
-    ? projects 
-    : projects.filter(project => project.type === selectedType);
+    return unsubscribe;
+  }, []);
+
+  const combinedProjects = useMemo(
+    () => [...defaultProjects, ...customProjects],
+    [customProjects]
+  );
+
+  const projectTypes = useMemo(() => {
+    const types = new Set<string>();
+    combinedProjects.forEach((project) => types.add(project.type));
+    return Array.from(types);
+  }, [combinedProjects]);
+
+  const filteredProjects =
+    selectedType === "tous"
+      ? combinedProjects
+      : combinedProjects.filter((project) => project.type === selectedType);
 
   return (
     <section id="projets" className="py-20 section-gradient">
@@ -120,33 +51,51 @@ const ProjectsSection = () => {
             Découvrez mes réalisations qui mettent en valeur mes compétences techniques
           </p>
           
-          <ToggleGroup 
-            type="single" 
-            value={selectedType} 
+          <ToggleGroup
+            type="single"
+            value={selectedType}
             onValueChange={(value) => setSelectedType(value || "tous")}
             className="justify-center mb-8"
           >
             <ToggleGroupItem value="tous" variant="outline">
               Tous
             </ToggleGroupItem>
-            <ToggleGroupItem value="web" variant="outline">
-              Web
-            </ToggleGroupItem>
-            <ToggleGroupItem value="mobile" variant="outline">
-              Mobile
-            </ToggleGroupItem>
-            <ToggleGroupItem value="autres" variant="outline">
-              Autres
-            </ToggleGroupItem>
+            {projectTypes.map((type) => (
+              <ToggleGroupItem key={type} value={type} variant="outline">
+                {formatProjectType(type)}
+              </ToggleGroupItem>
+            ))}
           </ToggleGroup>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 transition-all duration-700">
+          {filteredProjects.length === 0 && (
+            <div className="col-span-full text-center text-muted-foreground">
+              Aucun projet disponible pour cette catégorie pour le moment.
+            </div>
+          )}
           {filteredProjects.map((project, index) => (
-            <Card key={`${selectedType}-${project.title}`} className={`card-gradient border-border overflow-hidden group hover:shadow-lg hover:shadow-primary/10 transition-all duration-500 animate-[slide-in-right_0.5s_ease-out] opacity-0 animate-[fade-in_0.6s_ease-out_forwards]`} style={{ animationDelay: `${index * 0.1}s` }}>
+            <Card
+              key={`${selectedType}-${project.title}`}
+              className={`card-gradient border-border overflow-hidden group hover:shadow-lg hover:shadow-primary/10 transition-all duration-500 animate-[slide-in-right_0.5s_ease-out] opacity-0 animate-[fade-in_0.6s_ease-out_forwards]`}
+              style={{ animationDelay: `${index * 0.1}s` }}
+            >
               {/* Project Image/Icon */}
               <div className="h-48 bg-muted/20 flex items-center justify-center text-6xl border-b border-border group-hover:bg-muted/30 transition-colors">
-                {project.image}
+                {project.visual ? (
+                  <img
+                    src={project.visual}
+                    alt={project.title}
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                ) : (
+                  <span className="text-4xl" aria-hidden="true">
+                    {(project.skillHighlight || project.title)
+                      .slice(0, 2)
+                      .toUpperCase()}
+                  </span>
+                )}
               </div>
               
               <div className="p-6">
@@ -186,16 +135,27 @@ const ProjectsSection = () => {
                     </span>
                   ))}
                 </div>
-                
+
                 {/* Actions */}
-                <div className="flex gap-2">
-                  <Button variant="outline" size="sm" className="flex-1 text-xs border-primary/20 hover:bg-primary/10">
-                    Code
-                  </Button>
-                  <Button size="sm" className="flex-1 hero-gradient text-white text-xs">
-                    Démo
-                  </Button>
-                </div>
+                {(() => {
+                  const primaryLink =
+                    project.primaryLink || project.demo || project.github;
+                  if (!primaryLink) {
+                    return null;
+                  }
+
+                  const label = project.primaryLinkLabel || "Voir le projet";
+
+                  return (
+                    <div className="flex">
+                      <Button size="sm" className="flex-1 hero-gradient text-white text-xs" asChild>
+                        <a href={primaryLink} target="_blank" rel="noopener noreferrer">
+                          {label}
+                        </a>
+                      </Button>
+                    </div>
+                  );
+                })()}
               </div>
             </Card>
           ))}

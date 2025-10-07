@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
+import { contactDetails, siteMeta, socialLinks } from "@/data/portfolio";
 
 const ContactSection = () => {
   const [formData, setFormData] = useState({
@@ -24,33 +25,6 @@ const ContactSection = () => {
     });
   };
 
-  const contactInfo = [
-    {
-      icon: "📧",
-      title: "Email",
-      value: "contact@portfolio.dev",
-      link: "mailto:contact@portfolio.dev"
-    },
-    {
-      icon: "📱",
-      title: "Téléphone",
-      value: "+33 6 12 34 56 78",
-      link: "tel:+33612345678"
-    },
-    {
-      icon: "📍",
-      title: "Localisation",
-      value: "Paris, France",
-      link: "#"
-    },
-    {
-      icon: "💼",
-      title: "LinkedIn",
-      value: "linkedin.com/in/portfolio",
-      link: "https://linkedin.com"
-    }
-  ];
-
   return (
     <section id="contact" className="py-20 bg-background">
       <div className="container mx-auto px-6">
@@ -71,19 +45,22 @@ const ContactSection = () => {
                 Restons en contact
               </h3>
               <p className="text-muted-foreground mb-8">
-                Je suis toujours ouvert aux nouvelles opportunités et collaborations. 
+                Basé à {siteMeta.location}, je suis toujours ouvert aux nouvelles opportunités et collaborations.
                 N'hésitez pas à me contacter pour discuter de vos projets.
               </p>
             </div>
 
             <div className="grid gap-4">
-              {contactInfo.map((info, index) => (
-                <Card key={info.title} className="card-gradient border-border p-4 hover:shadow-lg hover:shadow-primary/10 transition-all duration-300">
-                  <a 
-                    href={info.link} 
+              {contactDetails.map((info) => (
+                <Card
+                  key={info.title}
+                  className="card-gradient border-border p-4 hover:shadow-lg hover:shadow-primary/10 transition-all duration-300"
+                >
+                  <a
+                    href={info.link}
                     className="flex items-center gap-4 group"
-                    target={info.link.startsWith('http') ? '_blank' : undefined}
-                    rel={info.link.startsWith('http') ? 'noopener noreferrer' : undefined}
+                    target={info.link.startsWith("http") ? "_blank" : undefined}
+                    rel={info.link.startsWith("http") ? "noopener noreferrer" : undefined}
                   >
                     <div className="text-2xl">{info.icon}</div>
                     <div>
@@ -101,11 +78,12 @@ const ContactSection = () => {
             <div>
               <h4 className="font-semibold mb-4 text-foreground">Me suivre</h4>
               <div className="flex gap-4">
-                {[
-                  { icon: "🐙", label: "GitHub", link: "https://github.com" },
-                  { icon: "🐦", label: "Twitter", link: "https://twitter.com" },
-                  { icon: "📷", label: "Instagram", link: "https://instagram.com" }
-                ].map((social) => (
+                {socialLinks.length === 0 && (
+                  <span className="text-sm text-muted-foreground">
+                    Ajoutez vos réseaux sociaux dans <code>src/data/portfolio.ts</code>.
+                  </span>
+                )}
+                {socialLinks.map((social) => (
                   <a
                     key={social.label}
                     href={social.link}
@@ -126,7 +104,7 @@ const ContactSection = () => {
             <h3 className="text-2xl font-semibold mb-6 text-primary">
               Envoyez-moi un message
             </h3>
-            
+
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
                 <label htmlFor="name" className="block text-sm font-medium mb-2 text-foreground">
@@ -156,7 +134,7 @@ const ContactSection = () => {
                   value={formData.email}
                   onChange={handleChange}
                   className="bg-background border-border focus:border-primary"
-                  placeholder="votre@email.com"
+                  placeholder={siteMeta.email}
                 />
               </div>
               
