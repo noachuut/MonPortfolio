@@ -1,45 +1,7 @@
 import { Card } from "@/components/ui/card";
+import { experiences } from "@/data/portfolio";
 
 const ExperienceSection = () => {
-  const experiences = [
-    {
-      title: "Développeur Full Stack Senior",
-      company: "TechCorp Solutions",
-      period: "2022 - Présent",
-      description: "Développement d'applications web complexes avec React et Node.js. Lead technique sur plusieurs projets stratégiques.",
-      technologies: ["React", "TypeScript", "Node.js", "PostgreSQL"],
-      achievements: [
-        "Amélioration des performances de 40%",
-        "Lead d'une équipe de 5 développeurs",
-        "Migration vers l'architecture microservices"
-      ]
-    },
-    {
-      title: "Développeur Frontend",
-      company: "Digital Agency",
-      period: "2020 - 2022",
-      description: "Création d'interfaces utilisateur modernes et responsives pour des clients variés.",
-      technologies: ["React", "CSS", "JavaScript", "Figma"],
-      achievements: [
-        "Développement de 15+ sites web",
-        "Réduction du temps de chargement de 60%",
-        "Implémentation de designs pixel-perfect"
-      ]
-    },
-    {
-      title: "Développeur Junior",
-      company: "StartupTech",
-      period: "2019 - 2020",
-      description: "Participation au développement d'une plateforme SaaS innovante.",
-      technologies: ["JavaScript", "Python", "MySQL", "AWS"],
-      achievements: [
-        "Contribution à l'architecture initiale",
-        "Développement de features clés",
-        "Apprentissage rapide des technologies"
-      ]
-    }
-  ];
-
   return (
     <section id="experience" className="py-20 bg-background">
       <div className="container mx-auto px-6">
@@ -53,8 +15,13 @@ const ExperienceSection = () => {
         </div>
 
         <div className="max-w-4xl mx-auto">
+          {experiences.length === 0 && (
+            <p className="text-center text-muted-foreground">
+              Ajoutez vos expériences professionnelles dans <code>src/data/portfolio.ts</code> pour les afficher ici.
+            </p>
+          )}
           {experiences.map((exp, index) => (
-            <div key={index} className="relative">
+            <div key={`${exp.title}-${index}`} className="relative">
               {/* Timeline line */}
               {index !== experiences.length - 1 && (
                 <div className="absolute left-8 top-20 bottom-0 w-0.5 hero-gradient"></div>
