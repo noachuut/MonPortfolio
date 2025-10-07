@@ -1,6 +1,10 @@
 import { Card } from "@/components/ui/card";
 import { useEffect, useMemo, useState } from "react";
-import { experiences as defaultExperiences, type Experience } from "@/data/portfolio";
+import {
+  experiences as defaultExperiences,
+  mergeExperiences,
+  type Experience
+} from "@/data/portfolio";
 import {
   loadCustomExperiences,
   subscribeToExperienceUpdates
@@ -19,7 +23,7 @@ const ExperienceSection = () => {
   }, []);
 
   const combinedExperiences = useMemo(
-    () => [...defaultExperiences, ...customExperiences],
+    () => mergeExperiences(defaultExperiences, customExperiences),
     [customExperiences]
   );
 

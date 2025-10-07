@@ -2,7 +2,11 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useEffect, useMemo, useState } from "react";
-import { projects as defaultProjects, type Project } from "@/data/portfolio";
+import {
+  mergeProjects,
+  projects as defaultProjects,
+  type Project
+} from "@/data/portfolio";
 import {
   loadCustomProjects,
   subscribeToProjectUpdates
@@ -25,7 +29,7 @@ const ProjectsSection = () => {
   }, []);
 
   const combinedProjects = useMemo(
-    () => [...defaultProjects, ...customProjects],
+    () => mergeProjects(defaultProjects, customProjects),
     [customProjects]
   );
 

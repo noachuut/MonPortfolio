@@ -183,3 +183,40 @@ export const socialLinks: SocialLink[] = [
   { icon: "🐙", label: "GitHub", link: "https://github.com" },
   { icon: "💼", label: "LinkedIn", link: "https://linkedin.com" }
 ];
+
+const normalizeKey = (value: string) => value.trim().toLowerCase();
+
+const dedupeBy = <T>(items: T[], getKey: (item: T) => string) => {
+  const map = new Map<string, T>();
+
+  items.forEach((item) => {
+    const key = getKey(item);
+
+    if (!key) {
+      return;
+    }
+
+    map.set(key, item);
+  });
+
+  return Array.from(map.values());
+};
+
+/**
+ * Fusionne les expériences par clef "poste + entreprise" en privilégiant les entrées
+ * personnalisées lorsqu'elles existent déjà côté vitrine.
+ */
+export const mergeExperiences = (
+  defaults: Experience[],
+  custom: Experience[]
+) =>
+  dedupeBy<Experience>([...defaults, ...custom], (item) =>
+    normalizeKey(`${item.title}-${item.company}`)
+  );
+
+/**
+ * Fusionne les projets par clef "titre" afin d'éviter les doublons entre le contenu
+ * fourni par défaut et les projets ajoutés via l'interface d'administration.
+ */
+export const mergeProjects = (defaults: Project[], custom: Project[]) =>
+  dedupeBy<Project>([...defaults, ...custom], (item) => normalizeKey(item.title));
