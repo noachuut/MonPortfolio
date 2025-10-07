@@ -1,7 +1,32 @@
 import { Card } from "@/components/ui/card";
-import { experiences } from "@/data/portfolio";
+import { useEffect, useMemo, useState } from "react";
+import {
+  experiences as defaultExperiences,
+  mergeExperiences,
+  type Experience
+} from "@/data/portfolio";
+import {
+  loadCustomExperiences,
+  subscribeToExperienceUpdates
+} from "@/lib/portfolioStorage";
 
 const ExperienceSection = () => {
+  const [customExperiences, setCustomExperiences] = useState<Experience[]>([]);
+
+  useEffect(() => {
+    setCustomExperiences(loadCustomExperiences());
+    const unsubscribe = subscribeToExperienceUpdates(() => {
+      setCustomExperiences(loadCustomExperiences());
+    });
+
+    return unsubscribe;
+  }, []);
+
+  const combinedExperiences = useMemo(
+    () => mergeExperiences(defaultExperiences, customExperiences),
+    [customExperiences]
+  );
+
   return (
     <section id="experience" className="py-20 bg-background">
       <div className="container mx-auto px-6">
@@ -15,18 +40,18 @@ const ExperienceSection = () => {
         </div>
 
         <div className="max-w-4xl mx-auto">
-          {experiences.length === 0 && (
+          {combinedExperiences.length === 0 && (
             <p className="text-center text-muted-foreground">
-              Ajoutez vos expériences professionnelles dans <code>src/data/portfolio.ts</code> pour les afficher ici.
+              Ajoutez vos expériences professionnelles depuis l'interface d'administration pour les afficher ici.
             </p>
           )}
-          {experiences.map((exp, index) => (
+          {combinedExperiences.map((exp, index) => (
             <div key={`${exp.title}-${index}`} className="relative">
               {/* Timeline line */}
-              {index !== experiences.length - 1 && (
+              {index !== combinedExperiences.length - 1 && (
                 <div className="absolute left-8 top-20 bottom-0 w-0.5 hero-gradient"></div>
               )}
-              
+
               <div className={`flex items-start gap-8 mb-12 slide-in-left`} style={{ animationDelay: `${index * 0.3}s` }}>
                 {/* Timeline dot */}
                 <div className="relative">
@@ -34,9 +59,20 @@ const ExperienceSection = () => {
                     <div className="w-8 h-8 bg-background rounded-full"></div>
                   </div>
                 </div>
-                
+
                 {/* Content */}
                 <Card className="flex-1 card-gradient border-border p-6 hover:shadow-lg hover:shadow-primary/10 transition-all duration-300">
+                  {exp.image && (
+                    <div className="mb-4 overflow-hidden rounded-lg border border-border/60">
+                      <img
+                        src={exp.image}
+                        alt={`Illustration de ${exp.title}`}
+                        className="w-full max-h-56 object-cover"
+                        loading="lazy"
+                      />
+                    </div>
+                  )}
+
                   <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
                     <div>
                       <h3 className="text-xl font-semibold text-primary mb-1">{exp.title}</h3>

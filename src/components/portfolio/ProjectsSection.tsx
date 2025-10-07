@@ -1,25 +1,48 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { useMemo, useState } from "react";
-import { projects } from "@/data/portfolio";
+import { useEffect, useMemo, useState } from "react";
+import {
+  mergeProjects,
+  projects as defaultProjects,
+  type Project
+} from "@/data/portfolio";
+import {
+  loadCustomProjects,
+  subscribeToProjectUpdates
+} from "@/lib/portfolioStorage";
 
 const formatProjectType = (type: string) =>
   type.charAt(0).toUpperCase() + type.slice(1);
 
 const ProjectsSection = () => {
   const [selectedType, setSelectedType] = useState("tous");
+  const [customProjects, setCustomProjects] = useState<Project[]>([]);
+
+  useEffect(() => {
+    setCustomProjects(loadCustomProjects());
+    const unsubscribe = subscribeToProjectUpdates(() => {
+      setCustomProjects(loadCustomProjects());
+    });
+
+    return unsubscribe;
+  }, []);
+
+  const combinedProjects = useMemo(
+    () => mergeProjects(defaultProjects, customProjects),
+    [customProjects]
+  );
 
   const projectTypes = useMemo(() => {
     const types = new Set<string>();
-    projects.forEach((project) => types.add(project.type));
+    combinedProjects.forEach((project) => types.add(project.type));
     return Array.from(types);
-  }, []);
+  }, [combinedProjects]);
 
   const filteredProjects =
     selectedType === "tous"
-      ? projects
-      : projects.filter((project) => project.type === selectedType);
+      ? combinedProjects
+      : combinedProjects.filter((project) => project.type === selectedType);
 
   return (
     <section id="projets" className="py-20 section-gradient">
@@ -116,29 +139,27 @@ const ProjectsSection = () => {
                     </span>
                   ))}
                 </div>
-                
+
                 {/* Actions */}
-                <div className="flex gap-2">
-                  {project.github && (
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="flex-1 text-xs border-primary/20 hover:bg-primary/10"
-                      asChild
-                    >
-                      <a href={project.github} target="_blank" rel="noopener noreferrer">
-                        Code
-                      </a>
-                    </Button>
-                  )}
-                  {project.demo && (
-                    <Button size="sm" className="flex-1 hero-gradient text-white text-xs" asChild>
-                      <a href={project.demo} target="_blank" rel="noopener noreferrer">
-                        Démo
-                      </a>
-                    </Button>
-                  )}
-                </div>
+                {(() => {
+                  const primaryLink =
+                    project.primaryLink || project.demo || project.github;
+                  if (!primaryLink) {
+                    return null;
+                  }
+
+                  const label = project.primaryLinkLabel || "Voir le projet";
+
+                  return (
+                    <div className="flex">
+                      <Button size="sm" className="flex-1 hero-gradient text-white text-xs" asChild>
+                        <a href={primaryLink} target="_blank" rel="noopener noreferrer">
+                          {label}
+                        </a>
+                      </Button>
+                    </div>
+                  );
+                })()}
               </div>
             </Card>
           ))}
