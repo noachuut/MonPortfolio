@@ -121,7 +121,7 @@ export const heroContent: HeroContent = {
     "Étudiant en BTS SIO option SLAM, je conçois et développe des solutions adaptées aux besoins métiers tout en consolidant mes compétences techniques.",
   cvDownload: {
     label: "Télécharger mon CV",
-    href: "/files/noa-morandeau-cv.pdf"
+    href: "C:/Users/noamo/OneDrive/Documents/portfolio/sleek-skill-span/public"
   },
   primaryCta: {
     label: "Voir mes projets",
