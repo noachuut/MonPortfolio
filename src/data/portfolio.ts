@@ -100,7 +100,7 @@ export const siteMeta = {
   brand: "Noa Morandeau",
   role: "Alternant Développeur",
   location: "Nouméa, Nouvelle-Calédonie",
-  email: "contact@portfolio.dev"
+  email: "noamorandeau@gmail.com"
 };
 
 export const navigationLinks: NavigationLink[] = [
@@ -260,8 +260,8 @@ export const contactDetails: ContactDetail[] = [
 ];
 
 export const socialLinks: SocialLink[] = [
-  { icon: "github", label: "GitHub", link: "https://github.com" },
-  { icon: "linkedin", label: "LinkedIn", link: "https://linkedin.com" }
+  { icon: "github", label: "GitHub", link: "https://github.com/noachuut" },
+  { icon: "linkedin", label: "LinkedIn", link: "https://www.linkedin.com/in/noa-morandeau-3122182b7/" }
 ];
 
 export const certifications: Certification[] = [
