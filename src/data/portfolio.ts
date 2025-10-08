@@ -100,7 +100,7 @@ export const siteMeta = {
   brand: "Noa Morandeau",
   role: "Alternant Développeur",
   location: "Nouméa, Nouvelle-Calédonie",
-  email: "contact@portfolio.dev"
+  email: "noamorandeau@gmail.com"
 };
 
 export const navigationLinks: NavigationLink[] = [
@@ -121,7 +121,7 @@ export const heroContent: HeroContent = {
     "Étudiant en BTS SIO option SLAM, je conçois et développe des solutions adaptées aux besoins métiers tout en consolidant mes compétences techniques.",
   cvDownload: {
     label: "Télécharger mon CV",
-    href: "/noa-morandeau-cv.pdf"
+    href: "/CV_NOA_MORANDEAU.pdf"
   },
   primaryCta: {
     label: "Voir mes projets",
@@ -135,7 +135,7 @@ export const heroContent: HeroContent = {
 
 export const referentialDownload = {
   label: "Télécharger le référentiel BTS SIO",
-  href: "/referentiel-bts-sio.pdf"
+  href: "/Noa_MORANDEAU_Referentiel_E4.pdf"
 };
 
 export const skillCategories: SkillCategory[] = [
@@ -260,8 +260,8 @@ export const contactDetails: ContactDetail[] = [
 ];
 
 export const socialLinks: SocialLink[] = [
-  { icon: "github", label: "GitHub", link: "https://github.com" },
-  { icon: "linkedin", label: "LinkedIn", link: "https://linkedin.com" }
+  { icon: "github", label: "GitHub", link: "https://github.com/noachuut" },
+  { icon: "linkedin", label: "LinkedIn", link: "https://www.linkedin.com/in/noa-morandeau-3122182b7/" }
 ];
 
 export const certifications: Certification[] = [
