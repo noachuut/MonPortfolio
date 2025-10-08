@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+  <title>CSS3</title>
+  <path fill="#264de4" d="M8 4h48l-4.6 52.3L31.8 60l-19.2-3.7z"/>
+  <path fill="#2965f1" d="M32 56l15.3-3 3.9-43H32z"/>
+  <path fill="#fff" d="M32 32h9.8l-.5 6H32v6h9.4l-.8 9.3L32 50v6l15.3-4.4L48.9 20H32z" opacity=".9"/>
+  <path fill="#d9e4ff" d="M32 32v6H22.3l-.3-6zm0 12v6l-6.6-1.8-.4-4.2z"/>
+</svg>

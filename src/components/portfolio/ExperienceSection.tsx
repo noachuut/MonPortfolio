@@ -1,4 +1,5 @@
 import { Card } from "@/components/ui/card";
+import { Briefcase, Building2 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import {
   experiences as defaultExperiences,
@@ -72,20 +73,40 @@ const ExperienceSection = () => {
                 {/* Content */}
                 <Card className="flex-1 card-gradient border-border p-6 hover:shadow-lg hover:shadow-primary/10 transition-all duration-300">
                   {exp.image && (
-                    <div className="mb-4 overflow-hidden rounded-lg border border-border/60">
-                      <img
-                        src={exp.image}
-                        alt={`Illustration de ${exp.title}`}
-                        className="w-full max-h-56 object-cover"
-                        loading="lazy"
-                      />
+                    <div className="mb-4 flex justify-start">
+                      <div className="w-32 h-32 overflow-hidden rounded-lg border border-border/60">
+                        <img
+                          src={exp.image}
+                          alt={`Illustration de ${exp.title}`}
+                          className="w-full h-full object-cover"
+                          loading="lazy"
+                        />
+                      </div>
                     </div>
                   )}
 
-                  <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
-                    <div>
-                      <h3 className="text-xl font-semibold text-primary mb-1">{exp.title}</h3>
-                      <p className="text-lg text-accent font-medium">{exp.company}</p>
+                  <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-3 md:gap-6">
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2">
+                        <Briefcase
+                          aria-hidden="true"
+                          className="h-5 w-5 text-primary"
+                          focusable="false"
+                        />
+                        <span className="sr-only">Poste :</span>
+                        <h3 className="text-xl font-semibold text-primary">
+                          {exp.title}
+                        </h3>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Building2
+                          aria-hidden="true"
+                          className="h-5 w-5 text-accent"
+                          focusable="false"
+                        />
+                        <span className="sr-only">Entreprise :</span>
+                        <p className="text-lg text-accent font-medium">{exp.company}</p>
+                      </div>
                     </div>
                     <span className="text-sm text-muted-foreground bg-muted px-3 py-1 rounded-full mt-2 md:mt-0">
                       {exp.period}
