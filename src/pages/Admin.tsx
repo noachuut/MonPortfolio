@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -33,6 +33,7 @@ import {
   loadHiddenProjectIds,
   loadHiddenSkillCategoryIds,
   loadHiddenSkillIds,
+  loadServerDataVersion,
   saveCustomArticles,
   saveCustomCertifications,
   saveCustomExperiences,
@@ -46,12 +47,19 @@ import {
   saveHiddenSkillIds
 } from "@/lib/portfolioStorage";
 import { resizeImageFile } from "@/lib/image";
+import {
+  applyPortfolioSnapshot,
+  createPortfolioSnapshot,
+  normalizePortfolioSnapshot
+} from "@/lib/portfolioSnapshot";
+import { syncServerData } from "@/lib/serverSync";
 
 const projectTypeOptions: { value: Project["type"]; label: string }[] = [
   { value: "web", label: "Web" },
   { value: "ia", label: "IA" },
   { value: "mobile", label: "Mobile" },
-  { value: "reseaux", label: "Réseaux" }
+  { value: "reseaux", label: "Réseaux" },
+  { value: "cli", label: "CLI Python" }
 ];
 
 const generateId = (prefix: string) =>
@@ -193,6 +201,26 @@ const emptyArticleForm: ArticleFormState = {
 const Admin = () => {
   const { toast } = useToast();
 
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [serverVersion, setServerVersion] = useState<string | null>(null);
+  const [isSyncing, setIsSyncing] = useState(false);
+  const formattedServerVersion = useMemo(() => {
+    if (!serverVersion) {
+      return "Aucune synchronisation enregistrée";
+    }
+
+    const parsed = new Date(serverVersion);
+
+    if (Number.isNaN(parsed.getTime())) {
+      return serverVersion;
+    }
+
+    return new Intl.DateTimeFormat("fr-FR", {
+      dateStyle: "medium",
+      timeStyle: "short"
+    }).format(parsed);
+  }, [serverVersion]);
+
   const [projectForm, setProjectForm] = useState<ProjectFormState>(
     emptyProjectForm
   );
@@ -237,7 +265,23 @@ const Admin = () => {
     setHiddenCertificationIds(loadHiddenCertificationIds());
     setCustomArticles(loadCustomArticles());
     setHiddenArticleIds(loadHiddenArticleIds());
+    setServerVersion(loadServerDataVersion());
   }, []);
+
+  const refreshFromStorage = () => {
+    setCustomProjects(loadCustomProjects());
+    setHiddenProjectIds(loadHiddenProjectIds());
+    setCustomExperiences(loadCustomExperiences());
+    setHiddenExperienceIds(loadHiddenExperienceIds());
+    setCustomSkillCategories(loadCustomSkillCategories());
+    setHiddenSkillCategoryIds(loadHiddenSkillCategoryIds());
+    setHiddenSkillIds(loadHiddenSkillIds());
+    setCustomCertifications(loadCustomCertifications());
+    setHiddenCertificationIds(loadHiddenCertificationIds());
+    setCustomArticles(loadCustomArticles());
+    setHiddenArticleIds(loadHiddenArticleIds());
+    setServerVersion(loadServerDataVersion());
+  };
 
   const allProjects = useMemo(
     () => mergeById(defaultProjects, customProjects),
@@ -321,6 +365,122 @@ const Admin = () => {
   const upsertHiddenArticles = (ids: string[]) => {
     setHiddenArticleIds(ids);
     saveHiddenArticleIds(ids);
+  };
+
+  const handleSnapshotExport = () => {
+    try {
+      const snapshot = createPortfolioSnapshot();
+      const json = JSON.stringify(snapshot, null, 2);
+      const blob = new Blob([json], { type: "application/json" });
+      const safeTimestamp = snapshot.version.replace(/[:.]/g, "-");
+      const downloadLink = document.createElement("a");
+      downloadLink.href = URL.createObjectURL(blob);
+      downloadLink.download = `portfolio-data-${safeTimestamp}.json`;
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+      URL.revokeObjectURL(downloadLink.href);
+
+      toast({
+        title: "Export prêt",
+        description:
+          "Le fichier JSON contient vos ajouts et peut être déposé dans public/data/portfolio-data.json."
+      });
+    } catch (error) {
+      console.error("Export impossible", error);
+      toast({
+        title: "Échec de l'export",
+        description:
+          "Le fichier n'a pas pu être généré. Réessayez ou contactez l'administrateur.",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleSnapshotImport = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+
+    if (!file) {
+      return;
+    }
+
+    try {
+      const text = await file.text();
+      const payload = JSON.parse(text) as unknown;
+      const snapshot = normalizePortfolioSnapshot(payload);
+
+      if (!snapshot) {
+        throw new Error("Fichier invalide");
+      }
+
+      applyPortfolioSnapshot(snapshot);
+      refreshFromStorage();
+
+      toast({
+        title: "Import terminé",
+        description: "Les données ont été chargées depuis le fichier sélectionné."
+      });
+    } catch (error) {
+      console.error("Import impossible", error);
+      toast({
+        title: "Impossible de lire le fichier",
+        description:
+          "Vérifiez que le JSON provient bien de l'export de l'admin avant de réessayer.",
+        variant: "destructive"
+      });
+    } finally {
+      event.target.value = "";
+    }
+  };
+
+  const openImportDialog = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleServerResync = async () => {
+    if (isSyncing) {
+      return;
+    }
+
+    setIsSyncing(true);
+
+    try {
+      const result = await syncServerData();
+      refreshFromStorage();
+
+      if (result.status === "missing") {
+        toast({
+          title: "Aucun fichier trouvé",
+          description:
+            "Déposez un fichier public/data/portfolio-data.json sur le serveur pour partager vos modifications."
+        });
+        return;
+      }
+
+      if (result.status === "updated") {
+        toast({
+          title: "Contenu synchronisé",
+          description: "La vitrine reflète désormais les données du fichier serveur."
+        });
+        return;
+      }
+
+      toast({
+        title: "Déjà à jour",
+        description: "Les données locales correspondent déjà à la dernière version disponible."
+      });
+    } catch (error) {
+      toast({
+        title: "Synchronisation impossible",
+        description:
+          "Le fichier n'a pas pu être chargé. Vérifiez son accessibilité ou réessayez plus tard.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSyncing(false);
+    }
   };
 
   const handleProjectSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -996,6 +1156,61 @@ const Admin = () => {
       </header>
 
       <main className="container mx-auto px-6 mt-10 space-y-16">
+        <section>
+          <div className="grid gap-6 lg:grid-cols-[1fr_1.2fr]">
+            <Card className="p-6 h-full space-y-4">
+              <div>
+                <h2 className="text-xl font-semibold">Synchroniser le contenu</h2>
+                <p className="text-sm text-muted-foreground">
+                  Les changements réalisés dans cette interface sont stockés dans le navigateur. Pour les partager sur
+                  le serveur, exportez-les puis remplacez le fichier <code>public/data/portfolio-data.json</code> avant
+                  le déploiement.
+                </p>
+              </div>
+              <ul className="text-sm text-muted-foreground list-disc pl-5 space-y-1">
+                <li>Exportez un instantané JSON lorsque vos ajouts sont terminés.</li>
+                <li>Importez un fichier existant pour retrouver une sauvegarde ou préparer une mise à jour.</li>
+                <li>Rechargez les données publiées pour vérifier qu’elles correspondent à la production.</li>
+              </ul>
+            </Card>
+            <Card className="p-6 h-full space-y-4">
+              <div className="space-y-1">
+                <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
+                  Version serveur appliquée
+                </p>
+                <p className="text-base font-semibold">{formattedServerVersion}</p>
+              </div>
+              <div className="flex flex-wrap gap-3">
+                <Button onClick={handleSnapshotExport}>Exporter le JSON</Button>
+                <Button variant="secondary" onClick={openImportDialog}>
+                  Importer un JSON
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={handleServerResync}
+                  disabled={isSyncing}
+                >
+                  {isSyncing ? "Synchronisation..." : "Recharger depuis le serveur"}
+                </Button>
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Après export, copiez le fichier généré dans <code>public/data/portfolio-data.json</code>,
+                validez-le dans votre dépôt puis relancez le déploiement. Les visiteurs chargeront automatiquement
+                cette version.
+              </p>
+            </Card>
+          </div>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="application/json"
+            className="hidden"
+            onChange={handleSnapshotImport}
+          />
+        </section>
+
+        <Separator />
+
         <section>
           <div className="flex items-center justify-between mb-6">
             <div>

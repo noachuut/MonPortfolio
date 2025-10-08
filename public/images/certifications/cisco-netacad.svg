@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 180" role="img" aria-labelledby="title">
+  <title>Cisco Networking Academy</title>
+  <rect width="320" height="180" rx="24" fill="#002b45"/>
+  <path fill="#00bceb" d="M60 54h22v72H60zm38 0h22v72H98zm38 0h22v72h-22z"/>
+  <path fill="#ffffff" d="M196 72c17.5 0 30.4 12.9 30.4 30.1 0 17.1-12.9 29.9-30.4 29.9s-30.4-12.8-30.4-29.9c0-17.2 12.9-30.1 30.4-30.1zm0 47.5c9.8 0 16.4-7.4 16.4-17.4 0-10.1-6.6-17.6-16.4-17.6s-16.4 7.5-16.4 17.6c0 10 6.6 17.4 16.4 17.4z"/>
+  <path fill="#00bceb" d="M252 64h16l24 44-24 44h-16l24-44z"/>
+</svg>

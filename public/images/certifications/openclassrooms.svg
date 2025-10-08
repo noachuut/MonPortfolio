@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 180" role="img" aria-labelledby="title">
+  <title>OpenClassrooms</title>
+  <defs>
+    <linearGradient id="oc" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#6c2bd9"/>
+      <stop offset="100%" stop-color="#a56bff"/>
+    </linearGradient>
+  </defs>
+  <rect width="320" height="180" rx="24" fill="#f7f3ff"/>
+  <circle cx="90" cy="90" r="58" fill="url(#oc)"/>
+  <circle cx="90" cy="90" r="32" fill="#ffffff"/>
+  <path fill="#6c2bd9" d="M170 58h108v20h-42v64h-24V78h-42z"/>
+  <path fill="#6c2bd9" d="M160 118c0 11-8.5 18-21 18s-21-7-21-18 8.4-18 21-18 21 7 21 18zm-30 0c0 5.2 3.4 8.7 9 8.7s9-3.5 9-8.7-3.4-8.7-9-8.7-9 3.5-9 8.7z"/>
+</svg>

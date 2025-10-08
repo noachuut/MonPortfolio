@@ -64,6 +64,49 @@ This project is built with:
 
 Simply open [Lovable](https://lovable.dev/projects/23b2966e-a83b-49e6-90d0-bb5e2060af82) and click on Share -> Publish.
 
+## Déployer sur votre propre serveur avec Nginx
+
+Si vous souhaitez héberger l’application vous-même sur un serveur où Nginx est déjà installé, voici un guide rapide :
+
+1. **Préparer l’application**
+   - Installez les dépendances : `npm install`
+   - Construisez la version de production : `npm run build`
+   - Le dossier `dist/` généré contient les fichiers statiques à déployer.
+2. **Transférer les fichiers sur le serveur**
+   - Copiez le contenu de `dist/` vers un dossier sur le serveur, par exemple `/var/www/mon-site`.
+   - Assurez-vous que l’utilisateur Nginx peut lire ces fichiers (`chown -R www-data:www-data /var/www/mon-site`).
+3. **Configurer Nginx**
+   - Créez un fichier de configuration, par exemple `/etc/nginx/sites-available/mon-site` :
+
+     ```nginx
+     server {
+       listen 80;
+       server_name exemple.com www.exemple.com;
+
+       root /var/www/mon-site;
+       index index.html;
+
+       location / {
+         try_files $uri $uri/ /index.html;
+       }
+
+       location ~* \.(js|css|png|jpg|jpeg|gif|svg|woff2?)$ {
+         expires 7d;
+         add_header Cache-Control "public";
+       }
+     }
+     ```
+
+   - Activez le site : `ln -s /etc/nginx/sites-available/mon-site /etc/nginx/sites-enabled/`
+   - Vérifiez la configuration : `sudo nginx -t`
+   - Rechargez Nginx : `sudo systemctl reload nginx`
+4. **Sécuriser avec HTTPS (optionnel mais recommandé)**
+   - Installez Certbot : `sudo apt install certbot python3-certbot-nginx`
+   - Générez un certificat : `sudo certbot --nginx -d exemple.com -d www.exemple.com`
+   - Certbot mettra automatiquement à jour la configuration Nginx.
+
+Après ces étapes, votre application Vite sera servie en production via Nginx.
+
 ## Can I connect a custom domain to my Lovable project?
 
 Yes, you can!
@@ -71,3 +114,32 @@ Yes, you can!
 To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
 
 Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+
+## Construire et lancer avec Docker
+
+Pour exécuter l’application dans un conteneur, assurez-vous d’avoir Docker installé puis suivez ces étapes :
+
+```sh
+# Construire l’image (ajustez le tag selon vos besoins)
+docker build -t mon-portfolio .
+
+# Lancer le conteneur et exposer le port 80 du conteneur sur le port 3000 de l’hôte
+docker run --rm -p 3000:80 mon-portfolio
+```
+
+L’application sera alors accessible sur http://localhost:3000. Le fichier `docker/default.conf` gère la redirection vers `index.html` pour les routes côté client.
+
+## Sauvegarder les contenus de l’admin pour la production
+
+L’interface `/admin` enregistre vos ajouts (projets, expériences, certifications, etc.) dans le navigateur via `localStorage`. Pour que ces données soient visibles après déploiement :
+
+1. **Exportez un instantané JSON**
+   - Depuis l’onglet *Synchroniser le contenu*, cliquez sur **Exporter le JSON**.
+   - Un fichier `portfolio-data-AAAA-MM-JJTHH-MM-SS.json` est téléchargé. Il contient uniquement vos ajouts/masquages.
+2. **Remplacez le fichier de production**
+   - Copiez le JSON exporté dans le dépôt sous `public/data/portfolio-data.json` (écrasez l’existant).
+   - Validez le fichier dans votre dépôt puis redéployez l’application (build statique ou image Docker).
+3. **Synchronisez depuis le serveur si nécessaire**
+   - Après déploiement, ouvrez `/admin` et cliquez sur **Recharger depuis le serveur** pour vérifier que la version publiée est bien chargée.
+
+Vous pouvez également utiliser **Importer un JSON** pour charger une sauvegarde dans l’admin locale avant de repartir d’une base existante.

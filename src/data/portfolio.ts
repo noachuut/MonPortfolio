@@ -13,6 +13,10 @@ export type HeroContent = {
   name: string;
   highlight: string;
   tagline: string;
+  cvDownload: {
+    label: string;
+    href: string;
+  };
   primaryCta: {
     label: string;
     targetId: string;
@@ -51,7 +55,7 @@ export type Project = {
   title: string;
   description: string;
   visual?: string;
-  type: "web" | "ia" | "mobile" | "reseaux";
+  type: "web" | "ia" | "mobile" | "reseaux" | "cli";
   technologies: string[];
   skillHighlight: string;
   github?: string;
@@ -93,8 +97,8 @@ export type SocialLink = {
 };
 
 export const siteMeta = {
-  brand: "Portfolio",
-  role: "Développeur Full Stack",
+  brand: "Noa Morandeau",
+  role: "Alternant Développeur",
   location: "Nouméa, Nouvelle-Calédonie",
   email: "contact@portfolio.dev"
 };
@@ -111,10 +115,14 @@ export const navigationLinks: NavigationLink[] = [
 
 export const heroContent: HeroContent = {
   intro: "Bonjour, je suis",
-  name: "Votre Nom",
-  highlight: "Développeur Full Stack",
+  name: "Noa Morandeau",
+  highlight: "Alternant Développeur",
   tagline:
-    "Je conçois et développe des solutions web modernes. Remplacez ce texte par les informations provenant de votre portfolio.",
+    "Étudiant en BTS SIO option SLAM, je conçois et développe des solutions adaptées aux besoins métiers tout en consolidant mes compétences techniques.",
+  cvDownload: {
+    label: "Télécharger mon CV",
+    href: "/noa-morandeau-cv.pdf"
+  },
   primaryCta: {
     label: "Voir mes projets",
     targetId: "projets"
@@ -125,56 +133,85 @@ export const heroContent: HeroContent = {
   }
 };
 
+export const referentialDownload = {
+  label: "Télécharger le référentiel BTS SIO",
+  href: "/referentiel-bts-sio.pdf"
+};
+
 export const skillCategories: SkillCategory[] = [
   {
     id: "frontend",
-    title: "Frontend",
+    title: "Langages & Frontend",
     skills: [
-      { id: "react", name: "React", icon: "/images/technologies/react.svg" },
+      { id: "html", name: "HTML5", icon: "/images/technologies/html5.svg" },
+      { id: "css", name: "CSS3", icon: "/images/technologies/css3.svg" },
       {
-        id: "typescript",
-        name: "TypeScript",
-        icon: "/images/technologies/typescript.svg"
+        id: "javascript",
+        name: "JavaScript",
+        icon: "/images/technologies/javascript.svg"
       },
-      {
-        id: "tailwind",
-        name: "Tailwind CSS",
-        icon: "/images/technologies/tailwind.svg"
-      }
+      { id: "vaadin", name: "Vaadin", icon: "/images/technologies/vaadin.svg" }
     ]
   },
   {
     id: "backend",
-    title: "Backend",
+    title: "Backend & Frameworks",
     skills: [
-      { id: "nodejs", name: "Node.js", icon: "/images/technologies/nodejs.svg" },
-      { id: "express", name: "Express", icon: "/images/technologies/express.svg" },
+      { id: "java", name: "Java", icon: "/images/technologies/java.svg" },
+      {
+        id: "spring-boot",
+        name: "Spring Boot",
+        icon: "/images/technologies/spring-boot.svg"
+      },
+      { id: "python", name: "Python", icon: "/images/technologies/python.svg" },
+      { id: "flask", name: "Flask", icon: "/images/technologies/flask.svg" }
+    ]
+  },
+  {
+    id: "outils",
+    title: "Outils & Bases de données",
+    skills: [
+      { id: "docker", name: "Docker", icon: "/images/technologies/docker.svg" },
+      { id: "git", name: "Git", icon: "/images/technologies/git.svg" },
       {
         id: "postgresql",
         name: "PostgreSQL",
         icon: "/images/technologies/postgresql.svg"
       }
     ]
-  },
-  {
-    id: "outils",
-    title: "Outils",
-    skills: [
-      { id: "git", name: "Git", icon: "/images/technologies/git.svg" },
-      { id: "docker", name: "Docker", icon: "/images/technologies/docker.svg" },
-      { id: "figma", name: "Figma", icon: "/images/technologies/figma.svg" }
-    ]
   }
 ];
 
 export const experiences: Experience[] = [
   {
+    id: "sio-stage-1",
+    title: "Stagiaire développeur",
+    company: "DINUM NC – Direction du Numérique (Nouméa)",
+    period: "04 novembre 2024 – 06 décembre 2024",
+    description:
+      "Réalisation d’un POC intégrant NC Connect pour offrir une authentification unifiée (SSO) et faciliter la connexion de fournisseurs de données aux applications internes.",
+    technologies: [
+      "Python",
+      "Flask",
+      "NC Connect (SSO)",
+      "OpenID Connect",
+      "JWT",
+      "API REST"
+    ],
+    achievements: [
+      "Conception et réalisation d’un POC fonctionnel avec Flask",
+      "Intégration de l’authentification unifiée via NC Connect (SSO)",
+      "Mise à disposition d’endpoints REST pour l’accès aux données fournisseurs"
+    ],
+    image: undefined
+  },
+  {
     id: "default-experience-1",
-    title: "Votre poste",
+    title: "Alternant Développeur",
     company: "Votre entreprise",
     period: "2023 - Aujourd'hui",
     description:
-      "Décrivez votre rôle ici. Remplacez ces informations par celles provenant de votre portfolio.",
+      "En tant qu'alternant développeur en BTS SIO SLAM, je participe à la conception et à la maintenance d'applications tout en approfondissant mes compétences.",
     technologies: ["React", "TypeScript", "Node.js"],
     achievements: [
       "Ajoutez vos réalisations clés.",
@@ -223,19 +260,110 @@ export const contactDetails: ContactDetail[] = [
 ];
 
 export const socialLinks: SocialLink[] = [
-  { icon: "🐙", label: "GitHub", link: "https://github.com" },
-  { icon: "💼", label: "LinkedIn", link: "https://linkedin.com" }
+  { icon: "github", label: "GitHub", link: "https://github.com" },
+  { icon: "linkedin", label: "LinkedIn", link: "https://linkedin.com" }
 ];
 
 export const certifications: Certification[] = [
   {
-    id: "default-certification-1",
-    name: "Certification professionnelle",
+    id: "skills-for-all-cybersecurity",
+    name: "Introduction à la cybersécurité — Skills for All",
     description:
-      "Ajoutez ici la description de votre certification, son impact et les compétences démontrées.",
-    skills: ["Gestion de projet", "Développement web"],
-    image: undefined,
-    link: "#"
+      "Formation (6h) d’initiation aux fondamentaux de la cybersécurité : risques courants, bonnes pratiques et hygiène numérique. Attestation de suivi (pas de certification officielle).",
+    skills: [
+      "Cybersécurité de base",
+      "Menaces et risques",
+      "Bonnes pratiques",
+      "Sensibilisation"
+    ],
+    image: "/images/certifications/skills-for-all.svg"
+  },
+  {
+    id: "openclassrooms-comprendre-web",
+    name: "Comprendre le Web — OpenClassrooms",
+    description:
+      "Formation (6h) qui explique le fonctionnement du Web : HTTP, DNS, navigateurs, hébergement et déploiement simple. Attestation de suivi.",
+    skills: [
+      "HTTP/DNS",
+      "Architecture web",
+      "Hébergement",
+      "Déploiement",
+      "Culture web"
+    ],
+    image: "/images/certifications/openclassrooms.svg"
+  },
+  {
+    id: "skills-for-all-networks",
+    name: "Notions de base sur les réseaux — Skills for All",
+    description:
+      "Formation (20h) sur les fondamentaux réseaux : modèles OSI/TCP-IP, adressage IP, commutation/routage de base. Attestation de suivi.",
+    skills: [
+      "Réseaux",
+      "Modèle OSI",
+      "TCP/IP",
+      "Adressage IP",
+      "Routage de base"
+    ],
+    image: "/images/certifications/skills-for-all.svg"
+  },
+  {
+    id: "openclassrooms-html-css",
+    name: "Créez votre site web avec HTML5 et CSS3 — OpenClassrooms",
+    description:
+      "Formation (14h) aux bases du front-end : sémantique HTML5, mise en page CSS (Flexbox/Grid), responsive et accessibilité. Attestation de suivi.",
+    skills: [
+      "HTML5",
+      "CSS3",
+      "Responsive design",
+      "Flexbox",
+      "Grid",
+      "Accessibilité"
+    ],
+    image: "/images/certifications/openclassrooms.svg"
+  },
+  {
+    id: "cisco-netacad-linux-unhatched",
+    name: "Linux Unhatched — Cisco NetAcad",
+    description:
+      "Formation (6h) d’initiation à Linux : ligne de commande, arborescence, permissions, gestion de paquets. Attestation de suivi.",
+    skills: [
+      "Linux",
+      "CLI",
+      "Bash",
+      "Permissions",
+      "Paquets logiciels"
+    ],
+    image: "/images/certifications/cisco-netacad.svg"
+  },
+  {
+    id: "openclassrooms-php-mysql",
+    name: "Concevez votre site web avec PHP et MySQL — OpenClassrooms",
+    description:
+      "Formation (≈20h) pour réaliser un site dynamique : PHP côté serveur, MySQL, CRUD, sécurité et bonnes pratiques. Formation suivie (certification non obtenue).",
+    skills: ["PHP", "MySQL", "SQL/CRUD", "Sécurité web", "MVC basique"],
+    image: "/images/certifications/openclassrooms.svg"
+  },
+  {
+    id: "openclassrooms-java",
+    name: "Apprenez à programmer en Java — OpenClassrooms",
+    description:
+      "Formation (10h) d’introduction à Java : bases du langage, POO, exceptions, collections et tests simples. Attestation de suivi.",
+    skills: [
+      "Java",
+      "Programmation orientée objet",
+      "Exceptions",
+      "Collections",
+      "Tests"
+    ],
+    image: "/images/certifications/openclassrooms.svg"
+  },
+  {
+    id: "openclassrooms-spring-boot",
+    name: "Créez une application Java avec Spring Boot — OpenClassrooms",
+    description:
+      "Formation (8–11h réelles) : création d’une API REST avec Spring Boot, persistance JPA/Hibernate et tests. Attestation de suivi.",
+    skills: ["Spring Boot", "REST API", "JPA/Hibernate", "Maven", "Tests"],
+    image: "/images/certifications/openclassrooms.svg"
   }
 ];
 
