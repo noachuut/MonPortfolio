@@ -13,6 +13,10 @@ export type HeroContent = {
   name: string;
   highlight: string;
   tagline: string;
+  cvDownload: {
+    label: string;
+    href: string;
+  };
   primaryCta: {
     label: string;
     targetId: string;
@@ -51,7 +55,7 @@ export type Project = {
   title: string;
   description: string;
   visual?: string;
-  type: "web" | "ia" | "mobile" | "reseaux";
+  type: "web" | "ia" | "mobile" | "reseaux" | "cli";
   technologies: string[];
   skillHighlight: string;
   github?: string;
@@ -93,8 +97,8 @@ export type SocialLink = {
 };
 
 export const siteMeta = {
-  brand: "Portfolio",
-  role: "Développeur Full Stack",
+  brand: "Noa Morandeau",
+  role: "Alternant Développeur",
   location: "Nouméa, Nouvelle-Calédonie",
   email: "contact@portfolio.dev"
 };
@@ -111,10 +115,14 @@ export const navigationLinks: NavigationLink[] = [
 
 export const heroContent: HeroContent = {
   intro: "Bonjour, je suis",
-  name: "Votre Nom",
-  highlight: "Développeur Full Stack",
+  name: "Noa Morandeau",
+  highlight: "Alternant Développeur",
   tagline:
-    "Je conçois et développe des solutions web modernes. Remplacez ce texte par les informations provenant de votre portfolio.",
+    "Étudiant en BTS SIO option SLAM, je conçois et développe des solutions adaptées aux besoins métiers tout en consolidant mes compétences techniques.",
+  cvDownload: {
+    label: "Télécharger mon CV",
+    href: "/files/noa-morandeau-cv.pdf"
+  },
   primaryCta: {
     label: "Voir mes projets",
     targetId: "projets"
@@ -170,11 +178,11 @@ export const skillCategories: SkillCategory[] = [
 export const experiences: Experience[] = [
   {
     id: "default-experience-1",
-    title: "Votre poste",
+    title: "Alternant Développeur",
     company: "Votre entreprise",
     period: "2023 - Aujourd'hui",
     description:
-      "Décrivez votre rôle ici. Remplacez ces informations par celles provenant de votre portfolio.",
+      "En tant qu'alternant développeur en BTS SIO SLAM, je participe à la conception et à la maintenance d'applications tout en approfondissant mes compétences.",
     technologies: ["React", "TypeScript", "Node.js"],
     achievements: [
       "Ajoutez vos réalisations clés.",
@@ -223,8 +231,8 @@ export const contactDetails: ContactDetail[] = [
 ];
 
 export const socialLinks: SocialLink[] = [
-  { icon: "🐙", label: "GitHub", link: "https://github.com" },
-  { icon: "💼", label: "LinkedIn", link: "https://linkedin.com" }
+  { icon: "github", label: "GitHub", link: "https://github.com" },
+  { icon: "linkedin", label: "LinkedIn", link: "https://linkedin.com" }
 ];
 
 export const certifications: Certification[] = [

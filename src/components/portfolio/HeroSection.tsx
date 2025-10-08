@@ -17,7 +17,7 @@ const HeroSection = () => {
         <div className="absolute bottom-1/4 right-1/4 w-48 h-48 bg-accent/20 rounded-full blur-3xl glow-accent"></div>
       </div>
       
-      <div className="container mx-auto px-6 text-center relative z-10">
+      <div className="container mx-auto px-6 text-center relative z-10 pb-24 sm:pb-28">
         <div className="fade-in">
           <h1 className="text-5xl md:text-7xl font-bold mb-4">
             <span className="block text-foreground">{heroContent.intro}</span>
@@ -34,11 +34,20 @@ const HeroSection = () => {
             {heroContent.tagline}
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-10">
+            <Button
+              asChild
+              size="lg"
+              className="w-full sm:w-auto hero-gradient text-white hover:shadow-lg hover:shadow-primary/25 transition-all duration-300 px-8 py-6 text-lg font-semibold"
+            >
+              <a href={heroContent.cvDownload.href} download>
+                {heroContent.cvDownload.label}
+              </a>
+            </Button>
             <Button
               onClick={() => scrollToSection(heroContent.primaryCta.targetId)}
               size="lg"
-              className="hero-gradient text-white hover:shadow-lg hover:shadow-primary/25 transition-all duration-300 px-8 py-6 text-lg font-semibold"
+              className="w-full sm:w-auto hero-gradient text-white hover:shadow-lg hover:shadow-primary/25 transition-all duration-300 px-8 py-6 text-lg font-semibold"
             >
               {heroContent.primaryCta.label}
             </Button>
@@ -46,7 +55,7 @@ const HeroSection = () => {
               onClick={() => scrollToSection(heroContent.secondaryCta.targetId)}
               variant="outline"
               size="lg"
-              className="border-primary text-primary hover:bg-primary hover:text-white transition-all duration-300 px-8 py-6 text-lg"
+              className="w-full sm:w-auto border-primary text-primary hover:bg-primary hover:text-white transition-all duration-300 px-8 py-6 text-lg"
             >
               {heroContent.secondaryCta.label}
             </Button>
@@ -54,7 +63,7 @@ const HeroSection = () => {
         </div>
         
         {/* Scroll indicator */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+        <div className="absolute bottom-6 sm:bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce z-20 pointer-events-none">
           <div className="w-6 h-10 border-2 border-primary rounded-full flex justify-center">
             <div className="w-1 h-3 bg-primary rounded-full mt-2 animate-pulse"></div>
           </div>

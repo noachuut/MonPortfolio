@@ -2,8 +2,17 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
+import { Github, Linkedin } from "lucide-react";
 import { contactDetails, siteMeta, socialLinks } from "@/data/portfolio";
+
+const socialIconMap: Record<string, ReactNode> = {
+  github: <Github className="w-6 h-6" aria-hidden="true" />,
+  linkedin: <Linkedin className="w-6 h-6" aria-hidden="true" />
+};
+
+const getSocialIcon = (key: string): ReactNode | undefined =>
+  socialIconMap[key.toLowerCase()];
 
 const ContactSection = () => {
   const [formData, setFormData] = useState({
@@ -83,18 +92,28 @@ const ContactSection = () => {
                     Ajoutez vos réseaux sociaux dans <code>src/data/portfolio.ts</code>.
                   </span>
                 )}
-                {socialLinks.map((social) => (
-                  <a
-                    key={social.label}
-                    href={social.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-12 h-12 bg-muted hover:bg-primary/10 rounded-full flex items-center justify-center text-xl transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-primary/25"
-                    aria-label={social.label}
-                  >
-                    {social.icon}
-                  </a>
-                ))}
+                {socialLinks.map((social) => {
+                  const icon =
+                    getSocialIcon(social.icon) ??
+                    getSocialIcon(social.label) ?? (
+                      <span className="text-xl" aria-hidden="true">
+                        {social.icon}
+                      </span>
+                    );
+
+                  return (
+                    <a
+                      key={social.label}
+                      href={social.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-12 h-12 bg-muted hover:bg-primary/10 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-primary/25"
+                      aria-label={social.label}
+                    >
+                      {icon}
+                    </a>
+                  );
+                })}
               </div>
             </div>
           </div>
