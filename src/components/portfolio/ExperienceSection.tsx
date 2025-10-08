@@ -1,4 +1,5 @@
 import { Card } from "@/components/ui/card";
+import { Briefcase, Building2 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import {
   experiences as defaultExperiences,
@@ -84,10 +85,28 @@ const ExperienceSection = () => {
                     </div>
                   )}
 
-                  <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
-                    <div>
-                      <h3 className="text-xl font-semibold text-primary mb-1">{exp.title}</h3>
-                      <p className="text-lg text-accent font-medium">{exp.company}</p>
+                  <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-3 md:gap-6">
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2">
+                        <Briefcase
+                          aria-hidden="true"
+                          className="h-5 w-5 text-primary"
+                          focusable="false"
+                        />
+                        <span className="sr-only">Poste :</span>
+                        <h3 className="text-xl font-semibold text-primary">
+                          {exp.title}
+                        </h3>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Building2
+                          aria-hidden="true"
+                          className="h-5 w-5 text-accent"
+                          focusable="false"
+                        />
+                        <span className="sr-only">Entreprise :</span>
+                        <p className="text-lg text-accent font-medium">{exp.company}</p>
+                      </div>
                     </div>
                     <span className="text-sm text-muted-foreground bg-muted px-3 py-1 rounded-full mt-2 md:mt-0">
                       {exp.period}
