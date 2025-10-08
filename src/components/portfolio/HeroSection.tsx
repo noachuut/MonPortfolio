@@ -36,9 +36,18 @@ const HeroSection = () => {
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Button
+              asChild
+              size="lg"
+              className="w-full sm:w-auto hero-gradient text-white hover:shadow-lg hover:shadow-primary/25 transition-all duration-300 px-8 py-6 text-lg font-semibold"
+            >
+              <a href={heroContent.cvDownload.href} download>
+                {heroContent.cvDownload.label}
+              </a>
+            </Button>
+            <Button
               onClick={() => scrollToSection(heroContent.primaryCta.targetId)}
               size="lg"
-              className="hero-gradient text-white hover:shadow-lg hover:shadow-primary/25 transition-all duration-300 px-8 py-6 text-lg font-semibold"
+              className="w-full sm:w-auto hero-gradient text-white hover:shadow-lg hover:shadow-primary/25 transition-all duration-300 px-8 py-6 text-lg font-semibold"
             >
               {heroContent.primaryCta.label}
             </Button>
@@ -46,7 +55,7 @@ const HeroSection = () => {
               onClick={() => scrollToSection(heroContent.secondaryCta.targetId)}
               variant="outline"
               size="lg"
-              className="border-primary text-primary hover:bg-primary hover:text-white transition-all duration-300 px-8 py-6 text-lg"
+              className="w-full sm:w-auto border-primary text-primary hover:bg-primary hover:text-white transition-all duration-300 px-8 py-6 text-lg"
             >
               {heroContent.secondaryCta.label}
             </Button>
