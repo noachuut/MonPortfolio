@@ -51,7 +51,7 @@ export type Project = {
   title: string;
   description: string;
   visual?: string;
-  type: "web" | "ia" | "mobile" | "reseaux";
+  type: "web" | "ia" | "mobile" | "reseaux" | "cli";
   technologies: string[];
   skillHighlight: string;
   github?: string;
