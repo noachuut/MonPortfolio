@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { siteMeta } from "@/data/portfolio";
+import { referentialDownload, siteMeta } from "@/data/portfolio";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -28,8 +28,8 @@ const Footer = () => {
               variant="outline"
               className="w-full md:w-auto border-primary text-primary hover:bg-primary hover:text-white transition-all duration-300"
             >
-              <a href="/files/referentiel-bts-sio.pdf" download>
-                Télécharger le référentiel BTS SIO
+              <a href={referentialDownload.href} download>
+                {referentialDownload.label}
               </a>
             </Button>
           </div>
