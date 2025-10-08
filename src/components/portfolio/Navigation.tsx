@@ -1,26 +1,22 @@
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
+import { navigationLinks, siteMeta } from "@/data/portfolio";
 
 const Navigation = () => {
-  const [activeSection, setActiveSection] = useState("accueil");
-
-  const navItems = [
-    { id: "accueil", label: "Accueil" },
-    { id: "competences", label: "Compétences" },
-    { id: "experience", label: "Expérience" },
-    { id: "projets", label: "Projets" },
-    { id: "contact", label: "Contact" },
-  ];
+  const defaultSection = navigationLinks[0]?.id ?? "accueil";
+  const [activeSection, setActiveSection] = useState(defaultSection);
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = navItems.map(item => document.getElementById(item.id));
+      const sections = navigationLinks.map((item) =>
+        document.getElementById(item.id)
+      );
       const scrollPosition = window.scrollY + 100;
 
       for (let i = sections.length - 1; i >= 0; i--) {
         const section = sections[i];
         if (section && section.offsetTop <= scrollPosition) {
-          setActiveSection(navItems[i].id);
+          setActiveSection(navigationLinks[i].id);
           break;
         }
       }
@@ -42,11 +38,11 @@ const Navigation = () => {
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="text-xl font-bold hero-gradient bg-clip-text text-transparent">
-            Portfolio
+            {siteMeta.brand || "Portfolio"}
           </div>
-          
+
           <div className="hidden md:flex space-x-8">
-            {navItems.map((item) => (
+            {navigationLinks.map((item) => (
               <button
                 key={item.id}
                 onClick={() => scrollToSection(item.id)}
