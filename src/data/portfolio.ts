@@ -13,6 +13,10 @@ export type HeroContent = {
   name: string;
   highlight: string;
   tagline: string;
+  cvDownload: {
+    label: string;
+    href: string;
+  };
   primaryCta: {
     label: string;
     targetId: string;
@@ -115,6 +119,10 @@ export const heroContent: HeroContent = {
   highlight: "Alternant Développeur",
   tagline:
     "Étudiant en BTS SIO option SLAM, je conçois et développe des solutions adaptées aux besoins métiers tout en consolidant mes compétences techniques.",
+  cvDownload: {
+    label: "Télécharger mon CV",
+    href: "/files/noa-morandeau-cv.pdf"
+  },
   primaryCta: {
     label: "Voir mes projets",
     targetId: "projets"
@@ -223,8 +231,8 @@ export const contactDetails: ContactDetail[] = [
 ];
 
 export const socialLinks: SocialLink[] = [
-  { icon: "🐙", label: "GitHub", link: "https://github.com" },
-  { icon: "💼", label: "LinkedIn", link: "https://linkedin.com" }
+  { icon: "github", label: "GitHub", link: "https://github.com" },
+  { icon: "linkedin", label: "LinkedIn", link: "https://linkedin.com" }
 ];
 
 export const certifications: Certification[] = [
