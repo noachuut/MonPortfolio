@@ -126,9 +126,12 @@ const ProjectsSection = () => {
               
               <div className="p-6">
                 {/* Skill highlight badge */}
-                <div className="flex items-center justify-between mb-3">
-                  <span className="px-3 py-1 bg-primary/10 text-primary text-sm rounded-full border border-primary/20 font-medium">
-                    Compétence: {project.skillHighlight}
+                <div className="mb-4">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-2">
+                    Compétence
+                  </p>
+                  <span className="inline-block px-3 py-1 bg-primary/10 text-primary text-sm rounded-full border border-primary/20 font-medium">
+                    {project.skillHighlight}
                   </span>
                 </div>
                 
