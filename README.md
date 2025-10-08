@@ -114,3 +114,17 @@ Yes, you can!
 To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
 
 Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+
+## Construire et lancer avec Docker
+
+Pour exécuter l’application dans un conteneur, assurez-vous d’avoir Docker installé puis suivez ces étapes :
+
+```sh
+# Construire l’image (ajustez le tag selon vos besoins)
+docker build -t mon-portfolio .
+
+# Lancer le conteneur et exposer le port 80 du conteneur sur le port 3000 de l’hôte
+docker run --rm -p 3000:80 mon-portfolio
+```
+
+L’application sera alors accessible sur http://localhost:3000. Le fichier `docker/default.conf` gère la redirection vers `index.html` pour les routes côté client.
