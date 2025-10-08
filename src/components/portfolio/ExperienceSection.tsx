@@ -7,24 +7,33 @@ import {
 } from "@/data/portfolio";
 import {
   loadCustomExperiences,
+  loadHiddenExperienceIds,
   subscribeToExperienceUpdates
 } from "@/lib/portfolioStorage";
 
 const ExperienceSection = () => {
   const [customExperiences, setCustomExperiences] = useState<Experience[]>([]);
+  const [hiddenExperienceIds, setHiddenExperienceIds] = useState<string[]>([]);
 
   useEffect(() => {
     setCustomExperiences(loadCustomExperiences());
+    setHiddenExperienceIds(loadHiddenExperienceIds());
     const unsubscribe = subscribeToExperienceUpdates(() => {
       setCustomExperiences(loadCustomExperiences());
+      setHiddenExperienceIds(loadHiddenExperienceIds());
     });
 
     return unsubscribe;
   }, []);
 
   const combinedExperiences = useMemo(
-    () => mergeExperiences(defaultExperiences, customExperiences),
-    [customExperiences]
+    () =>
+      mergeExperiences(
+        defaultExperiences,
+        customExperiences,
+        hiddenExperienceIds
+      ),
+    [customExperiences, hiddenExperienceIds]
   );
 
   return (
@@ -46,7 +55,7 @@ const ExperienceSection = () => {
             </p>
           )}
           {combinedExperiences.map((exp, index) => (
-            <div key={`${exp.title}-${index}`} className="relative">
+            <div key={exp.id} className="relative">
               {/* Timeline line */}
               {index !== combinedExperiences.length - 1 && (
                 <div className="absolute left-8 top-20 bottom-0 w-0.5 hero-gradient"></div>

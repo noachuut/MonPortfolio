@@ -9,32 +9,51 @@ import {
 } from "@/data/portfolio";
 import {
   loadCustomProjects,
+  loadHiddenProjectIds,
   subscribeToProjectUpdates
 } from "@/lib/portfolioStorage";
 
-const formatProjectType = (type: string) =>
-  type.charAt(0).toUpperCase() + type.slice(1);
+const formatProjectType = (type: Project["type"]) => {
+  switch (type) {
+    case "ia":
+      return "IA";
+    case "mobile":
+      return "Mobile";
+    case "reseaux":
+      return "Réseaux";
+    default:
+      return "Web";
+  }
+};
 
 const ProjectsSection = () => {
   const [selectedType, setSelectedType] = useState("tous");
   const [customProjects, setCustomProjects] = useState<Project[]>([]);
+  const [hiddenProjectIds, setHiddenProjectIds] = useState<string[]>([]);
 
   useEffect(() => {
     setCustomProjects(loadCustomProjects());
+    setHiddenProjectIds(loadHiddenProjectIds());
     const unsubscribe = subscribeToProjectUpdates(() => {
       setCustomProjects(loadCustomProjects());
+      setHiddenProjectIds(loadHiddenProjectIds());
     });
 
     return unsubscribe;
   }, []);
 
   const combinedProjects = useMemo(
-    () => mergeProjects(defaultProjects, customProjects),
-    [customProjects]
+    () => mergeProjects(defaultProjects, customProjects, hiddenProjectIds),
+    [customProjects, hiddenProjectIds]
   );
 
   const projectTypes = useMemo(() => {
-    const types = new Set<string>();
+    const types = new Set<Project["type"]>([
+      "web",
+      "ia",
+      "mobile",
+      "reseaux"
+    ]);
     combinedProjects.forEach((project) => types.add(project.type));
     return Array.from(types);
   }, [combinedProjects]);
@@ -80,7 +99,7 @@ const ProjectsSection = () => {
           )}
           {filteredProjects.map((project, index) => (
             <Card
-              key={`${selectedType}-${project.title}`}
+              key={project.id}
               className={`card-gradient border-border overflow-hidden group hover:shadow-lg hover:shadow-primary/10 transition-all duration-500 animate-[slide-in-right_0.5s_ease-out] opacity-0 animate-[fade-in_0.6s_ease-out_forwards]`}
               style={{ animationDelay: `${index * 0.1}s` }}
             >

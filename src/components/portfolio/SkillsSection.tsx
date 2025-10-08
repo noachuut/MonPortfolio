@@ -1,7 +1,47 @@
+import { useEffect, useMemo, useState } from "react";
 import { Card } from "@/components/ui/card";
-import { skillCategories } from "@/data/portfolio";
+import {
+  mergeSkillCategories,
+  skillCategories as defaultSkillCategories,
+  type SkillCategory
+} from "@/data/portfolio";
+import {
+  loadCustomSkillCategories,
+  loadHiddenSkillCategoryIds,
+  loadHiddenSkillIds,
+  subscribeToSkillUpdates
+} from "@/lib/portfolioStorage";
 
 const SkillsSection = () => {
+  const [customCategories, setCustomCategories] = useState<SkillCategory[]>([]);
+  const [hiddenCategoryIds, setHiddenCategoryIds] = useState<string[]>([]);
+  const [hiddenSkillIds, setHiddenSkillIds] = useState<string[]>([]);
+
+  useEffect(() => {
+    setCustomCategories(loadCustomSkillCategories());
+    setHiddenCategoryIds(loadHiddenSkillCategoryIds());
+    setHiddenSkillIds(loadHiddenSkillIds());
+
+    const unsubscribe = subscribeToSkillUpdates(() => {
+      setCustomCategories(loadCustomSkillCategories());
+      setHiddenCategoryIds(loadHiddenSkillCategoryIds());
+      setHiddenSkillIds(loadHiddenSkillIds());
+    });
+
+    return unsubscribe;
+  }, []);
+
+  const categories = useMemo(
+    () =>
+      mergeSkillCategories(
+        defaultSkillCategories,
+        customCategories,
+        hiddenCategoryIds,
+        hiddenSkillIds
+      ),
+    [customCategories, hiddenCategoryIds, hiddenSkillIds]
+  );
+
   return (
     <section id="competences" className="py-20 section-gradient">
       <div className="container mx-auto px-6">
@@ -15,21 +55,21 @@ const SkillsSection = () => {
         </div>
 
         <div className="grid md:grid-cols-3 gap-8">
-          {skillCategories.length === 0 && (
+          {categories.length === 0 && (
             <p className="md:col-span-3 text-center text-muted-foreground">
               Ajoutez vos compétences dans <code>src/data/portfolio.ts</code> pour les afficher ici.
             </p>
           )}
-          {skillCategories.map((category, categoryIndex) => (
+          {categories.map((category, categoryIndex) => (
             <Card key={category.title} className={`card-gradient border-border p-6 hover:shadow-lg hover:shadow-primary/10 transition-all duration-500 scale-in`} style={{ animationDelay: `${categoryIndex * 0.2}s` }}>
               <h3 className="text-2xl font-semibold mb-6 text-center text-primary">
                 {category.title}
               </h3>
-              
+
               <div className="grid grid-cols-2 gap-4">
                 {category.skills.map((skill) => (
                   <div
-                    key={skill.name}
+                    key={skill.id}
                     className="flex items-center gap-3 p-3 rounded-lg bg-muted/20 hover:bg-muted/30 transition-colors"
                   >
                     <img
