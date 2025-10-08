@@ -72,13 +72,15 @@ const ExperienceSection = () => {
                 {/* Content */}
                 <Card className="flex-1 card-gradient border-border p-6 hover:shadow-lg hover:shadow-primary/10 transition-all duration-300">
                   {exp.image && (
-                    <div className="mb-4 overflow-hidden rounded-lg border border-border/60">
-                      <img
-                        src={exp.image}
-                        alt={`Illustration de ${exp.title}`}
-                        className="w-full max-h-56 object-cover"
-                        loading="lazy"
-                      />
+                    <div className="mb-4 flex justify-start">
+                      <div className="w-32 h-32 overflow-hidden rounded-lg border border-border/60">
+                        <img
+                          src={exp.image}
+                          alt={`Illustration de ${exp.title}`}
+                          className="w-full h-full object-cover"
+                          loading="lazy"
+                        />
+                      </div>
                     </div>
                   )}
 
