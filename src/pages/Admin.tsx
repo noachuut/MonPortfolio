@@ -51,7 +51,8 @@ const projectTypeOptions: { value: Project["type"]; label: string }[] = [
   { value: "web", label: "Web" },
   { value: "ia", label: "IA" },
   { value: "mobile", label: "Mobile" },
-  { value: "reseaux", label: "Réseaux" }
+  { value: "reseaux", label: "Réseaux" },
+  { value: "cli", label: "CLI Python" }
 ];
 
 const generateId = (prefix: string) =>
