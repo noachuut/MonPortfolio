@@ -21,6 +21,8 @@ const formatProjectType = (type: Project["type"]) => {
       return "Mobile";
     case "reseaux":
       return "Réseaux";
+    case "cli":
+      return "CLI Python";
     default:
       return "Web";
   }
@@ -52,7 +54,8 @@ const ProjectsSection = () => {
       "web",
       "ia",
       "mobile",
-      "reseaux"
+      "reseaux",
+      "cli"
     ]);
     combinedProjects.forEach((project) => types.add(project.type));
     return Array.from(types);
