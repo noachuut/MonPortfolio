@@ -121,7 +121,7 @@ export const heroContent: HeroContent = {
     "Étudiant en BTS SIO option SLAM, je conçois et développe des solutions adaptées aux besoins métiers tout en consolidant mes compétences techniques.",
   cvDownload: {
     label: "Télécharger mon CV",
-    href: "/Cv_Noa.pdf"
+    href: "/CV_NOA_MORANDEAU.pdf"
   },
   primaryCta: {
     label: "Voir mes projets",
@@ -135,7 +135,7 @@ export const heroContent: HeroContent = {
 
 export const referentialDownload = {
   label: "Télécharger le référentiel BTS SIO",
-  href: "/referentiel-bts-sio.pdf"
+  href: "/Noa_MORANDEAU_Referentiel_E4.pdf"
 };
 
 export const skillCategories: SkillCategory[] = [
