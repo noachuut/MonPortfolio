@@ -128,3 +128,18 @@ docker run --rm -p 3000:80 mon-portfolio
 ```
 
 L’application sera alors accessible sur http://localhost:3000. Le fichier `docker/default.conf` gère la redirection vers `index.html` pour les routes côté client.
+
+## Sauvegarder les contenus de l’admin pour la production
+
+L’interface `/admin` enregistre vos ajouts (projets, expériences, certifications, etc.) dans le navigateur via `localStorage`. Pour que ces données soient visibles après déploiement :
+
+1. **Exportez un instantané JSON**
+   - Depuis l’onglet *Synchroniser le contenu*, cliquez sur **Exporter le JSON**.
+   - Un fichier `portfolio-data-AAAA-MM-JJTHH-MM-SS.json` est téléchargé. Il contient uniquement vos ajouts/masquages.
+2. **Remplacez le fichier de production**
+   - Copiez le JSON exporté dans le dépôt sous `public/data/portfolio-data.json` (écrasez l’existant).
+   - Validez le fichier dans votre dépôt puis redéployez l’application (build statique ou image Docker).
+3. **Synchronisez depuis le serveur si nécessaire**
+   - Après déploiement, ouvrez `/admin` et cliquez sur **Recharger depuis le serveur** pour vérifier que la version publiée est bien chargée.
+
+Vous pouvez également utiliser **Importer un JSON** pour charger une sauvegarde dans l’admin locale avant de repartir d’une base existante.

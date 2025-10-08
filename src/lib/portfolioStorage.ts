@@ -17,6 +17,7 @@ const HIDDEN_SKILL_IDS_KEY = "portfolio-hidden-skill-ids";
 const HIDDEN_SKILL_CATEGORY_IDS_KEY = "portfolio-hidden-skill-category-ids";
 const HIDDEN_CERTIFICATION_IDS_KEY = "portfolio-hidden-certification-ids";
 const HIDDEN_ARTICLE_IDS_KEY = "portfolio-hidden-article-ids";
+const SERVER_DATA_VERSION_KEY = "portfolio-server-data-version";
 const PROJECTS_EVENT = "portfolio-projects-updated";
 const EXPERIENCES_EVENT = "portfolio-experiences-updated";
 const SKILLS_EVENT = "portfolio-skills-updated";
@@ -340,6 +341,30 @@ export const saveHiddenArticleIds = (ids: string[]) => {
 
   window.localStorage.setItem(HIDDEN_ARTICLE_IDS_KEY, JSON.stringify(ids));
   window.dispatchEvent(new Event(ARTICLES_EVENT));
+};
+
+export const loadServerDataVersion = () => {
+  if (!isBrowser) {
+    return null;
+  }
+
+  return window.localStorage.getItem(SERVER_DATA_VERSION_KEY);
+};
+
+export const saveServerDataVersion = (version: string) => {
+  if (!isBrowser) {
+    return;
+  }
+
+  window.localStorage.setItem(SERVER_DATA_VERSION_KEY, version);
+};
+
+export const clearServerDataVersion = () => {
+  if (!isBrowser) {
+    return;
+  }
+
+  window.localStorage.removeItem(SERVER_DATA_VERSION_KEY);
 };
 
 export const subscribeToArticleUpdates = (callback: () => void) => {
