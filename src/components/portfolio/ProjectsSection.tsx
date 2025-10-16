@@ -17,12 +17,12 @@ const formatProjectType = (type: Project["type"]) => {
   switch (type) {
     case "ia":
       return "IA";
-    case "mobile":
-      return "Mobile";
+    case "évenements":
+      return "Evenements";
     case "reseaux":
       return "Réseaux";
-    case "cli":
-      return "CLI Python";
+    case "autres":
+      return "Autres";
     default:
       return "Web";
   }
@@ -53,9 +53,9 @@ const ProjectsSection = () => {
     const types = new Set<Project["type"]>([
       "web",
       "ia",
-      "mobile",
+      "évenements",
       "reseaux",
-      "cli"
+      "autres"
     ]);
     combinedProjects.forEach((project) => types.add(project.type));
     return Array.from(types);
@@ -144,6 +144,7 @@ const ProjectsSection = () => {
                 </p>
                 
                 {/* Features */}
+                {((project.type as unknown as string) !== "�venements" && (project.type as unknown as string) !== "Ǹvenements") && (
                 <div className="mb-4">
                   <h4 className="font-semibold mb-2 text-sm">Fonctionnalités :</h4>
                   <ul className="space-y-1">
@@ -155,6 +156,7 @@ const ProjectsSection = () => {
                     ))}
                   </ul>
                 </div>
+                )}
                 
                 {/* Technologies */}
                 <div className="flex flex-wrap gap-2 mb-4">
@@ -169,7 +171,7 @@ const ProjectsSection = () => {
                 {(() => {
                   const primaryLink =
                     project.primaryLink || project.demo || project.github;
-                  if (!primaryLink) {
+                  if (!primaryLink || project.hidePrimaryButton) {
                     return null;
                   }
 

@@ -55,13 +55,15 @@ export type Project = {
   title: string;
   description: string;
   visual?: string;
-  type: "web" | "ia" | "mobile" | "reseaux" | "cli";
+  type: "web" | "ia" | "évenements" | "reseaux" | "autres";
   technologies: string[];
   skillHighlight: string;
   github?: string;
   demo?: string;
   primaryLink?: string;
   primaryLinkLabel?: string;
+  // When true, hide the primary action button even if a link exists
+  hidePrimaryButton?: boolean;
   features: string[];
 };
 
@@ -186,7 +188,7 @@ export const experiences: Experience[] = [
   {
     id: "sio-stage-1",
     title: "Stagiaire développeur",
-    company: "DINUM NC – Direction du Numérique (Nouméa)",
+    company: "DINUM NC – Direction du Numérique et de la modernisation",
     period: "04 novembre 2024 – 06 décembre 2024",
     description:
       "Réalisation d’un POC intégrant NC Connect pour offrir une authentification unifiée (SSO) et faciliter la connexion de fournisseurs de données aux applications internes.",
@@ -224,22 +226,61 @@ export const experiences: Experience[] = [
 
 export const projects: Project[] = [
   {
-    id: "default-project-1",
-    title: "Nom du projet",
+    id: "1",
+    title: "IA-Docubase",
     description:
-      "Décrivez ici un projet important. Les données doivent être mises à jour avec le contenu de votre portfolio.",
-    visual: undefined,
-    type: "web",
-    technologies: ["React", "TypeScript"],
-    skillHighlight: "React",
+      "Docubase automatise le traitement des factures : centralisation, extraction des champs clés (Nom, Prénom, BP, n° de contrat, n° client), comparaison aux métadonnées et signalement des écarts en rouge. Validation/correction rapide, puis mise à jour de la GED avec des données fiables.",
+    visual: "/images/projets/docubase.png",
+    type: "ia",
+    technologies: ["Spring Boot","Spring Batch","Vaadin","Docker"],
+    skillHighlight: "Java",
     github: "#",
     demo: "#",
     primaryLink: "#",
     primaryLinkLabel: "Voir le projet",
     features: [
-      "Première fonctionnalité clé.",
-      "Deuxième fonctionnalité clé.",
-      "Troisième fonctionnalité clé."
+      "Extraire automatiquement les champs clés",
+      "Mettre en évidence les écarts avec la GED",
+      "Mettre à jour la GED avec les données vérifiées"
+    ],
+    hidePrimaryButton: true 
+  },
+  {
+    id: "2",
+    title: "Cyber EscapeGame",
+    description:
+      "jeu pédagogique de cybersécurité pour lycéens : propose des parcours d’énigmes chronométrés portées sur la cybersécurité. Classement finale pour mettre en compétitions. Projet de sensibilisation réaliser pour la semaine du Numérique au Lycée Dick Ukeiwe ",
+    visual: "/images/projets/escape-game.png",
+    type: "web",
+    technologies: ["Node.js",  "PostgreSQL", "OpenAPI/Swagger", "HTML,CSS,JavaScript"],
+    skillHighlight: "Node.js",
+    github: "#",
+    demo: "#",
+    primaryLink: "https://escape-game.btsinfo.nc/",
+    primaryLinkLabel: "Voir le projet",
+    features: [
+      "Créer des sessions et gérer les énigmes",
+      "Chronométrer les parcours (timer)",
+      "Enregistrer la progression et les scores"
+    ]
+  },
+  {
+    id: "3",
+    title: "Jeu Labyrinthe",
+    description:
+      "Mini-jeu de labyrinthe en Python (terminal) réalisé en 1ʳᵉ année de BTS SIO. Le joueur doit trouver la sortie en naviguant case par case dans un labyrinthe . le joueur choisis son personnage et a 5 vies pour terminer ce labbyrinthe facile en apparence mais remplis de piège. Un agent vocale est mis a disposition pour lire les consignes.",
+    visual: "/images/projets/labyrinthGame.png",
+    type: "autres",
+    technologies: ["Python"],
+    skillHighlight: "POO Python",
+    github: "#",
+    demo: "#",
+    primaryLink: "https://github.com/noachuut/LabyrinthGame",
+    primaryLinkLabel: "Voir le Github",
+    features: [
+      "Déplacements clavier (z q s d) et affichage en temps réel dans le terminal",
+      "Création du labyrinthe",
+      "Menus avec règles, lancement du jeu et choix du personnage"
     ]
   }
 ];
