@@ -143,3 +143,18 @@ L’interface `/admin` enregistre vos ajouts (projets, expériences, certificati
    - Après déploiement, ouvrez `/admin` et cliquez sur **Recharger depuis le serveur** pour vérifier que la version publiée est bien chargée.
 
 Vous pouvez également utiliser **Importer un JSON** pour charger une sauvegarde dans l’admin locale avant de repartir d’une base existante.
+
+## Activer l'envoi du formulaire de contact
+
+Le formulaire « Me contacter » peut envoyer un email vers 
+oamorandeau@gmail.com via un service externe, sans backend.
+
+- Option A — Formspree (simple)
+  - Créez une forme sur https://formspree.io et copiez l'URL (ex: https://formspree.io/f/xxxxabcd).
+  - Renommez .env.example en .env et renseignez VITE_CONTACT_ENDPOINT avec cette URL.
+
+- Option B — Web3Forms
+  - Créez un compte sur https://web3forms.com, vérifiez votre email et récupérez votre Access Key.
+  - Renommez .env.example en .env et renseignez VITE_WEB3FORMS_KEY avec la clé.
+
+Relancez le serveur si nécessaire. Sans configuration, un clic ouvrira votre client mail via mailto:.

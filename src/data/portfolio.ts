@@ -143,40 +143,40 @@ export const skillCategories: SkillCategory[] = [
     id: "frontend",
     title: "Langages & Frontend",
     skills: [
-      { id: "html", name: "HTML5", icon: "/images/technologies/html5.svg" },
-      { id: "css", name: "CSS3", icon: "/images/technologies/css3.svg" },
+      { id: "html", name: "HTML5", icon: "/images/technologies/html.png" },
+      { id: "css", name: "CSS3", icon: "/images/technologies/css.png" },
       {
         id: "javascript",
         name: "JavaScript",
-        icon: "/images/technologies/javascript.svg"
+        icon: "/images/technologies/JS.png"
       },
-      { id: "vaadin", name: "Vaadin", icon: "/images/technologies/vaadin.svg" }
+      { id: "vaadin", name: "Vaadin", icon: "/images/technologies/vaadin.png" }
     ]
   },
   {
     id: "backend",
     title: "Backend & Frameworks",
     skills: [
-      { id: "java", name: "Java", icon: "/images/technologies/java.svg" },
+      { id: "java", name: "Java", icon: "/images/technologies/java.png" },
       {
         id: "spring-boot",
         name: "Spring Boot",
-        icon: "/images/technologies/spring-boot.svg"
+        icon: "/images/technologies/spring-boot.png"
       },
-      { id: "python", name: "Python", icon: "/images/technologies/python.svg" },
-      { id: "flask", name: "Flask", icon: "/images/technologies/flask.svg" }
+      { id: "python", name: "Python", icon: "/images/technologies/python.png" },
+      { id: "flask", name: "Flask", icon: "/images/technologies/flask.png" }
     ]
   },
   {
     id: "outils",
     title: "Outils & Bases de données",
     skills: [
-      { id: "docker", name: "Docker", icon: "/images/technologies/docker.svg" },
-      { id: "git", name: "Git", icon: "/images/technologies/git.svg" },
+      { id: "docker", name: "Docker", icon: "/images/technologies/docker.png" },
+      { id: "git", name: "Git", icon: "/images/technologies/git.png" },
       {
         id: "postgresql",
         name: "PostgreSQL",
-        icon: "/images/technologies/postgresql.svg"
+        icon: "/images/technologies/postgresql.png"
       }
     ]
   }
