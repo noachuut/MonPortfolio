@@ -276,7 +276,7 @@ export const certifications: Certification[] = [
       "Bonnes pratiques",
       "Sensibilisation"
     ],
-    image: "/images/certifications/skills-for-all.svg"
+    image: "/images/certifications/cisco.png"
   },
   {
     id: "openclassrooms-comprendre-web",
@@ -290,7 +290,7 @@ export const certifications: Certification[] = [
       "Déploiement",
       "Culture web"
     ],
-    image: "/images/certifications/openclassrooms.svg"
+    image: "/images/certifications/openclassrooms.png"
   },
   {
     id: "skills-for-all-networks",
@@ -304,7 +304,7 @@ export const certifications: Certification[] = [
       "Adressage IP",
       "Routage de base"
     ],
-    image: "/images/certifications/skills-for-all.svg"
+    image: "/images/certifications/cisco.png"
   },
   {
     id: "openclassrooms-html-css",
@@ -319,7 +319,7 @@ export const certifications: Certification[] = [
       "Grid",
       "Accessibilité"
     ],
-    image: "/images/certifications/openclassrooms.svg"
+    image: "/images/certifications/openclassrooms.png"
   },
   {
     id: "cisco-netacad-linux-unhatched",
@@ -333,7 +333,7 @@ export const certifications: Certification[] = [
       "Permissions",
       "Paquets logiciels"
     ],
-    image: "/images/certifications/cisco-netacad.svg"
+    image: "/images/certifications/cisco.png"
   },
   {
     id: "openclassrooms-php-mysql",
@@ -341,7 +341,7 @@ export const certifications: Certification[] = [
     description:
       "Formation (≈20h) pour réaliser un site dynamique : PHP côté serveur, MySQL, CRUD, sécurité et bonnes pratiques. Formation suivie (certification non obtenue).",
     skills: ["PHP", "MySQL", "SQL/CRUD", "Sécurité web", "MVC basique"],
-    image: "/images/certifications/openclassrooms.svg"
+    image: "/images/certifications/openclassrooms.png"
   },
   {
     id: "openclassrooms-java",
@@ -355,7 +355,7 @@ export const certifications: Certification[] = [
       "Collections",
       "Tests"
     ],
-    image: "/images/certifications/openclassrooms.svg"
+    image: "/images/certifications/openclassrooms.png"
   },
   {
     id: "openclassrooms-spring-boot",
@@ -363,7 +363,7 @@ export const certifications: Certification[] = [
     description:
       "Formation (8–11h réelles) : création d’une API REST avec Spring Boot, persistance JPA/Hibernate et tests. Attestation de suivi.",
     skills: ["Spring Boot", "REST API", "JPA/Hibernate", "Maven", "Tests"],
-    image: "/images/certifications/openclassrooms.svg"
+    image: "/images/certifications/openclassrooms.png"
   }
 ];
 
