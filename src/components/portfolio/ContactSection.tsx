@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useState, type ReactNode } from "react";
-import { Github, Linkedin } from "lucide-react";
+import { Github, Linkedin, Mail, MapPin } from "lucide-react";
 import { contactDetails, siteMeta, socialLinks } from "@/data/portfolio";
 
 const socialIconMap: Record<string, ReactNode> = {
@@ -13,6 +13,18 @@ const socialIconMap: Record<string, ReactNode> = {
 
 const getSocialIcon = (key: string): ReactNode | undefined =>
   socialIconMap[key.toLowerCase()];
+
+const contactIconMap: Record<string, ReactNode> = {
+  mail: <Mail className="w-6 h-6" aria-hidden="true" />,
+  email: <Mail className="w-6 h-6" aria-hidden="true" />,
+  "map-pin": <MapPin className="w-6 h-6" aria-hidden="true" />,
+  map: <MapPin className="w-6 h-6" aria-hidden="true" />,
+  localisation: <MapPin className="w-6 h-6" aria-hidden="true" />,
+  location: <MapPin className="w-6 h-6" aria-hidden="true" />
+};
+
+const getContactIcon = (key: string): ReactNode | undefined =>
+  contactIconMap[key.toLowerCase()];
 
 const ContactSection = () => {
   const [formData, setFormData] = useState({
@@ -146,7 +158,14 @@ const ContactSection = () => {
                     target={info.link.startsWith("http") ? "_blank" : undefined}
                     rel={info.link.startsWith("http") ? "noopener noreferrer" : undefined}
                   >
-                    <div className="text-2xl">{info.icon}</div>
+                    <div className="text-2xl">
+                      {getContactIcon(info.icon) ??
+                        getContactIcon(info.title) ?? (
+                          <span className="text-xl" aria-hidden="true">
+                            {info.icon}
+                          </span>
+                        )}
+                    </div>
                     <div>
                       <h4 className="font-semibold text-foreground group-hover:text-primary transition-colors">
                         {info.title}

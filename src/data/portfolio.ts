@@ -193,7 +193,7 @@ export const experiences: Experience[] = [
     technologies: [
       "Python",
       "Flask",
-      "NC Connect (SSO)",
+      "NC Connect ",
       "OpenID Connect",
       "JWT",
       "API REST"
