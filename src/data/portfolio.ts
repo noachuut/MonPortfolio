@@ -461,7 +461,7 @@ export const defaultTechWatchProfile: TechWatchProfile = {
   dailyDev: {
     description:
       "Daily.dev est une plateforme gratuite et open-source qui centralise l’actu tech. C’est un peu comme un flux RSS, sauf que je n’ai rien à configurer : le contenu vient à moi et devient plus pertinent avec mes clics. J’utilise surtout leur extension Chrome : à chaque nouvel onglet, j’ai ma veille sous les yeux. Je lis direct ou j’enregistre pour plus tard, je choisis mes thèmes… ou je me laisse surprendre.J’aime aussi le côté communauté : les articles sont notés, commentés, et les discussions sont souvent utiles. On peut même afficher une DevCard sur GitHub avec les sujets qu’on a lus. Je n’ai pas encore testé la partie forum/entraide, mais l’idée est de faciliter le partage entre devs.",
-    devCardImage: "/images/veille/devcard.jpg",
+    devCardImage: "/images/veille/devcard.png",
     profileLink: "https://app.daily.dev/morandeaunoa"
   },
   socialAccounts: [
@@ -485,7 +485,7 @@ export const defaultTechWatchProfile: TechWatchProfile = {
   favoriteTopic: {
     title: "La place de l’IA dans notre quotidien",
     content:
-      "Je m’intéresse à la façon dont l’IA améliore nos usages: automatisation des tâches, assistance à l’écriture/code, recommandations plus pertinentes, et nouveaux outils métiers. Cette veille m’aide à rester critique (biais, sécurité, RGPD) et à choisir les outils adaptés aux besoins réels.",
+      "Je m’intéresse beaucoup à la façon dont l’intelligence artificielle s’intègre dans nos usages au quotidien. Que ce soit pour automatiser certaines tâches, améliorer la rédaction ou l’analyse de code, ou encore proposer des recommandations plus pertinentes, l’IA transforme peu à peu notre manière de travailler et d’apprendre.Ce qui me passionne, c’est de comprendre comment ces outils fonctionnent et jusqu’où ils peuvent nous aider sans remplacer la réflexion humaine. À travers ma veille, j’essaie de rester attentif aux enjeux éthiques et techniques : les biais, la sécurité des données, la conformité RGPD ou encore l’impact sur nos métiers.Cette approche me permet de garder un regard critique, d’expérimenter les nouveaux outils avec recul, et de choisir ceux qui apportent une vraie valeur ajoutée selon les besoins réels d’un projet. C'est un sujet que j'ai choisis dû aux misions qui m'ont été confiées en alternance, toutes ce porter sur l'IA, j'ai donc du me former et c'est un sujet qui m'a séduis par son évolution constante",
     image: undefined
   }
 };
