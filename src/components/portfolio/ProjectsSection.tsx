@@ -12,6 +12,8 @@ import {
   loadHiddenProjectIds,
   subscribeToProjectUpdates
 } from "@/lib/portfolioStorage";
+import { Link } from "react-router-dom";
+import { slugify } from "@/lib/slug";
 
 const formatProjectType = (type: Project["type"]) => {
   switch (type) {
@@ -167,26 +169,12 @@ const ProjectsSection = () => {
                   ))}
                 </div>
 
-                {/* Actions */}
-                {(() => {
-                  const primaryLink =
-                    project.primaryLink || project.demo || project.github;
-                  if (!primaryLink || project.hidePrimaryButton) {
-                    return null;
-                  }
-
-                  const label = project.primaryLinkLabel || "Voir le projet";
-
-                  return (
-                    <div className="flex">
-                      <Button size="sm" className="flex-1 hero-gradient text-white text-xs" asChild>
-                        <a href={primaryLink} target="_blank" rel="noopener noreferrer">
-                          {label}
-                        </a>
-                      </Button>
-                    </div>
-                  );
-                })()}
+                {/* Details link */}
+                <div className="flex">
+                  <Button size="sm" className="flex-1 hero-gradient text-white text-xs" asChild>
+                    <Link to={`/projets/${slugify(project.title)}`}>En savoir plus</Link>
+                  </Button>
+                </div>
               </div>
             </Card>
           ))}

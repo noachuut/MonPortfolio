@@ -14,12 +14,15 @@ import {
   projects as defaultProjects,
   skillCategories as defaultSkillCategories,
   techWatchArticles as defaultArticles,
+  defaultTechWatchProfile,
   type Certification,
   type Experience,
   type Project,
   type Skill,
   type SkillCategory,
-  type TechWatchArticle
+  type TechWatchArticle,
+  type TechWatchProfile,
+  type SocialPlatform
 } from "@/data/portfolio";
 import {
   loadCustomArticles,
@@ -27,6 +30,7 @@ import {
   loadCustomExperiences,
   loadCustomProjects,
   loadCustomSkillCategories,
+  loadCustomTechWatchProfile,
   loadHiddenArticleIds,
   loadHiddenCertificationIds,
   loadHiddenExperienceIds,
@@ -39,12 +43,14 @@ import {
   saveCustomExperiences,
   saveCustomProjects,
   saveCustomSkillCategories,
+  saveCustomTechWatchProfile,
   saveHiddenArticleIds,
   saveHiddenCertificationIds,
   saveHiddenExperienceIds,
   saveHiddenProjectIds,
   saveHiddenSkillCategoryIds,
-  saveHiddenSkillIds
+  saveHiddenSkillIds,
+  subscribeToTechWatchProfileUpdates
 } from "@/lib/portfolioStorage";
 import { resizeImageFile } from "@/lib/image";
 import {
@@ -57,9 +63,9 @@ import { syncServerData } from "@/lib/serverSync";
 const projectTypeOptions: { value: Project["type"]; label: string }[] = [
   { value: "web", label: "Web" },
   { value: "ia", label: "IA" },
-  { value: "mobile", label: "Mobile" },
+  { value: "évenements", label: "Evenements" },
   { value: "reseaux", label: "Réseaux" },
-  { value: "cli", label: "CLI Python" }
+  { value: "autres", label: "Autres" }
 ];
 
 const generateId = (prefix: string) =>
@@ -198,6 +204,24 @@ const emptyArticleForm: ArticleFormState = {
   image: undefined
 };
 
+type TechWatchAccountForm = {
+  id: string | null;
+  platform: SocialPlatform;
+  name: string;
+  link: string;
+  description: string;
+  image?: string;
+};
+
+const emptyTechWatchAccountForm: TechWatchAccountForm = {
+  id: null,
+  platform: "youtube",
+  name: "",
+  link: "",
+  description: "",
+  image: undefined
+};
+
 const Admin = () => {
   const { toast } = useToast();
 
@@ -252,6 +276,12 @@ const Admin = () => {
   >([]);
   const [customArticles, setCustomArticles] = useState<TechWatchArticle[]>([]);
   const [hiddenArticleIds, setHiddenArticleIds] = useState<string[]>([]);
+  const [techProfile, setTechProfile] = useState<TechWatchProfile>(
+    defaultTechWatchProfile
+  );
+  const [accountForm, setAccountForm] = useState<TechWatchAccountForm>(
+    emptyTechWatchAccountForm
+  );
 
   useEffect(() => {
     setCustomProjects(loadCustomProjects());
@@ -266,6 +296,19 @@ const Admin = () => {
     setCustomArticles(loadCustomArticles());
     setHiddenArticleIds(loadHiddenArticleIds());
     setServerVersion(loadServerDataVersion());
+    const customProfile = loadCustomTechWatchProfile();
+    setTechProfile({
+      ...defaultTechWatchProfile,
+      ...(customProfile || {})
+    });
+
+    const unsubTech = subscribeToTechWatchProfileUpdates(() => {
+      const cp = loadCustomTechWatchProfile();
+      setTechProfile({ ...defaultTechWatchProfile, ...(cp || {}) });
+    });
+    return () => {
+      unsubTech();
+    };
   }, []);
 
   const refreshFromStorage = () => {
@@ -281,6 +324,8 @@ const Admin = () => {
     setCustomArticles(loadCustomArticles());
     setHiddenArticleIds(loadHiddenArticleIds());
     setServerVersion(loadServerDataVersion());
+    const cp = loadCustomTechWatchProfile();
+    setTechProfile({ ...defaultTechWatchProfile, ...(cp || {}) });
   };
 
   const allProjects = useMemo(
@@ -481,6 +526,92 @@ const Admin = () => {
     } finally {
       setIsSyncing(false);
     }
+  };
+
+  // Tech Watch profile handlers
+  const handleDevcardImageChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    const dataUrl = await resizeImageFile(file, 1024, 1024);
+    setTechProfile((prev) => ({
+      ...prev,
+      dailyDev: { ...prev.dailyDev, devCardImage: dataUrl }
+    }));
+  };
+
+  const handleFavoriteImageChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    const dataUrl = await resizeImageFile(file, 1400, 900);
+    setTechProfile((prev) => ({
+      ...prev,
+      favoriteTopic: { ...prev.favoriteTopic, image: dataUrl }
+    }));
+  };
+
+  const handleAccountImageChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    const dataUrl = await resizeImageFile(file, 400, 400);
+    setAccountForm((prev) => ({ ...prev, image: dataUrl }));
+  };
+
+  const addSocialAccount = () => {
+    if (!accountForm.name.trim() || !accountForm.link.trim()) {
+      toast({
+        title: "Champs requis",
+        description: "Renseignez au moins le nom et le lien.",
+        variant: "destructive"
+      });
+      return;
+    }
+    const id = accountForm.id ?? generateId("tw-acc");
+    setTechProfile((prev) => ({
+      ...prev,
+      socialAccounts: [
+        ...prev.socialAccounts.filter((a) => a.id !== id),
+        {
+          id,
+          platform: accountForm.platform,
+          name: accountForm.name.trim(),
+          link: accountForm.link.trim(),
+          description: accountForm.description.trim(),
+          image: accountForm.image
+        }
+      ]
+    }));
+    setAccountForm(emptyTechWatchAccountForm);
+  };
+
+  const editSocialAccount = (id: string) => {
+    const acc = techProfile.socialAccounts.find((a) => a.id === id);
+    if (!acc) return;
+    setAccountForm({
+      id: acc.id,
+      platform: acc.platform,
+      name: acc.name,
+      link: acc.link,
+      description: acc.description,
+      image: acc.image
+    });
+  };
+
+  const removeSocialAccount = (id: string) => {
+    setTechProfile((prev) => ({
+      ...prev,
+      socialAccounts: prev.socialAccounts.filter((a) => a.id !== id)
+    }));
+  };
+
+  const saveTechWatchProfile = () => {
+    saveCustomTechWatchProfile(techProfile);
+    toast({ title: "Profil de veille enregistré" });
   };
 
   const handleProjectSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -1207,6 +1338,194 @@ const Admin = () => {
             className="hidden"
             onChange={handleSnapshotImport}
           />
+        </section>
+
+        {/* Méthode de veille – daily.dev, Réseaux, Sujet favori */}
+        <section>
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h2 className="text-xl font-semibold">Méthode de veille</h2>
+              <p className="text-sm text-muted-foreground">
+                Gérez daily.dev, vos comptes suivis (YouTube, TikTok, Instagram) et votre sujet favori.
+              </p>
+            </div>
+            <Button asChild variant="outline" size="sm">
+              <a href="/veille-technologique" target="_blank" rel="noopener noreferrer">Voir la page publique</a>
+            </Button>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-6">
+            <Card className="p-4">
+              <h3 className="font-semibold mb-3">daily.dev</h3>
+              <div className="grid gap-2">
+                <Label>Description</Label>
+                <Textarea
+                  rows={3}
+                  value={techProfile.dailyDev?.description || ""}
+                  onChange={(e) =>
+                    setTechProfile((p) => ({
+                      ...p,
+                      dailyDev: { ...p.dailyDev, description: e.target.value }
+                    }))
+                  }
+                />
+              </div>
+              <div className="grid gap-2 mt-3">
+                <Label>Lien de profil</Label>
+                <Input
+                  value={techProfile.dailyDev?.profileLink || ""}
+                  onChange={(e) =>
+                    setTechProfile((p) => ({
+                      ...p,
+                      dailyDev: { ...p.dailyDev, profileLink: e.target.value }
+                    }))
+                  }
+                />
+              </div>
+              <div className="grid gap-2 mt-3">
+                <Label>Image DevCard</Label>
+                <Input type="file" accept="image/*" onChange={handleDevcardImageChange} />
+                {techProfile.dailyDev?.devCardImage && (
+                  <img
+                    src={techProfile.dailyDev.devCardImage}
+                    alt="DevCard"
+                    className="mt-2 h-32 object-contain border rounded"
+                  />
+                )}
+              </div>
+            </Card>
+
+            <Card className="p-4">
+              <h3 className="font-semibold mb-3">Comptes suivis</h3>
+              <div className="grid md:grid-cols-2 gap-3">
+                <div className="grid gap-2">
+                  <Label>Plateforme</Label>
+                  <select
+                    className="h-9 rounded border border-input bg-background px-2"
+                    value={accountForm.platform}
+                    onChange={(e) =>
+                      setAccountForm((p) => ({ ...p, platform: e.target.value as any }))
+                    }
+                  >
+                    <option value="youtube">YouTube</option>
+                    <option value="tiktok">TikTok</option>
+                    <option value="instagram">Instagram</option>
+                    <option value="other">Autre</option>
+                  </select>
+                </div>
+                <div className="grid gap-2">
+                  <Label>Nom</Label>
+                  <Input
+                    value={accountForm.name}
+                    onChange={(e) => setAccountForm((p) => ({ ...p, name: e.target.value }))}
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label>Lien</Label>
+                  <Input
+                    value={accountForm.link}
+                    onChange={(e) => setAccountForm((p) => ({ ...p, link: e.target.value }))}
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label>Image</Label>
+                  <Input type="file" accept="image/*" onChange={handleAccountImageChange} />
+                </div>
+              </div>
+              <div className="grid gap-2 mt-2">
+                <Label>Description</Label>
+                <Textarea
+                  rows={3}
+                  value={accountForm.description}
+                  onChange={(e) => setAccountForm((p) => ({ ...p, description: e.target.value }))}
+                />
+              </div>
+              <div className="mt-3 flex gap-2">
+                <Button size="sm" onClick={addSocialAccount}>
+                  {accountForm.id ? "Mettre à jour" : "Ajouter"}
+                </Button>
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  onClick={() => setAccountForm(emptyTechWatchAccountForm)}
+                >
+                  Annuler
+                </Button>
+              </div>
+              <div className="mt-4 space-y-2 max-h-64 overflow-y-auto pr-2">
+                {techProfile.socialAccounts.map((acc) => (
+                  <div key={acc.id} className="rounded border p-2 flex items-start gap-3">
+                    {acc.image && (
+                      <img src={acc.image} alt={acc.name} className="w-10 h-10 object-cover rounded" />
+                    )}
+                    <div className="flex-1">
+                      <p className="text-sm font-medium">
+                        {acc.name}{" "}
+                        <span className="text-xs text-muted-foreground">({acc.platform})</span>
+                      </p>
+                      <p className="text-xs text-muted-foreground break-all">{acc.link}</p>
+                    </div>
+                    <div className="flex gap-2">
+                      <Button size="sm" variant="outline" onClick={() => editSocialAccount(acc.id)}>
+                        Modifier
+                      </Button>
+                      <Button size="sm" variant="destructive" onClick={() => removeSocialAccount(acc.id)}>
+                        Supprimer
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </Card>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-6 mt-6">
+            <Card className="p-4">
+              <h3 className="font-semibold mb-3">Sujet favori</h3>
+              <div className="grid gap-2">
+                <Label>Titre</Label>
+                <Input
+                  value={techProfile.favoriteTopic.title}
+                  onChange={(e) =>
+                    setTechProfile((p) => ({
+                      ...p,
+                      favoriteTopic: { ...p.favoriteTopic, title: e.target.value }
+                    }))
+                  }
+                />
+              </div>
+              <div className="grid gap-2 mt-2">
+                <Label>Contenu</Label>
+                <Textarea
+                  rows={5}
+                  value={techProfile.favoriteTopic.content}
+                  onChange={(e) =>
+                    setTechProfile((p) => ({
+                      ...p,
+                      favoriteTopic: { ...p.favoriteTopic, content: e.target.value }
+                    }))
+                  }
+                />
+              </div>
+            </Card>
+            <Card className="p-4">
+              <div className="grid gap-2">
+                <Label>Image</Label>
+                <Input type="file" accept="image/*" onChange={handleFavoriteImageChange} />
+                {techProfile.favoriteTopic.image && (
+                  <img
+                    src={techProfile.favoriteTopic.image}
+                    alt="Sujet favori"
+                    className="mt-2 h-40 object-cover border rounded"
+                  />
+                )}
+              </div>
+            </Card>
+          </div>
+
+          <div className="mt-4">
+            <Button onClick={saveTechWatchProfile}>Enregistrer la méthode de veille</Button>
+          </div>
         </section>
 
         <Separator />

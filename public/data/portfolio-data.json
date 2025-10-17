@@ -1,7 +1,9 @@
 {
   "schemaVersion": 1,
-  "version": "0",
-  "exportedAt": "1970-01-01T00:00:00.000Z",
+  "version": "2025-01-01T00:00:00.000Z",
+  "exportedAt": "2025-01-01T00:00:00.000Z",
+  "source": "tech-watch-import",
+  "note": "Veille technologique – IA en entreprise",
   "projects": [],
   "hiddenProjectIds": [],
   "experiences": [],
@@ -11,6 +13,23 @@
   "hiddenSkillIds": [],
   "certifications": [],
   "hiddenCertificationIds": [],
-  "techWatchArticles": [],
+  "techWatchArticles": [
+    {
+      "id": "ia-automation-outils",
+      "title": "Les outils d’automatisation IA",
+      "summary": "Aujourd’hui, des outils comme Zapier et n8n permettent de créer des workflows automatisés pour réduire les tâches répétitives et gagner en productivité. On enchaîne des nœuds pour réaliser chaque action : récupérer des données, générer un rapport avec Power BI, l’envoyer par e‑mail puis prévenir l’équipe sur Slack. Tout se pilote depuis un tableau de bord simple, ce qui facilite la vision d’ensemble et l’ajustement de chaque étape selon le besoin.\n\nSources : zapier.com (Automations), docs.n8n.io (Workflows), learn.microsoft.com/power-bi (Power BI).",
+      "image": null,
+      "link": "https://docs.n8n.io",
+      "publishedAt": "2025"
+    },
+    {
+      "id": "ia-gouvernement-osez-ia",
+      "title": "Le gouvernement français encourage l’utilisation de l’IA au travail",
+      "summary": "Selon le gouvernement français, l’IA est un levier de compétitivité mais de nombreuses entreprises hésitent encore. Le plan “Osez l’IA” vise à accompagner TPE/PME/ETI tout au long de l’adoption : sensibilisation, diagnostics d’usage, catalogue de solutions et cas d’usage, et orientation vers des aides. Objectif : accélérer une adoption responsable, sécurisée et utile dans les métiers.\n\nSources : France Num – Osez l’IA (francenum.gouv.fr), Bpifrance – Diagnostic IA (bpifrance.fr).",
+      "image": null,
+      "link": "https://www.francenum.gouv.fr",
+      "publishedAt": "2025"
+    }
+  ],
   "hiddenArticleIds": []
 }
