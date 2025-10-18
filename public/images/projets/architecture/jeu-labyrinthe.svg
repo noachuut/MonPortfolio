@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="220" viewBox="0 0 820 220">
+  <style>
+    .box{fill:#0b1220;stroke:#f59e0b;stroke-width:2;rx:8}
+    .text{fill:#d1d5db;font:14px sans-serif}
+    .title{fill:#fff;font:600 14px sans-serif}
+    .arrow{stroke:#94a3b8;stroke-width:2;marker-end:url(#a)}
+  </style>
+  <defs>
+    <marker id="a" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#94a3b8" />
+    </marker>
+  </defs>
+  <rect x="40" y="70" width="160" height="80" class="box"/>
+  <text x="120" y="95" text-anchor="middle" class="title">Entrées</text>
+  <text x="120" y="115" text-anchor="middle" class="text">Clavier (ZQSD)</text>
+
+  <rect x="240" y="70" width="200" height="80" class="box"/>
+  <text x="340" y="95" text-anchor="middle" class="title">Boucle de jeu</text>
+  <text x="340" y="115" text-anchor="middle" class="text">Règles/États</text>
+
+  <rect x="480" y="70" width="140" height="80" class="box"/>
+  <text x="550" y="95" text-anchor="middle" class="title">Carte</text>
+  <text x="550" y="115" text-anchor="middle" class="text">Labyrinthe</text>
+
+  <rect x="650" y="70" width="130" height="80" class="box"/>
+  <text x="715" y="95" text-anchor="middle" class="title">Affichage</text>
+  <text x="715" y="115" text-anchor="middle" class="text">Terminal</text>
+
+  <path d="M200 110 H240" class="arrow"/>
+  <path d="M440 110 H480" class="arrow"/>
+  <path d="M620 110 H650" class="arrow"/>
+</svg>

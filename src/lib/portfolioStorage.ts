@@ -3,7 +3,8 @@ import type {
   Experience,
   Project,
   SkillCategory,
-  TechWatchArticle
+  TechWatchArticle,
+  TechWatchProfile
 } from "@/data/portfolio";
 
 const CUSTOM_PROJECTS_KEY = "portfolio-custom-projects";
@@ -11,6 +12,7 @@ const CUSTOM_EXPERIENCES_KEY = "portfolio-custom-experiences";
 const CUSTOM_SKILLS_KEY = "portfolio-custom-skills";
 const CUSTOM_CERTIFICATIONS_KEY = "portfolio-custom-certifications";
 const CUSTOM_ARTICLES_KEY = "portfolio-custom-articles";
+const CUSTOM_TECHWATCH_PROFILE_KEY = "portfolio-custom-techwatch-profile";
 const HIDDEN_PROJECT_IDS_KEY = "portfolio-hidden-project-ids";
 const HIDDEN_EXPERIENCE_IDS_KEY = "portfolio-hidden-experience-ids";
 const HIDDEN_SKILL_IDS_KEY = "portfolio-hidden-skill-ids";
@@ -23,6 +25,7 @@ const EXPERIENCES_EVENT = "portfolio-experiences-updated";
 const SKILLS_EVENT = "portfolio-skills-updated";
 const CERTIFICATIONS_EVENT = "portfolio-certifications-updated";
 const ARTICLES_EVENT = "portfolio-articles-updated";
+const TECHWATCH_PROFILE_EVENT = "portfolio-techwatch-profile-updated";
 
 const isBrowser = typeof window !== "undefined";
 
@@ -30,16 +33,14 @@ const safeParse = <T>(value: string | null, fallback: T): T => {
   if (!value) {
     return fallback;
   }
-
   try {
-    const parsed = JSON.parse(value) as T;
+    const parsed = JSON.parse(value) as unknown;
     if (Array.isArray(parsed)) {
-      return parsed;
+      return parsed as T;
     }
-
     return fallback;
   } catch (error) {
-    console.warn("Impossible d'analyser les donnÃ©es stockÃ©es", error);
+    console.warn("Impossible d'analyser les données stockées", error);
     return fallback;
   }
 };
@@ -382,3 +383,48 @@ export const subscribeToArticleUpdates = (callback: () => void) => {
     window.removeEventListener(ARTICLES_EVENT, handler);
   };
 };
+
+// Tech Watch Profile (single object)
+export const loadCustomTechWatchProfile = (): TechWatchProfile | null => {
+  if (!isBrowser) {
+    return null;
+  }
+
+  const raw = window.localStorage.getItem(CUSTOM_TECHWATCH_PROFILE_KEY);
+  try {
+    return raw ? (JSON.parse(raw) as TechWatchProfile) : null;
+  } catch (e) {
+    console.warn("Profil de veille invalide", e);
+    return null;
+  }
+};
+
+export const saveCustomTechWatchProfile = (profile: TechWatchProfile | null) => {
+  if (!isBrowser) {
+    return;
+  }
+  if (profile) {
+    window.localStorage.setItem(
+      CUSTOM_TECHWATCH_PROFILE_KEY,
+      JSON.stringify(profile)
+    );
+  } else {
+    window.localStorage.removeItem(CUSTOM_TECHWATCH_PROFILE_KEY);
+  }
+  window.dispatchEvent(new Event(TECHWATCH_PROFILE_EVENT));
+};
+
+export const subscribeToTechWatchProfileUpdates = (callback: () => void) => {
+  if (!isBrowser) {
+    return () => undefined;
+  }
+  const handler = () => callback();
+  window.addEventListener("storage", handler);
+  window.addEventListener(TECHWATCH_PROFILE_EVENT, handler);
+  return () => {
+    window.removeEventListener("storage", handler);
+    window.removeEventListener(TECHWATCH_PROFILE_EVENT, handler);
+  };
+};
+
+

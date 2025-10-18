@@ -75,7 +75,7 @@ const SkillsSection = () => {
                     <img
                       src={skill.icon}
                       alt={skill.name}
-                      className="w-8 h-8 object-contain"
+                      className="w-10 h-10 object-contain rounded-md bg-background/80 ring-1 ring-border p-1"
                       loading="lazy"
                     />
                     <span className="font-medium">{skill.name}</span>

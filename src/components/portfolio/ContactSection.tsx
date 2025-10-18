@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useState, type ReactNode } from "react";
-import { Github, Linkedin } from "lucide-react";
+import { Github, Linkedin, Mail, MapPin } from "lucide-react";
 import { contactDetails, siteMeta, socialLinks } from "@/data/portfolio";
 
 const socialIconMap: Record<string, ReactNode> = {
@@ -14,17 +14,104 @@ const socialIconMap: Record<string, ReactNode> = {
 const getSocialIcon = (key: string): ReactNode | undefined =>
   socialIconMap[key.toLowerCase()];
 
+const contactIconMap: Record<string, ReactNode> = {
+  mail: <Mail className="w-6 h-6" aria-hidden="true" />,
+  email: <Mail className="w-6 h-6" aria-hidden="true" />,
+  "map-pin": <MapPin className="w-6 h-6" aria-hidden="true" />,
+  map: <MapPin className="w-6 h-6" aria-hidden="true" />,
+  localisation: <MapPin className="w-6 h-6" aria-hidden="true" />,
+  location: <MapPin className="w-6 h-6" aria-hidden="true" />
+};
+
+const getContactIcon = (key: string): ReactNode | undefined =>
+  contactIconMap[key.toLowerCase()];
+
 const ContactSection = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    message: "",
+    website: ""
+  });
+  const [submitting, setSubmitting] = useState(false);
+  const [status, setStatus] = useState<{ type: "success" | "error" | null; message: string }>({
+    type: null,
     message: ""
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission here
-    console.log("Form submitted:", formData);
+    setStatus({ type: null, message: "" });
+
+    if (!formData.name || !formData.email || !formData.message) {
+      setStatus({ type: "error", message: "Veuillez remplir tous les champs." });
+      return;
+    }
+    const emailOk = /.+@.+\..+/.test(formData.email);
+    if (!emailOk) {
+      setStatus({ type: "error", message: "Veuillez saisir un email valide." });
+      return;
+    }
+    if (formData.website) {
+      setStatus({ type: "success", message: "Message envoyé. Merci !" });
+      setFormData({ name: "", email: "", message: "", website: "" });
+      return;
+    }
+
+    const endpoint = import.meta.env.VITE_CONTACT_ENDPOINT as string | undefined;
+    const web3formsKey = import.meta.env.VITE_WEB3FORMS_KEY as string | undefined;
+
+    setSubmitting(true);
+    try {
+      let ok = false;
+      if (endpoint) {
+        const res = await fetch(endpoint, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json"
+          },
+          body: JSON.stringify({
+            name: formData.name,
+            email: formData.email,
+            message: formData.message,
+            subject: "Nouveau message depuis le portfolio",
+            to: "noamorandeau@gmail.com"
+          })
+        });
+        ok = res.ok;
+      } else if (web3formsKey) {
+        const payload = new FormData();
+        payload.append("access_key", web3formsKey);
+        payload.append("from_name", formData.name);
+        payload.append("from_email", formData.email);
+        payload.append("subject", "Nouveau message depuis le portfolio");
+        payload.append("message", formData.message);
+        payload.append("page", window.location.href);
+
+        const res = await fetch("https://api.web3forms.com/submit", {
+          method: "POST",
+          body: payload
+        });
+        ok = res.ok;
+      } else {
+        const subject = encodeURIComponent("Nouveau message depuis le portfolio");
+        const body = encodeURIComponent(`Nom: ${formData.name}\nEmail: ${formData.email}\n\n${formData.message}`);
+        window.location.href = `mailto:noamorandeau@gmail.com?subject=${subject}&body=${body}`;
+        ok = true;
+      }
+
+      if (ok) {
+        setStatus({ type: "success", message: "Message envoyé. Merci !" });
+        setFormData({ name: "", email: "", message: "", website: "" });
+      } else {
+        setStatus({ type: "error", message: "Une erreur est survenue. Réessayez plus tard." });
+      }
+    } catch (err) {
+      setStatus({ type: "error", message: "Impossible d'envoyer le message pour le moment." });
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -71,7 +158,14 @@ const ContactSection = () => {
                     target={info.link.startsWith("http") ? "_blank" : undefined}
                     rel={info.link.startsWith("http") ? "noopener noreferrer" : undefined}
                   >
-                    <div className="text-2xl">{info.icon}</div>
+                    <div className="text-2xl">
+                      {getContactIcon(info.icon) ??
+                        getContactIcon(info.title) ?? (
+                          <span className="text-xl" aria-hidden="true">
+                            {info.icon}
+                          </span>
+                        )}
+                    </div>
                     <div>
                       <h4 className="font-semibold text-foreground group-hover:text-primary transition-colors">
                         {info.title}
@@ -171,12 +265,33 @@ const ContactSection = () => {
                   placeholder="Décrivez votre projet..."
                 />
               </div>
-              
-              <Button 
-                type="submit" 
-                className="w-full hero-gradient text-white hover:shadow-lg hover:shadow-primary/25 transition-all duration-300 py-6 text-lg font-semibold"
+
+              {/* Honeypot field (hidden) */}
+              <div className="hidden" aria-hidden>
+                <label htmlFor="website">Votre site web (laisser vide)</label>
+                <input
+                  id="website"
+                  name="website"
+                  type="text"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  value={formData.website}
+                  onChange={handleChange as any}
+                />
+              </div>
+
+              {status.type && (
+                <div className={status.type === "success" ? "text-green-600" : "text-red-600"}>
+                  {status.message}
+                </div>
+              )}
+
+              <Button
+                type="submit"
+                disabled={submitting}
+                className="w-full hero-gradient text-white hover:shadow-lg hover:shadow-primary/25 transition-all duration-300 py-6 text-lg font-semibold disabled:opacity-70"
               >
-                Envoyer le message
+                {submitting ? "Envoi en cours..." : "Envoyer le message"}
               </Button>
             </form>
           </Card>

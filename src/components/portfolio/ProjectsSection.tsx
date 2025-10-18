@@ -12,17 +12,19 @@ import {
   loadHiddenProjectIds,
   subscribeToProjectUpdates
 } from "@/lib/portfolioStorage";
+import { Link } from "react-router-dom";
+import { slugify } from "@/lib/slug";
 
 const formatProjectType = (type: Project["type"]) => {
   switch (type) {
     case "ia":
       return "IA";
-    case "mobile":
-      return "Mobile";
+    case "évenements":
+      return "Evenements";
     case "reseaux":
       return "Réseaux";
-    case "cli":
-      return "CLI Python";
+    case "autres":
+      return "Autres";
     default:
       return "Web";
   }
@@ -53,9 +55,9 @@ const ProjectsSection = () => {
     const types = new Set<Project["type"]>([
       "web",
       "ia",
-      "mobile",
+      "évenements",
       "reseaux",
-      "cli"
+      "autres"
     ]);
     combinedProjects.forEach((project) => types.add(project.type));
     return Array.from(types);
@@ -144,6 +146,7 @@ const ProjectsSection = () => {
                 </p>
                 
                 {/* Features */}
+                {((project.type as unknown as string) !== "�venements" && (project.type as unknown as string) !== "Ǹvenements") && (
                 <div className="mb-4">
                   <h4 className="font-semibold mb-2 text-sm">Fonctionnalités :</h4>
                   <ul className="space-y-1">
@@ -155,6 +158,7 @@ const ProjectsSection = () => {
                     ))}
                   </ul>
                 </div>
+                )}
                 
                 {/* Technologies */}
                 <div className="flex flex-wrap gap-2 mb-4">
@@ -165,26 +169,12 @@ const ProjectsSection = () => {
                   ))}
                 </div>
 
-                {/* Actions */}
-                {(() => {
-                  const primaryLink =
-                    project.primaryLink || project.demo || project.github;
-                  if (!primaryLink) {
-                    return null;
-                  }
-
-                  const label = project.primaryLinkLabel || "Voir le projet";
-
-                  return (
-                    <div className="flex">
-                      <Button size="sm" className="flex-1 hero-gradient text-white text-xs" asChild>
-                        <a href={primaryLink} target="_blank" rel="noopener noreferrer">
-                          {label}
-                        </a>
-                      </Button>
-                    </div>
-                  );
-                })()}
+                {/* Details link */}
+                <div className="flex">
+                  <Button size="sm" className="flex-1 hero-gradient text-white text-xs" asChild>
+                    <Link to={`/projets/${slugify(project.title)}`}>En savoir plus</Link>
+                  </Button>
+                </div>
               </div>
             </Card>
           ))}

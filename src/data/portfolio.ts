@@ -55,13 +55,15 @@ export type Project = {
   title: string;
   description: string;
   visual?: string;
-  type: "web" | "ia" | "mobile" | "reseaux" | "cli";
+  type: "web" | "ia" | "évenements" | "reseaux" | "autres";
   technologies: string[];
   skillHighlight: string;
   github?: string;
   demo?: string;
   primaryLink?: string;
   primaryLinkLabel?: string;
+  // When true, hide the primary action button even if a link exists
+  hidePrimaryButton?: boolean;
   features: string[];
 };
 
@@ -81,6 +83,31 @@ export type TechWatchArticle = {
   image?: string;
   link: string;
   publishedAt?: string;
+};
+
+export type SocialPlatform = "youtube" | "tiktok" | "instagram" | "other";
+
+export type SocialAccount = {
+  id: string;
+  platform: SocialPlatform;
+  name: string;
+  link: string;
+  image?: string;
+  description: string;
+};
+
+export type TechWatchProfile = {
+  dailyDev: {
+    description?: string;
+    devCardImage?: string; // URL ou data URL de la devCard
+    profileLink: "https://app.daily.dev/morandeaunoa";
+  };
+  socialAccounts: SocialAccount[]; // comptes suivis avec plateforme
+  favoriteTopic: {
+    title: string;
+    content: string;
+    image?: string;
+  };
 };
 
 export type ContactDetail = {
@@ -143,40 +170,40 @@ export const skillCategories: SkillCategory[] = [
     id: "frontend",
     title: "Langages & Frontend",
     skills: [
-      { id: "html", name: "HTML5", icon: "/images/technologies/html5.svg" },
-      { id: "css", name: "CSS3", icon: "/images/technologies/css3.svg" },
+      { id: "html", name: "HTML5", icon: "/images/technologies/html.png" },
+      { id: "css", name: "CSS3", icon: "/images/technologies/css.png" },
       {
         id: "javascript",
         name: "JavaScript",
-        icon: "/images/technologies/javascript.svg"
+        icon: "/images/technologies/JS.png"
       },
-      { id: "vaadin", name: "Vaadin", icon: "/images/technologies/vaadin.svg" }
+      { id: "vaadin", name: "Vaadin", icon: "/images/technologies/vaadin.png" }
     ]
   },
   {
     id: "backend",
     title: "Backend & Frameworks",
     skills: [
-      { id: "java", name: "Java", icon: "/images/technologies/java.svg" },
+      { id: "java", name: "Java", icon: "/images/technologies/java.png" },
       {
         id: "spring-boot",
         name: "Spring Boot",
-        icon: "/images/technologies/spring-boot.svg"
+        icon: "/images/technologies/spring-boot.png"
       },
-      { id: "python", name: "Python", icon: "/images/technologies/python.svg" },
-      { id: "flask", name: "Flask", icon: "/images/technologies/flask.svg" }
+      { id: "python", name: "Python", icon: "/images/technologies/python.png" },
+      { id: "flask", name: "Flask", icon: "/images/technologies/flask.png" }
     ]
   },
   {
     id: "outils",
     title: "Outils & Bases de données",
     skills: [
-      { id: "docker", name: "Docker", icon: "/images/technologies/docker.svg" },
-      { id: "git", name: "Git", icon: "/images/technologies/git.svg" },
+      { id: "docker", name: "Docker", icon: "/images/technologies/docker.png" },
+      { id: "git", name: "Git", icon: "/images/technologies/git.png" },
       {
         id: "postgresql",
         name: "PostgreSQL",
-        icon: "/images/technologies/postgresql.svg"
+        icon: "/images/technologies/postgresql.png"
       }
     ]
   }
@@ -186,14 +213,14 @@ export const experiences: Experience[] = [
   {
     id: "sio-stage-1",
     title: "Stagiaire développeur",
-    company: "DINUM NC – Direction du Numérique (Nouméa)",
+    company: "DINUM NC – Direction du Numérique et de la modernisation",
     period: "04 novembre 2024 – 06 décembre 2024",
     description:
       "Réalisation d’un POC intégrant NC Connect pour offrir une authentification unifiée (SSO) et faciliter la connexion de fournisseurs de données aux applications internes.",
     technologies: [
       "Python",
       "Flask",
-      "NC Connect (SSO)",
+      "NC Connect ",
       "OpenID Connect",
       "JWT",
       "API REST"
@@ -206,17 +233,17 @@ export const experiences: Experience[] = [
     image: undefined
   },
   {
-    id: "default-experience-1",
+    id: "opt-alternance",
     title: "Alternant Développeur",
-    company: "Votre entreprise",
-    period: "2023 - Aujourd'hui",
+    company: "Office des postes et  télécommunications NC",
+    period: "08 janvier - 31 décembre",
     description:
-      "En tant qu'alternant développeur en BTS SIO SLAM, je participe à la conception et à la maintenance d'applications tout en approfondissant mes compétences.",
-    technologies: ["React", "TypeScript", "Node.js"],
+      "Participation à la conception et à l’évolution d’applications internes. réalisation d'un POC IA-Docubase (fiabilisation des données de factures) et travaux de réflexion/POC sur la détection d’anomalies (qualité des données, écarts, doublons, cas atypiques) pour soutenir les équipes métier.",
+    technologies: ["Java", "SpringBoot", "SpringBatch", "LLM"],
     achievements: [
-      "Ajoutez vos réalisations clés.",
-      "Personnalisez cette liste selon votre expérience.",
-      "Importez les détails depuis votre portfolio."
+      "Réalisation POC IA-Docubase : extraction de champs, rapprochement avec les métadonnées, contrôle/validation.",
+      "Conception d’un POC de détection d’anomalies : critères règles-based + pistes statistiques/LLM",
+      "Mise en place de jeux de tests et suivi de la qualité des données sur lots de factures."
     ],
     image: undefined
   }
@@ -224,23 +251,82 @@ export const experiences: Experience[] = [
 
 export const projects: Project[] = [
   {
-    id: "default-project-1",
-    title: "Nom du projet",
+    id: "1",
+    title: "IA-Docubase",
     description:
-      "Décrivez ici un projet important. Les données doivent être mises à jour avec le contenu de votre portfolio.",
-    visual: undefined,
-    type: "web",
-    technologies: ["React", "TypeScript"],
-    skillHighlight: "React",
+      "Docubase automatise le traitement des factures : centralisation, extraction des champs clés (Nom, Prénom, BP, n° de contrat, n° client), comparaison aux métadonnées et signalement des écarts en rouge. Validation/correction rapide, puis mise à jour de la GED avec des données fiables.",
+    visual: "/images/projets/docubase.png",
+    type: "ia",
+    technologies: ["Spring Boot","Spring Batch","Vaadin","Docker"],
+    skillHighlight: "Java",
     github: "#",
     demo: "#",
     primaryLink: "#",
     primaryLinkLabel: "Voir le projet",
     features: [
-      "Première fonctionnalité clé.",
-      "Deuxième fonctionnalité clé.",
-      "Troisième fonctionnalité clé."
+      "Extraire automatiquement les champs clés",
+      "Mettre en évidence les écarts avec la GED",
+      "Mettre à jour la GED avec les données vérifiées"
+    ],
+    hidePrimaryButton: true 
+  },
+  {
+    id: "2",
+    title: "Cyber EscapeGame",
+    description:
+      "jeu pédagogique de cybersécurité pour lycéens : propose des parcours d’énigmes chronométrés portées sur la cybersécurité. Classement finale pour mettre en compétitions. Projet de sensibilisation réaliser pour la semaine du Numérique au Lycée Dick Ukeiwe ",
+    visual: "/images/projets/escape-game.png",
+    type: "web",
+    technologies: ["Node.js",  "PostgreSQL", "OpenAPI/Swagger", "HTML,CSS,JavaScript"],
+    skillHighlight: "Node.js",
+    github: "https://github.com/noachuut/EscapeGame",
+    demo: "#",
+    primaryLink: "https://escape-game.btsinfo.nc/",
+    primaryLinkLabel: "Voir le projet",
+    features: [
+      "Créer des sessions et gérer les énigmes",
+      "Chronométrer les parcours (timer)",
+      "Enregistrer la progression et les scores"
     ]
+  },
+  {
+    id: "3",
+    title: "Jeu Labyrinthe",
+    description:
+      "Mini-jeu de labyrinthe en Python (terminal) réalisé en 1ʳᵉ année de BTS SIO. Le joueur doit trouver la sortie en naviguant case par case dans un labyrinthe . le joueur choisis son personnage et a 5 vies pour terminer ce labbyrinthe facile en apparence mais remplis de piège. Un agent vocale est mis a disposition pour lire les consignes.",
+    visual: "/images/projets/labyrinthGame.png",
+    type: "autres",
+    technologies: ["Python"],
+    skillHighlight: "POO Python",
+    github: "#",
+    demo: "#",
+    primaryLink: "https://github.com/noachuut/LabyrinthGame",
+    primaryLinkLabel: "Voir le Github",
+    features: [
+      "Déplacements clavier (z q s d) et affichage en temps réel dans le terminal",
+      "Création du labyrinthe",
+      "Menus avec règles, lancement du jeu et choix du personnage"
+    ]
+  },
+  {
+    id: "4",
+    title: "TélécabNc - Space4NC",
+    description:
+      "Space4NC, c’est 24 heures pour prototyper un projet entrepreneurial à impact, en mobilisant les données et technologies spatiales avec l’accompagnement de coachs, d’experts du CNES et de partenaires locaux. Nous avons eu l’honneur de participer à ce hackathon et d’y remporter la première place avec notre projet TélécabNC.",
+    visual: "/images/projets/hackathon.webp",
+    type: "évenements",
+    technologies: ["Python"],
+    skillHighlight: "POO Python",
+    github: "#",
+    demo: "#",
+    primaryLink: "",
+    primaryLinkLabel: "Voir le Github",
+    features: [
+      "Déplacements clavier (z q s d) et affichage en temps réel dans le terminal",
+      "Création du labyrinthe",
+      "Menus avec règles, lancement du jeu et choix du personnage"
+    ]
+
   }
 ];
 
@@ -276,7 +362,7 @@ export const certifications: Certification[] = [
       "Bonnes pratiques",
       "Sensibilisation"
     ],
-    image: "/images/certifications/skills-for-all.svg"
+    image: "/images/certifications/cisco.png"
   },
   {
     id: "openclassrooms-comprendre-web",
@@ -290,7 +376,7 @@ export const certifications: Certification[] = [
       "Déploiement",
       "Culture web"
     ],
-    image: "/images/certifications/openclassrooms.svg"
+    image: "/images/certifications/openclassrooms.png"
   },
   {
     id: "skills-for-all-networks",
@@ -304,7 +390,7 @@ export const certifications: Certification[] = [
       "Adressage IP",
       "Routage de base"
     ],
-    image: "/images/certifications/skills-for-all.svg"
+    image: "/images/certifications/cisco.png"
   },
   {
     id: "openclassrooms-html-css",
@@ -319,7 +405,7 @@ export const certifications: Certification[] = [
       "Grid",
       "Accessibilité"
     ],
-    image: "/images/certifications/openclassrooms.svg"
+    image: "/images/certifications/openclassrooms.png"
   },
   {
     id: "cisco-netacad-linux-unhatched",
@@ -333,7 +419,7 @@ export const certifications: Certification[] = [
       "Permissions",
       "Paquets logiciels"
     ],
-    image: "/images/certifications/cisco-netacad.svg"
+    image: "/images/certifications/cisco.png"
   },
   {
     id: "openclassrooms-php-mysql",
@@ -341,7 +427,7 @@ export const certifications: Certification[] = [
     description:
       "Formation (≈20h) pour réaliser un site dynamique : PHP côté serveur, MySQL, CRUD, sécurité et bonnes pratiques. Formation suivie (certification non obtenue).",
     skills: ["PHP", "MySQL", "SQL/CRUD", "Sécurité web", "MVC basique"],
-    image: "/images/certifications/openclassrooms.svg"
+    image: "/images/certifications/openclassrooms.png"
   },
   {
     id: "openclassrooms-java",
@@ -355,7 +441,7 @@ export const certifications: Certification[] = [
       "Collections",
       "Tests"
     ],
-    image: "/images/certifications/openclassrooms.svg"
+    image: "/images/certifications/openclassrooms.png"
   },
   {
     id: "openclassrooms-spring-boot",
@@ -363,21 +449,46 @@ export const certifications: Certification[] = [
     description:
       "Formation (8–11h réelles) : création d’une API REST avec Spring Boot, persistance JPA/Hibernate et tests. Attestation de suivi.",
     skills: ["Spring Boot", "REST API", "JPA/Hibernate", "Maven", "Tests"],
-    image: "/images/certifications/openclassrooms.svg"
+    image: "/images/certifications/openclassrooms.png"
   }
 ];
 
 export const techWatchArticles: TechWatchArticle[] = [
-  {
-    id: "default-article-1",
-    title: "Titre de l'article de veille",
-    summary:
-      "Présentez ici les points clés de votre veille technologique. Remplacez ce contenu par vos découvertes.",
-    image: undefined,
-    link: "https://example.com",
-    publishedAt: "2024"
-  }
+
 ];
+
+export const defaultTechWatchProfile: TechWatchProfile = {
+  dailyDev: {
+    description:
+      "Daily.dev est une plateforme gratuite et open-source qui centralise l’actu tech. C’est un peu comme un flux RSS, sauf que je n’ai rien à configurer : le contenu vient à moi et devient plus pertinent avec mes clics. J’utilise surtout leur extension Chrome : à chaque nouvel onglet, j’ai ma veille sous les yeux. Je lis direct ou j’enregistre pour plus tard, je choisis mes thèmes… ou je me laisse surprendre.J’aime aussi le côté communauté : les articles sont notés, commentés, et les discussions sont souvent utiles. On peut même afficher une DevCard sur GitHub avec les sujets qu’on a lus. Je n’ai pas encore testé la partie forum/entraide, mais l’idée est de faciliter le partage entre devs.",
+    devCardImage: "/images/veille/devcard.png",
+    profileLink: "https://app.daily.dev/morandeaunoa"
+  },
+  socialAccounts: [
+    { id: "yt-1", 
+      platform: "youtube", 
+      name: "Underscore", 
+      link: "https://www.youtube.com/@Underscore_", 
+      image: "/images/projets/underscore.jpg", 
+      description: "Décodage des tendances numériques : enjeux, usages et impacts sans buzz ni raccourcis. Cette chaine youtube, fais énormément d'interview, de vidéos l'actualité numérique (et surtout sur l'Ia) en vulgarisant le plus possible. Très agréable a régarder " 
+    },
+    { id: "yt-2", 
+      platform: "youtube", 
+      name: "Tech IA News", 
+      link: "https://www.youtube.com/@Tech_IA_news", 
+      image: "/images/projets/technews.jpg", 
+      description: "C’est une chaîne que je regarde souvent pour rester à jour sur l’actualité de l’intelligence artificielle. J’aime le fait que les vidéos soient claires et sans jargon : on comprend rapidement ce qui change, pourquoi c’est important, et ce que ça implique pour les développeurs. Le format est court, concret, et me permet de suivre les grandes tendances IA sans devoir passer des heures à lire des articles." 
+    }
+
+    
+  ],
+  favoriteTopic: {
+    title: "La place de l’IA dans notre quotidien",
+    content:
+      "Je m’intéresse beaucoup à la façon dont l’intelligence artificielle s’intègre dans nos usages au quotidien. Que ce soit pour automatiser certaines tâches, améliorer la rédaction ou l’analyse de code, ou encore proposer des recommandations plus pertinentes, l’IA transforme peu à peu notre manière de travailler et d’apprendre.Ce qui me passionne, c’est de comprendre comment ces outils fonctionnent et jusqu’où ils peuvent nous aider sans remplacer la réflexion humaine. À travers ma veille, j’essaie de rester attentif aux enjeux éthiques et techniques : les biais, la sécurité des données, la conformité RGPD ou encore l’impact sur nos métiers.Cette approche me permet de garder un regard critique, d’expérimenter les nouveaux outils avec recul, et de choisir ceux qui apportent une vraie valeur ajoutée selon les besoins réels d’un projet. C'est un sujet que j'ai choisis dû aux misions qui m'ont été confiées en alternance, toutes ce porter sur l'IA, j'ai donc du me former et c'est un sujet qui m'a séduis par son évolution constante",
+    image: undefined
+  }
+};
 
 const normalizeKey = (value: string) => value.trim().toLowerCase();
 

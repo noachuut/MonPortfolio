@@ -3,7 +3,8 @@ import type {
   Experience,
   Project,
   SkillCategory,
-  TechWatchArticle
+  TechWatchArticle,
+  TechWatchProfile
 } from "@/data/portfolio";
 import {
   loadCustomArticles,
@@ -29,7 +30,9 @@ import {
   saveHiddenProjectIds,
   saveHiddenSkillCategoryIds,
   saveHiddenSkillIds,
-  saveServerDataVersion
+  saveServerDataVersion,
+  loadCustomTechWatchProfile,
+  saveCustomTechWatchProfile
 } from "@/lib/portfolioStorage";
 
 const SCHEMA_VERSION = 1;
@@ -49,6 +52,7 @@ type BaseSnapshot = {
   hiddenCertificationIds: string[];
   techWatchArticles: TechWatchArticle[];
   hiddenArticleIds: string[];
+  techWatchProfile?: TechWatchProfile | null;
 };
 
 export type PortfolioSnapshot = BaseSnapshot & {
@@ -98,7 +102,8 @@ export const createPortfolioSnapshot = (): PortfolioSnapshot => {
     certifications: loadCustomCertifications(),
     hiddenCertificationIds: loadHiddenCertificationIds(),
     techWatchArticles: loadCustomArticles(),
-    hiddenArticleIds: loadHiddenArticleIds()
+    hiddenArticleIds: loadHiddenArticleIds(),
+    techWatchProfile: loadCustomTechWatchProfile()
   };
 };
 
@@ -146,7 +151,11 @@ export const normalizePortfolioSnapshot = (
     techWatchArticles: ensureArticleArray(
       data.techWatchArticles ?? data.articles
     ),
-    hiddenArticleIds: ensureStringArray(data.hiddenArticleIds)
+    hiddenArticleIds: ensureStringArray(data.hiddenArticleIds),
+    techWatchProfile:
+      typeof data.techWatchProfile === "object"
+        ? (data.techWatchProfile as TechWatchProfile)
+        : undefined
   };
 
   return snapshot;
@@ -164,6 +173,9 @@ export const applyPortfolioSnapshot = (snapshot: PortfolioSnapshot) => {
   saveHiddenCertificationIds(snapshot.hiddenCertificationIds);
   saveCustomArticles(snapshot.techWatchArticles);
   saveHiddenArticleIds(snapshot.hiddenArticleIds);
+  saveCustomTechWatchProfile(
+    snapshot.techWatchProfile !== undefined ? snapshot.techWatchProfile : null
+  );
   saveServerDataVersion(snapshot.version);
 };
 
