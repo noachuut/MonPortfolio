@@ -1,4 +1,4 @@
-@tailwind base;
+﻿@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
@@ -170,4 +170,14 @@ All colors MUST be HSL.
       transform: scale(1);
     }
   }
+
+  
+
+  @media (min-width: 768px) {
+  }
+
 }
+
+
+
+

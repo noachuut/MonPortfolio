@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+﻿import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -63,8 +63,8 @@ import { syncServerData } from "@/lib/serverSync";
 const projectTypeOptions: { value: Project["type"]; label: string }[] = [
   { value: "web", label: "Web" },
   { value: "ia", label: "IA" },
-  { value: "évenements", label: "Evenements" },
-  { value: "reseaux", label: "Réseaux" },
+  { value: "Ã©venements", label: "Événements" },
+  { value: "reseaux", label: "RÃ©seaux" },
   { value: "autres", label: "Autres" }
 ];
 
@@ -84,6 +84,13 @@ const parseLines = (value: string) =>
     .split("\n")
     .map((line) => line.trim())
     .filter(Boolean);
+
+// Normalisation du type de projet (retire les accents et met en minuscule)
+const normalizeType = (type: string) =>
+  type
+    .normalize("NFD")
+    .replace(/\p{Diacritic}/gu, "")
+    .toLowerCase();
 
 const mergeById = <T extends { id: string }>(defaults: T[], custom: T[]) => {
   const map = new Map<string, T>();
@@ -230,7 +237,7 @@ const Admin = () => {
   const [isSyncing, setIsSyncing] = useState(false);
   const formattedServerVersion = useMemo(() => {
     if (!serverVersion) {
-      return "Aucune synchronisation enregistrée";
+      return "Aucune synchronisation enregistrÃ©e";
     }
 
     const parsed = new Date(serverVersion);
@@ -427,16 +434,16 @@ const Admin = () => {
       URL.revokeObjectURL(downloadLink.href);
 
       toast({
-        title: "Export prêt",
+        title: "Export prÃªt",
         description:
-          "Le fichier JSON contient vos ajouts et peut être déposé dans public/data/portfolio-data.json."
+          "Le fichier JSON contient vos ajouts et peut Ãªtre dÃ©posÃ© dans public/data/portfolio-data.json."
       });
     } catch (error) {
       console.error("Export impossible", error);
       toast({
-        title: "Échec de l'export",
+        title: "Ã‰chec de l'export",
         description:
-          "Le fichier n'a pas pu être généré. Réessayez ou contactez l'administrateur.",
+          "Le fichier n'a pas pu Ãªtre gÃ©nÃ©rÃ©. RÃ©essayez ou contactez l'administrateur.",
         variant: "destructive"
       });
     }
@@ -464,15 +471,15 @@ const Admin = () => {
       refreshFromStorage();
 
       toast({
-        title: "Import terminé",
-        description: "Les données ont été chargées depuis le fichier sélectionné."
+        title: "Import terminÃ©",
+        description: "Les donnÃ©es ont Ã©tÃ© chargÃ©es depuis le fichier sÃ©lectionnÃ©."
       });
     } catch (error) {
       console.error("Import impossible", error);
       toast({
         title: "Impossible de lire le fichier",
         description:
-          "Vérifiez que le JSON provient bien de l'export de l'admin avant de réessayer.",
+          "VÃ©rifiez que le JSON provient bien de l'export de l'admin avant de rÃ©essayer.",
         variant: "destructive"
       });
     } finally {
@@ -497,30 +504,30 @@ const Admin = () => {
 
       if (result.status === "missing") {
         toast({
-          title: "Aucun fichier trouvé",
+          title: "Aucun fichier trouvÃ©",
           description:
-            "Déposez un fichier public/data/portfolio-data.json sur le serveur pour partager vos modifications."
+            "DÃ©posez un fichier public/data/portfolio-data.json sur le serveur pour partager vos modifications."
         });
         return;
       }
 
       if (result.status === "updated") {
         toast({
-          title: "Contenu synchronisé",
-          description: "La vitrine reflète désormais les données du fichier serveur."
+          title: "Contenu synchronisÃ©",
+          description: "La vitrine reflÃ¨te dÃ©sormais les donnÃ©es du fichier serveur."
         });
         return;
       }
 
       toast({
-        title: "Déjà à jour",
-        description: "Les données locales correspondent déjà à la dernière version disponible."
+        title: "DÃ©jÃ  Ã  jour",
+        description: "Les donnÃ©es locales correspondent dÃ©jÃ  Ã  la derniÃ¨re version disponible."
       });
     } catch (error) {
       toast({
         title: "Synchronisation impossible",
         description:
-          "Le fichier n'a pas pu être chargé. Vérifiez son accessibilité ou réessayez plus tard.",
+          "Le fichier n'a pas pu Ãªtre chargÃ©. VÃ©rifiez son accessibilitÃ© ou rÃ©essayez plus tard.",
         variant: "destructive"
       });
     } finally {
@@ -611,7 +618,7 @@ const Admin = () => {
 
   const saveTechWatchProfile = () => {
     saveCustomTechWatchProfile(techProfile);
-    toast({ title: "Profil de veille enregistré" });
+    toast({ title: "Profil de veille enregistrÃ©" });
   };
 
   const handleProjectSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -620,7 +627,7 @@ const Admin = () => {
     const technologies = parseCommaSeparated(projectForm.technologies);
     const features = parseLines(projectForm.features);
     const skillHighlight =
-      projectForm.skillHighlight.trim() || technologies[0] || "Compétence";
+      projectForm.skillHighlight.trim() || technologies[0] || "CompÃ©tence";
     const primaryLink =
       projectForm.primaryLink.trim() ||
       projectForm.demo.trim() ||
@@ -630,7 +637,7 @@ const Admin = () => {
       toast({
         title: "Lien requis",
         description:
-          "Ajoutez au moins un lien (démo, dépôt ou lien principal) pour le projet.",
+          "Ajoutez au moins un lien (dÃ©mo, dÃ©pÃ´t ou lien principal) pour le projet.",
         variant: "destructive"
       });
       return;
@@ -649,7 +656,7 @@ const Admin = () => {
       primaryLink,
       primaryLinkLabel:
         projectForm.primaryLinkLabel.trim() || "Voir le projet",
-      features: features.length > 0 ? features : ["Fonctionnalité à décrire"],
+      features: normalizeType(String(projectForm.type)) === "Événements" ? [] : (features.length > 0 ? features : ["Fonctionnalité à décrire"]),
       visual: projectForm.visual
     };
 
@@ -663,7 +670,7 @@ const Admin = () => {
     resetProjectForm();
 
     toast({
-      title: "Projet sauvegardé",
+      title: "Projet sauvegardÃ©",
       description: "Le projet sera visible dans la section publique."
     });
   };
@@ -689,7 +696,7 @@ const Admin = () => {
       achievements:
         achievements.length > 0
           ? achievements
-          : ["Réalisations à détailler"],
+          : ["RÃ©alisations Ã  dÃ©tailler"],
       image: experienceForm.image
     };
 
@@ -705,8 +712,8 @@ const Admin = () => {
     resetExperienceForm();
 
     toast({
-      title: "Expérience sauvegardée",
-      description: "Votre expérience est prête à être affichée."
+      title: "ExpÃ©rience sauvegardÃ©e",
+      description: "Votre expÃ©rience est prÃªte Ã  Ãªtre affichÃ©e."
     });
   };
 
@@ -722,14 +729,14 @@ const Admin = () => {
       const resized = await resizeImageFile(file);
       setProjectForm((previous) => ({ ...previous, visual: resized }));
       toast({
-        title: "Image projet prête",
-        description: "L'image a été redimensionnée et ajoutée au projet."
+        title: "Image projet prÃªte",
+        description: "L'image a Ã©tÃ© redimensionnÃ©e et ajoutÃ©e au projet."
       });
     } catch (error) {
       toast({
         title: "Erreur d'image",
         description:
-          "Impossible de traiter cette image. Réessayez avec un autre fichier.",
+          "Impossible de traiter cette image. RÃ©essayez avec un autre fichier.",
         variant: "destructive"
       });
     }
@@ -747,14 +754,14 @@ const Admin = () => {
       const resized = await resizeImageFile(file);
       setExperienceForm((previous) => ({ ...previous, image: resized }));
       toast({
-        title: "Image expérience prête",
-        description: "L'image a été redimensionnée et ajoutée à l'expérience."
+        title: "Image expÃ©rience prÃªte",
+        description: "L'image a Ã©tÃ© redimensionnÃ©e et ajoutÃ©e Ã  l'expÃ©rience."
       });
     } catch (error) {
       toast({
         title: "Erreur d'image",
         description:
-          "Impossible de traiter cette image. Réessayez avec un autre fichier.",
+          "Impossible de traiter cette image. RÃ©essayez avec un autre fichier.",
         variant: "destructive"
       });
     }
@@ -772,15 +779,15 @@ const Admin = () => {
       const resized = await resizeImageFile(file);
       setCertificationForm((previous) => ({ ...previous, image: resized }));
       toast({
-        title: "Image certification prête",
+        title: "Image certification prÃªte",
         description:
-          "L'image a été redimensionnée et ajoutée à la certification."
+          "L'image a Ã©tÃ© redimensionnÃ©e et ajoutÃ©e Ã  la certification."
       });
     } catch (error) {
       toast({
         title: "Erreur d'image",
         description:
-          "Impossible de traiter cette image. Réessayez avec un autre fichier.",
+          "Impossible de traiter cette image. RÃ©essayez avec un autre fichier.",
         variant: "destructive"
       });
     }
@@ -798,14 +805,14 @@ const Admin = () => {
       const resized = await resizeImageFile(file);
       setArticleForm((previous) => ({ ...previous, image: resized }));
       toast({
-        title: "Image article prête",
-        description: "L'image a été redimensionnée et ajoutée à l'article."
+        title: "Image article prÃªte",
+        description: "L'image a Ã©tÃ© redimensionnÃ©e et ajoutÃ©e Ã  l'article."
       });
     } catch (error) {
       toast({
         title: "Erreur d'image",
         description:
-          "Impossible de traiter cette image. Réessayez avec un autre fichier.",
+          "Impossible de traiter cette image. RÃ©essayez avec un autre fichier.",
         variant: "destructive"
       });
     }
@@ -897,12 +904,12 @@ const Admin = () => {
       resetProjectForm();
     }
 
-    toast({ title: "Projet supprimé" });
+    toast({ title: "Projet supprimÃ©" });
   };
 
   const restoreProject = (projectId: string) => {
     upsertHiddenProjects(hiddenProjectIds.filter((id) => id !== projectId));
-    toast({ title: "Projet restauré" });
+    toast({ title: "Projet restaurÃ©" });
   };
 
   const removeExperience = (experience: Experience) => {
@@ -929,14 +936,14 @@ const Admin = () => {
       resetExperienceForm();
     }
 
-    toast({ title: "Expérience supprimée" });
+    toast({ title: "ExpÃ©rience supprimÃ©e" });
   };
 
   const restoreExperience = (experienceId: string) => {
     upsertHiddenExperiences(
       hiddenExperienceIds.filter((id) => id !== experienceId)
     );
-    toast({ title: "Expérience restaurée" });
+    toast({ title: "ExpÃ©rience restaurÃ©e" });
   };
 
   const handleCategorySubmit = (
@@ -947,7 +954,7 @@ const Admin = () => {
     if (!categoryForm.title.trim()) {
       toast({
         title: "Titre requis",
-        description: "Saisissez un titre pour la catégorie.",
+        description: "Saisissez un titre pour la catÃ©gorie.",
         variant: "destructive"
       });
       return;
@@ -975,7 +982,7 @@ const Admin = () => {
     );
     resetCategoryForm();
 
-    toast({ title: "Catégorie sauvegardée" });
+    toast({ title: "CatÃ©gorie sauvegardÃ©e" });
   };
 
   const handleSkillSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -983,8 +990,8 @@ const Admin = () => {
 
     if (!skillForm.categoryId) {
       toast({
-        title: "Catégorie requise",
-        description: "Sélectionnez une catégorie pour la compétence.",
+        title: "CatÃ©gorie requise",
+        description: "SÃ©lectionnez une catÃ©gorie pour la compÃ©tence.",
         variant: "destructive"
       });
       return;
@@ -993,7 +1000,7 @@ const Admin = () => {
     if (!skillForm.name.trim()) {
       toast({
         title: "Nom requis",
-        description: "Indiquez le nom de la compétence.",
+        description: "Indiquez le nom de la compÃ©tence.",
         variant: "destructive"
       });
       return;
@@ -1006,9 +1013,9 @@ const Admin = () => {
 
     if (!baseCategory) {
       toast({
-        title: "Catégorie introuvable",
+        title: "CatÃ©gorie introuvable",
         description:
-          "Ajoutez d'abord la catégorie avant d'y associer une compétence.",
+          "Ajoutez d'abord la catÃ©gorie avant d'y associer une compÃ©tence.",
         variant: "destructive"
       });
       return;
@@ -1036,7 +1043,7 @@ const Admin = () => {
     upsertHiddenSkills(hiddenSkillIds.filter((id) => id !== skillId));
     resetSkillForm();
 
-    toast({ title: "Compétence sauvegardée" });
+    toast({ title: "CompÃ©tence sauvegardÃ©e" });
   };
 
   const removeCategory = (category: SkillCategory) => {
@@ -1063,14 +1070,14 @@ const Admin = () => {
       resetCategoryForm();
     }
 
-    toast({ title: "Catégorie masquée" });
+    toast({ title: "CatÃ©gorie masquÃ©e" });
   };
 
   const restoreCategory = (categoryId: string) => {
     upsertHiddenSkillCategories(
       hiddenSkillCategoryIds.filter((id) => id !== categoryId)
     );
-    toast({ title: "Catégorie restaurée" });
+    toast({ title: "CatÃ©gorie restaurÃ©e" });
   };
 
   const removeSkill = (skill: Skill) => {
@@ -1116,12 +1123,12 @@ const Admin = () => {
       resetSkillForm();
     }
 
-    toast({ title: "Compétence masquée" });
+    toast({ title: "CompÃ©tence masquÃ©e" });
   };
 
   const restoreSkill = (skillId: string) => {
     upsertHiddenSkills(hiddenSkillIds.filter((id) => id !== skillId));
-    toast({ title: "Compétence restaurée" });
+    toast({ title: "CompÃ©tence restaurÃ©e" });
   };
 
   const handleCertificationSubmit = (
@@ -1162,7 +1169,7 @@ const Admin = () => {
     );
     resetCertificationForm();
 
-    toast({ title: "Certification sauvegardée" });
+    toast({ title: "Certification sauvegardÃ©e" });
   };
 
   const removeCertification = (item: Certification) => {
@@ -1190,14 +1197,14 @@ const Admin = () => {
       resetCertificationForm();
     }
 
-    toast({ title: "Certification masquée" });
+    toast({ title: "Certification masquÃ©e" });
   };
 
   const restoreCertification = (certificationId: string) => {
     upsertHiddenCertifications(
       hiddenCertificationIds.filter((id) => id !== certificationId)
     );
-    toast({ title: "Certification restaurée" });
+    toast({ title: "Certification restaurÃ©e" });
   };
 
   const handleArticleSubmit = (
@@ -1243,7 +1250,7 @@ const Admin = () => {
     upsertHiddenArticles(hiddenArticleIds.filter((id) => id !== articleId));
     resetArticleForm();
 
-    toast({ title: "Article sauvegardé" });
+    toast({ title: "Article sauvegardÃ©" });
   };
 
   const removeArticle = (item: TechWatchArticle) => {
@@ -1264,12 +1271,12 @@ const Admin = () => {
       resetArticleForm();
     }
 
-    toast({ title: "Article masqué" });
+    toast({ title: "Article masquÃ©" });
   };
 
   const restoreArticle = (articleId: string) => {
     upsertHiddenArticles(hiddenArticleIds.filter((id) => id !== articleId));
-    toast({ title: "Article restauré" });
+    toast({ title: "Article restaurÃ©" });
   };
 
   return (
@@ -1281,7 +1288,7 @@ const Admin = () => {
             <h1 className="text-2xl font-bold">Gestion du portfolio</h1>
           </div>
           <Button variant="outline" asChild>
-            <Link to="/">← Retour au site</Link>
+            <Link to="/">â† Retour au site</Link>
           </Button>
         </div>
       </header>
@@ -1293,21 +1300,21 @@ const Admin = () => {
               <div>
                 <h2 className="text-xl font-semibold">Synchroniser le contenu</h2>
                 <p className="text-sm text-muted-foreground">
-                  Les changements réalisés dans cette interface sont stockés dans le navigateur. Pour les partager sur
+                  Les changements rÃ©alisÃ©s dans cette interface sont stockÃ©s dans le navigateur. Pour les partager sur
                   le serveur, exportez-les puis remplacez le fichier <code>public/data/portfolio-data.json</code> avant
-                  le déploiement.
+                  le dÃ©ploiement.
                 </p>
               </div>
               <ul className="text-sm text-muted-foreground list-disc pl-5 space-y-1">
-                <li>Exportez un instantané JSON lorsque vos ajouts sont terminés.</li>
-                <li>Importez un fichier existant pour retrouver une sauvegarde ou préparer une mise à jour.</li>
-                <li>Rechargez les données publiées pour vérifier qu’elles correspondent à la production.</li>
+                <li>Exportez un instantanÃ© JSON lorsque vos ajouts sont terminÃ©s.</li>
+                <li>Importez un fichier existant pour retrouver une sauvegarde ou prÃ©parer une mise Ã  jour.</li>
+                <li>Rechargez les donnÃ©es publiÃ©es pour vÃ©rifier quâ€™elles correspondent Ã  la production.</li>
               </ul>
             </Card>
             <Card className="p-6 h-full space-y-4">
               <div className="space-y-1">
                 <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
-                  Version serveur appliquée
+                  Version serveur appliquÃ©e
                 </p>
                 <p className="text-base font-semibold">{formattedServerVersion}</p>
               </div>
@@ -1325,8 +1332,8 @@ const Admin = () => {
                 </Button>
               </div>
               <p className="text-xs text-muted-foreground">
-                Après export, copiez le fichier généré dans <code>public/data/portfolio-data.json</code>,
-                validez-le dans votre dépôt puis relancez le déploiement. Les visiteurs chargeront automatiquement
+                AprÃ¨s export, copiez le fichier gÃ©nÃ©rÃ© dans <code>public/data/portfolio-data.json</code>,
+                validez-le dans votre dÃ©pÃ´t puis relancez le dÃ©ploiement. Les visiteurs chargeront automatiquement
                 cette version.
               </p>
             </Card>
@@ -1340,13 +1347,13 @@ const Admin = () => {
           />
         </section>
 
-        {/* Méthode de veille – daily.dev, Réseaux, Sujet favori */}
+        {/* MÃ©thode de veille â€“ daily.dev, RÃ©seaux, Sujet favori */}
         <section>
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h2 className="text-xl font-semibold">Méthode de veille</h2>
+              <h2 className="text-xl font-semibold">MÃ©thode de veille</h2>
               <p className="text-sm text-muted-foreground">
-                Gérez daily.dev, vos comptes suivis (YouTube, TikTok, Instagram) et votre sujet favori.
+                GÃ©rez daily.dev, vos comptes suivis (YouTube, TikTok, Instagram) et votre sujet favori.
               </p>
             </div>
             <Button asChild variant="outline" size="sm">
@@ -1524,7 +1531,7 @@ const Admin = () => {
           </div>
 
           <div className="mt-4">
-            <Button onClick={saveTechWatchProfile}>Enregistrer la méthode de veille</Button>
+            <Button onClick={saveTechWatchProfile}>Enregistrer la mÃ©thode de veille</Button>
           </div>
         </section>
 
@@ -1535,12 +1542,12 @@ const Admin = () => {
             <div>
               <h2 className="text-xl font-semibold">Projets</h2>
               <p className="text-sm text-muted-foreground">
-                Ajouter, modifier ou masquer les projets (Web, IA, Mobile, Réseaux).
+                Ajouter, modifier ou masquer les projets (Web, IA, Mobile, RÃ©seaux).
               </p>
             </div>
             {projectForm.id && (
               <Button variant="ghost" onClick={resetProjectForm}>
-                Annuler l'édition
+                Annuler l'Ã©dition
               </Button>
             )}
           </div>
@@ -1603,7 +1610,7 @@ const Admin = () => {
               <div className="grid gap-2 md:grid-cols-2">
                 <div className="grid gap-2">
                   <Label htmlFor="project-technologies">
-                    Technologies (séparées par des virgules)
+                    Technologies (sÃ©parÃ©es par des virgules)
                   </Label>
                   <Input
                     id="project-technologies"
@@ -1618,7 +1625,7 @@ const Admin = () => {
                   />
                 </div>
                 <div className="grid gap-2">
-                  <Label htmlFor="project-skill">Compétence mise en avant</Label>
+                  <Label htmlFor="project-skill">CompÃ©tence mise en avant</Label>
                   <Input
                     id="project-skill"
                     value={projectForm.skillHighlight}
@@ -1665,7 +1672,7 @@ const Admin = () => {
                   />
                 </div>
                 <div className="grid gap-2">
-                  <Label htmlFor="project-demo">Lien démo</Label>
+                  <Label htmlFor="project-demo">Lien dÃ©mo</Label>
                   <Input
                     id="project-demo"
                     type="url"
@@ -1681,46 +1688,49 @@ const Admin = () => {
                 </div>
               </div>
 
-              <div className="grid gap-2 md:grid-cols-2">
-                <div className="grid gap-2">
-                  <Label htmlFor="project-features">
-                    Fonctionnalités (une par ligne)
-                  </Label>
-                  <Textarea
-                    id="project-features"
-                    placeholder={"Authentification\nTableau de bord\nNotifications"}
-                    value={projectForm.features}
-                    onChange={(event) =>
-                      setProjectForm((previous) => ({
-                        ...previous,
-                        features: event.target.value
-                      }))
-                    }
-                    rows={3}
-                  />
-                </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="project-link-label">Texte du bouton</Label>
-                  <Input
-                    id="project-link-label"
-                    value={projectForm.primaryLinkLabel}
-                    onChange={(event) =>
-                      setProjectForm((previous) => ({
-                        ...previous,
-                        primaryLinkLabel: event.target.value
-                      }))
-                    }
-                  />
+              {/* Fonctionnalités: masquées si type = événements */}
+              {normalizeType(String(projectForm.type)) !== "Événements" && (
+                <div className="grid gap-2 md:grid-cols-2">
                   <div className="grid gap-2">
-                    <Label htmlFor="project-image">Illustration du projet</Label>
-                    <Input
-                      id="project-image"
-                      type="file"
-                      accept="image/*"
-                      onChange={handleProjectImageChange}
+                    <Label htmlFor="project-features">
+                      Fonctionnalités (une par ligne)
+                    </Label>
+                    <Textarea
+                      id="project-features"
+                      placeholder={"Authentification\nTableau de bord\nNotifications"}
+                      value={projectForm.features}
+                      onChange={(event) =>
+                        setProjectForm((previous) => ({
+                          ...previous,
+                          features: event.target.value
+                        }))
+                      }
+                      rows={3}
                     />
                   </div>
                 </div>
+              )}
+              <div className="grid gap-2">
+                <Label htmlFor="project-link-label">Texte du bouton</Label>
+                <Input
+                  id="project-link-label"
+                  value={projectForm.primaryLinkLabel}
+                  onChange={(event) =>
+                    setProjectForm((previous) => ({
+                      ...previous,
+                      primaryLinkLabel: event.target.value
+                    }))
+                  }
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="project-image">Illustration du projet</Label>
+                <Input
+                  id="project-image"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleProjectImageChange}
+                />
               </div>
 
               {projectForm.visual && (
@@ -1749,7 +1759,7 @@ const Admin = () => {
 
           <Card className="p-6">
             <h3 className="text-lg font-semibold mb-4">
-              Projets gérés ({allProjects.length})
+              Projets gÃ©rÃ©s ({allProjects.length})
             </h3>
             <div className="space-y-4 max-h-96 overflow-y-auto pr-2">
               {allProjects.map((project) => {
@@ -1765,7 +1775,7 @@ const Admin = () => {
                           {project.title}
                           {isHidden && (
                             <Badge variant="outline" className="text-xs">
-                              Masqué
+                              MasquÃ©
                             </Badge>
                           )}
                         </p>
@@ -1775,7 +1785,7 @@ const Admin = () => {
                               (opt) => opt.value === project.type
                             )?.label ?? project.type.toUpperCase()
                           }
-                          {" • "}
+                          {" â€¢ "}
                           {project.skillHighlight}
                         </p>
                         <div className="mt-2 flex flex-wrap gap-2">
@@ -1817,14 +1827,14 @@ const Admin = () => {
         <section>
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h2 className="text-xl font-semibold">Expériences</h2>
+              <h2 className="text-xl font-semibold">ExpÃ©riences</h2>
               <p className="text-sm text-muted-foreground">
-                Ajoutez vos expériences professionnelles et contrôlez leur visibilité.
+                Ajoutez vos expÃ©riences professionnelles et contrÃ´lez leur visibilitÃ©.
               </p>
             </div>
             {experienceForm.id && (
               <Button variant="ghost" onClick={resetExperienceForm}>
-                Annuler l'édition
+                Annuler l'Ã©dition
               </Button>
             )}
           </div>
@@ -1861,7 +1871,7 @@ const Admin = () => {
                   />
                 </div>
                 <div className="grid gap-2">
-                  <Label htmlFor="experience-period">Période</Label>
+                  <Label htmlFor="experience-period">PÃ©riode</Label>
                   <Input
                     id="experience-period"
                     placeholder="2022 - 2023"
@@ -1896,7 +1906,7 @@ const Admin = () => {
               <div className="grid gap-2 md:grid-cols-2">
                 <div className="grid gap-2">
                   <Label htmlFor="experience-technologies">
-                    Technologies (séparées par des virgules)
+                    Technologies (sÃ©parÃ©es par des virgules)
                   </Label>
                   <Input
                     id="experience-technologies"
@@ -1912,7 +1922,7 @@ const Admin = () => {
                 </div>
                 <div className="grid gap-2">
                   <Label htmlFor="experience-achievements">
-                    Réalisations (une par ligne)
+                    RÃ©alisations (une par ligne)
                   </Label>
                   <Textarea
                     id="experience-achievements"
@@ -1944,7 +1954,7 @@ const Admin = () => {
                   <p className="text-sm font-medium mb-2">Aperçu de l'image</p>
                   <img
                     src={experienceForm.image}
-                    alt="Aperçu de l'expérience"
+                    alt="Aperçu de l'expÃ©rience"
                     className="max-h-48 w-full object-cover rounded-md"
                   />
                 </div>
@@ -1952,11 +1962,11 @@ const Admin = () => {
 
               <div className="flex items-center gap-3">
                 <Button type="submit" className="self-start">
-                  {experienceForm.id ? "Mettre à jour" : "Enregistrer l'expérience"}
+                  {experienceForm.id ? "Mettre à jour" : "Enregistrer l'expÃ©rience"}
                 </Button>
                 {experienceForm.id && (
                   <Button variant="secondary" onClick={resetExperienceForm}>
-                    Nouvelle expérience
+                    Nouvelle expÃ©rience
                   </Button>
                 )}
               </div>
@@ -1965,7 +1975,7 @@ const Admin = () => {
 
           <Card className="p-6">
             <h3 className="text-lg font-semibold mb-4">
-              Expériences gérées ({allExperiences.length})
+              ExpÃ©riences gÃ©rÃ©es ({allExperiences.length})
             </h3>
             <div className="space-y-4 max-h-96 overflow-y-auto pr-2">
               {allExperiences.map((experience) => {
@@ -1981,12 +1991,12 @@ const Admin = () => {
                           {experience.title}
                           {isHidden && (
                             <Badge variant="outline" className="text-xs">
-                              Masquée
+                              MasquÃ©e
                             </Badge>
                           )}
                         </p>
                         <p className="text-sm text-muted-foreground">
-                          {experience.company} • {experience.period}
+                          {experience.company} â€¢ {experience.period}
                         </p>
                         <div className="mt-2 flex flex-wrap gap-2">
                           {experience.technologies.map((tech) => (
@@ -2030,14 +2040,14 @@ const Admin = () => {
               <div>
                 <div className="flex items-center justify-between mb-4">
                   <div>
-                    <h2 className="text-xl font-semibold">Catégories de compétences</h2>
+                    <h2 className="text-xl font-semibold">CatÃ©gories de compÃ©tences</h2>
                     <p className="text-sm text-muted-foreground">
-                      Gérez les regroupements de compétences (Frontend, Backend...).
+                      GÃ©rez les regroupements de compÃ©tences (Frontend, Backend...).
                     </p>
                   </div>
                   {categoryForm.id && (
                     <Button variant="ghost" onClick={resetCategoryForm}>
-                      Annuler l'édition
+                      Annuler l'Ã©dition
                     </Button>
                   )}
                 </div>
@@ -2045,7 +2055,7 @@ const Admin = () => {
                 <Card className="p-6">
                   <form className="grid gap-4" onSubmit={handleCategorySubmit}>
                     <div className="grid gap-2">
-                      <Label htmlFor="category-title">Titre de la catégorie</Label>
+                      <Label htmlFor="category-title">Titre de la catÃ©gorie</Label>
                       <Input
                         id="category-title"
                         value={categoryForm.title}
@@ -2065,7 +2075,7 @@ const Admin = () => {
                       </Button>
                       {categoryForm.id && (
                         <Button variant="secondary" onClick={resetCategoryForm}>
-                          Nouvelle catégorie
+                          Nouvelle catÃ©gorie
                         </Button>
                       )}
                     </div>
@@ -2075,7 +2085,7 @@ const Admin = () => {
 
               <Card className="p-6">
                 <h3 className="text-lg font-semibold mb-4">
-                  Catégories ({allSkillCategories.length})
+                  CatÃ©gories ({allSkillCategories.length})
                 </h3>
                 <div className="space-y-4 max-h-80 overflow-y-auto pr-2">
                   {allSkillCategories.map((category) => {
@@ -2091,12 +2101,12 @@ const Admin = () => {
                               {category.title}
                               {isHidden && (
                                 <Badge variant="outline" className="text-xs">
-                                  Masquée
+                                  MasquÃ©e
                                 </Badge>
                               )}
                             </p>
                             <p className="text-sm text-muted-foreground">
-                              {category.skills.length} compétences
+                              {category.skills.length} compÃ©tences
                             </p>
                           </div>
                           <div className="flex gap-2">
@@ -2129,14 +2139,14 @@ const Admin = () => {
               <div>
                 <div className="flex items-center justify-between mb-4">
                   <div>
-                    <h2 className="text-xl font-semibold">Compétences</h2>
+                    <h2 className="text-xl font-semibold">CompÃ©tences</h2>
                     <p className="text-sm text-muted-foreground">
-                      Ajoutez des compétences et associez-les à une catégorie.
+                      Ajoutez des compÃ©tences et associez-les Ã  une catÃ©gorie.
                     </p>
                   </div>
                   {skillForm.id && (
                     <Button variant="ghost" onClick={resetSkillForm}>
-                      Annuler l'édition
+                      Annuler l'Ã©dition
                     </Button>
                   )}
                 </div>
@@ -2144,7 +2154,7 @@ const Admin = () => {
                 <Card className="p-6">
                   <form className="grid gap-4" onSubmit={handleSkillSubmit}>
                     <div className="grid gap-2">
-                      <Label htmlFor="skill-category">Catégorie</Label>
+                      <Label htmlFor="skill-category">CatÃ©gorie</Label>
                       <select
                         id="skill-category"
                         value={skillForm.categoryId}
@@ -2157,7 +2167,7 @@ const Admin = () => {
                         className="h-10 rounded-md border border-input bg-background px-3 text-sm"
                         required
                       >
-                        <option value="">Sélectionnez une catégorie</option>
+                        <option value="">SÃ©lectionnez une catÃ©gorie</option>
                         {allSkillCategories.map((category) => (
                           <option key={category.id} value={category.id}>
                             {category.title}
@@ -2167,7 +2177,7 @@ const Admin = () => {
                     </div>
 
                     <div className="grid gap-2">
-                      <Label htmlFor="skill-name">Nom de la compétence</Label>
+                      <Label htmlFor="skill-name">Nom de la compÃ©tence</Label>
                       <Input
                         id="skill-name"
                         value={skillForm.name}
@@ -2183,7 +2193,7 @@ const Admin = () => {
                     </div>
 
                     <div className="grid gap-2">
-                      <Label htmlFor="skill-icon">Icône (URL)</Label>
+                      <Label htmlFor="skill-icon">IcÃ´ne (URL)</Label>
                       <Input
                         id="skill-icon"
                         value={skillForm.icon}
@@ -2203,7 +2213,7 @@ const Admin = () => {
                       </Button>
                       {skillForm.id && (
                         <Button variant="secondary" onClick={resetSkillForm}>
-                          Nouvelle compétence
+                          Nouvelle compÃ©tence
                         </Button>
                       )}
                     </div>
@@ -2213,7 +2223,7 @@ const Admin = () => {
 
               <Card className="p-6">
                 <h3 className="text-lg font-semibold mb-4">
-                  Compétences ({allSkillCategories.reduce((total, category) => total + category.skills.length, 0)})
+                  CompÃ©tences ({allSkillCategories.reduce((total, category) => total + category.skills.length, 0)})
                 </h3>
                 <div className="space-y-4 max-h-80 overflow-y-auto pr-2">
                   {allSkillCategories.map((category) => (
@@ -2240,7 +2250,7 @@ const Admin = () => {
                                     {skill.name}
                                     {isHidden && (
                                       <Badge variant="outline" className="text-xs">
-                                        Masquée
+                                        MasquÃ©e
                                       </Badge>
                                     )}
                                   </p>
@@ -2292,12 +2302,12 @@ const Admin = () => {
             <div>
               <h2 className="text-xl font-semibold">Certifications</h2>
               <p className="text-sm text-muted-foreground">
-                Ajoutez vos certifications, leurs visuels et les compétences associées.
+                Ajoutez vos certifications, leurs visuels et les compÃ©tences associÃ©es.
               </p>
             </div>
             {certificationForm.id && (
               <Button variant="ghost" onClick={resetCertificationForm}>
-                Annuler l'édition
+                Annuler l'Ã©dition
               </Button>
             )}
           </div>
@@ -2354,11 +2364,11 @@ const Admin = () => {
 
               <div className="grid gap-2">
                 <Label htmlFor="certification-skills">
-                  Compétences couvertes (séparées par des virgules)
+                  CompÃ©tences couvertes (sÃ©parÃ©es par des virgules)
                 </Label>
                 <Input
                   id="certification-skills"
-                  placeholder="Gestion de projet, Sécurité"
+                  placeholder="Gestion de projet, SÃ©curitÃ©"
                   value={certificationForm.skills}
                   onChange={(event) =>
                     setCertificationForm((previous) => ({
@@ -2421,12 +2431,12 @@ const Admin = () => {
                           {item.name}
                           {isHidden && (
                             <Badge variant="outline" className="text-xs">
-                              Masquée
+                              MasquÃ©e
                             </Badge>
                           )}
                         </p>
                         <p className="text-sm text-muted-foreground">
-                          {item.skills.join(", ") || "Compétences à préciser"}
+                          {item.skills.join(", ") || "CompÃ©tences Ã  prÃ©ciser"}
                         </p>
                       </div>
                       <div className="flex gap-2">
@@ -2462,12 +2472,12 @@ const Admin = () => {
             <div>
               <h2 className="text-xl font-semibold">Veille technologique</h2>
               <p className="text-sm text-muted-foreground">
-                Centralisez vos articles de veille avec un visuel, un résumé et un lien.
+                Centralisez vos articles de veille avec un visuel, un rÃ©sumÃ© et un lien.
               </p>
             </div>
             {articleForm.id && (
               <Button variant="ghost" onClick={resetArticleForm}>
-                Annuler l'édition
+                Annuler l'Ã©dition
               </Button>
             )}
           </div>
@@ -2508,7 +2518,7 @@ const Admin = () => {
               </div>
 
               <div className="grid gap-2">
-                <Label htmlFor="article-summary">Résumé</Label>
+                <Label htmlFor="article-summary">RÃ©sumÃ©</Label>
                 <Textarea
                   id="article-summary"
                   rows={3}
@@ -2524,7 +2534,7 @@ const Admin = () => {
 
               <div className="grid gap-2 md:grid-cols-2">
                 <div className="grid gap-2">
-                  <Label htmlFor="article-published">Date ou période</Label>
+                  <Label htmlFor="article-published">Date ou pÃ©riode</Label>
                   <Input
                     id="article-published"
                     placeholder="Janvier 2024"
@@ -2590,12 +2600,12 @@ const Admin = () => {
                           {item.title}
                           {isHidden && (
                             <Badge variant="outline" className="text-xs">
-                              Masqué
+                              MasquÃ©
                             </Badge>
                           )}
                         </p>
                         <p className="text-sm text-muted-foreground">
-                          {item.publishedAt || "Date non précisée"}
+                          {item.publishedAt || "Date non prÃ©cisÃ©e"}
                         </p>
                       </div>
                       <div className="flex gap-2">

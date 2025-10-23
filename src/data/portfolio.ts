@@ -315,16 +315,32 @@ export const projects: Project[] = [
       "Space4NC, c’est 24 heures pour prototyper un projet entrepreneurial à impact, en mobilisant les données et technologies spatiales avec l’accompagnement de coachs, d’experts du CNES et de partenaires locaux. Nous avons eu l’honneur de participer à ce hackathon et d’y remporter la première place avec notre projet TélécabNC.",
     visual: "/images/projets/hackathon.webp",
     type: "évenements",
-    technologies: ["Python"],
-    skillHighlight: "POO Python",
+    technologies: ["Travail d'équipe", "Prototypage rapide", "Présentation"],
+    skillHighlight: "Innovation",
     github: "#",
     demo: "#",
     primaryLink: "",
     primaryLinkLabel: "Voir le Github",
     features: [
-      "Déplacements clavier (z q s d) et affichage en temps réel dans le terminal",
-      "Création du labyrinthe",
-      "Menus avec règles, lancement du jeu et choix du personnage"
+      ""
+    ]
+
+  },
+  {
+    id: "5",
+    title: "Hackagou 2024",
+    description:
+      "Cet événement réunit les passionnés et les curieux du numérique lors d’une journée exceptionnelle, rythmée par des défis de cybersécurité, des conférences inspirantes et des échanges enrichissants avec des professionnels du secteur. Nous y avons participé en équipe et avons remporté le 3ème prix du challenge de cybersécurité dans la catégorie étudiant.",
+    visual: "/images/projets/hackagou.jpg",
+    type: "évenements",
+    technologies: ["Travail d'équipe", "Résolution de problèmes cybersécurité"],
+    skillHighlight: "Cybersécurité",
+    github: "#",
+    demo: "#",
+    primaryLink: "",
+    primaryLinkLabel: "Voir l'article",
+    features: [
+      ""
     ]
 
   }
@@ -485,7 +501,7 @@ export const defaultTechWatchProfile: TechWatchProfile = {
   favoriteTopic: {
     title: "La place de l’IA dans notre quotidien",
     content:
-      "Je m’intéresse beaucoup à la façon dont l’intelligence artificielle s’intègre dans nos usages au quotidien. Que ce soit pour automatiser certaines tâches, améliorer la rédaction ou l’analyse de code, ou encore proposer des recommandations plus pertinentes, l’IA transforme peu à peu notre manière de travailler et d’apprendre.Ce qui me passionne, c’est de comprendre comment ces outils fonctionnent et jusqu’où ils peuvent nous aider sans remplacer la réflexion humaine. À travers ma veille, j’essaie de rester attentif aux enjeux éthiques et techniques : les biais, la sécurité des données, la conformité RGPD ou encore l’impact sur nos métiers.Cette approche me permet de garder un regard critique, d’expérimenter les nouveaux outils avec recul, et de choisir ceux qui apportent une vraie valeur ajoutée selon les besoins réels d’un projet. C'est un sujet que j'ai choisis dû aux misions qui m'ont été confiées en alternance, toutes ce porter sur l'IA, j'ai donc du me former et c'est un sujet qui m'a séduis par son évolution constante",
+      "Je m’intéresse beaucoup à la façon dont l’intelligence artificielle s’intègre dans nos usages au quotidien. Que ce soit pour automatiser certaines tâches, améliorer la rédaction ou l’analyse de code, ou encore proposer des recommandations plus pertinentes, l’IA transforme peu à peu notre manière de travailler et d’apprendre.C'est un sujet que j'ai choisis dû aux misions qui m'ont été confiées en alternance, toutes ce porter sur l'IA, j'ai donc du me former et c'est un sujet qui m'a séduis par son évolution constante. Ce qui me passionne, c’est de comprendre comment ces outils fonctionnent et jusqu’où ils peuvent nous aider sans remplacer la réflexion humaine. À travers ma veille, j’essaie de rester attentif aux enjeux éthiques et techniques : les biais, la sécurité des données, la conformité RGPD ou encore l’impact sur nos métiers.Cette approche me permet de garder un regard critique, d’expérimenter les nouveaux outils avec recul, et de choisir ceux qui apportent une vraie valeur ajoutée selon les besoins réels d’un projet.",
     image: undefined
   }
 };

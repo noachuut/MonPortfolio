@@ -1,4 +1,4 @@
-import { Card } from "@/components/ui/card";
+﻿import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useEffect, useMemo, useState } from "react";
@@ -15,12 +15,21 @@ import {
 import { Link } from "react-router-dom";
 import { slugify } from "@/lib/slug";
 
+const normalizeType = (type: string) => type.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase();
+
+const isEventsType = (type: Project["type"]) => {
+  const t = normalizeType(String(type));
+  return t === "evenements" || t === "evenement" || t === "events" || t === "event";
+};
+
 const formatProjectType = (type: Project["type"]) => {
-  switch (type) {
+  const t = normalizeType(String(type));
+  switch (t) {
     case "ia":
       return "IA";
-    case "évenements":
-      return "Evenements";
+    case "evenements":
+    case "evenement":
+      return "Événements";
     case "reseaux":
       return "Réseaux";
     case "autres":
@@ -55,7 +64,7 @@ const ProjectsSection = () => {
     const types = new Set<Project["type"]>([
       "web",
       "ia",
-      "évenements",
+      "Ã©venements",
       "reseaux",
       "autres"
     ]);
@@ -66,7 +75,7 @@ const ProjectsSection = () => {
   const filteredProjects =
     selectedType === "tous"
       ? combinedProjects
-      : combinedProjects.filter((project) => project.type === selectedType);
+      : combinedProjects.filter((project) => normalizeType(String(project.type)) === selectedType);
 
   return (
     <section id="projets" className="py-20 section-gradient">
@@ -99,7 +108,7 @@ const ProjectsSection = () => {
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 transition-all duration-700">
           {filteredProjects.length === 0 && (
             <div className="col-span-full text-center text-muted-foreground">
-              Aucun projet disponible pour cette catégorie pour le moment.
+              Aucun projet disponible pour cette catÃ©gorie pour le moment.
             </div>
           )}
           {filteredProjects.map((project, index) => (
@@ -130,7 +139,7 @@ const ProjectsSection = () => {
                 {/* Skill highlight badge */}
                 <div className="mb-4">
                   <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-2">
-                    Compétence
+                    Compétences
                   </p>
                   <span className="inline-block px-3 py-1 bg-primary/10 text-primary text-sm rounded-full border border-primary/20 font-medium">
                     {project.skillHighlight}
@@ -145,8 +154,9 @@ const ProjectsSection = () => {
                   {project.description}
                 </p>
                 
-                {/* Features */}
-                {((project.type as unknown as string) !== "�venements" && (project.type as unknown as string) !== "Ǹvenements") && (
+                
+                {/* Features: hide for events */}
+                {!isEventsType(project.type) && project.features?.length > 0 && (
                 <div className="mb-4">
                   <h4 className="font-semibold mb-2 text-sm">Fonctionnalités :</h4>
                   <ul className="space-y-1">
@@ -185,3 +195,4 @@ const ProjectsSection = () => {
 };
 
 export default ProjectsSection;
+

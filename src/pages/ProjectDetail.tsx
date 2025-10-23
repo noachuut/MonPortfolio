@@ -21,37 +21,37 @@ type ProjectExtraDetails = {
   architectureDescription?: string;
 };
 
-// You can enrich projects here by slug without touching base data
+// Détails additionnels par slug (texte propre en UTF‑8)
 const PROJECT_DETAILS: Record<string, ProjectExtraDetails> = {
-  'ia-docubase': {
+  "ia-docubase": {
     context:
-      "Projet d’automatisation du traitement des factures pour une GED. En tant qu’étudiant BTS SIO SLAM, j’ai cherché à réduire les tâches manuelles (lecture de champs, vérification) tout en fiabilisant les données. Le flux récupère les documents, extrait les champs clés, compare aux métadonnées existantes et propose une validation simple.",
+      "Projet d'automatisation du traitement des factures pour une GED. En tant qu'étudiant BTS SIO SLAM, j'ai cherché à réduire les tâches manuelles (lecture de champs, vérification) tout en fiabilisant les données. Le flux récupère les documents, extrait les champs clés, compare aux métadonnées existantes et propose une validation simple.",
     objectives: [
-      "Automatiser l’extraction des champs (Nom, Prénom, contrat, client)",
+      "Automatiser l'extraction des champs (Nom, Prénom, contrat, client)",
       "Mettre en évidence les écarts avec la GED pour correction rapide",
       "Simplifier la validation et tracer les actions",
       "Exporter des indicateurs vers Power BI pour le suivi"
     ],
     architectureImage: "/images/projets/architecture/ia-docubase.svg",
     architectureDescription:
-      "Flux principal: Ingestion → Extraction (Batch) → Vérification/Validation (UI) → Mise à jour GED → Reporting (BI)."
+      "Flux principal : Ingestion → Extraction (batch) → Vérification/Validation (UI) → Mise à jour GED → Reporting (BI)."
   },
-  'cyber-escapegame': {
+  "cyber-escapegame": {
     context:
-      "En vue de la Semaine du Numérique, les BTS SIO se sont vu confier une mission : organiser des activités pour les élèves de seconde, afin de les sensibiliser à la cybersécurité.Étant développeurs, il fallait au moins concevoir une application plutôt que de proposer un banal quiz. C’est alors que l’idée de l’Escape Game nous est venue. C’est avec une équipe de cinq personnes que nous avons développé cette application web, qui a ravi les élèves de seconde tout en les sensibilisant aux dangers et aux bonnes attitudes à adopter sur Internet (phishing, chiffrement, mot de passe fort et OSINT).",
+      "En vue de la Semaine du Numérique, les BTS SIO ont organisé des activités pour sensibiliser les élèves de seconde à la cybersécurité. Plutôt qu'un simple quiz, nous avons conçu un Escape Game web en équipe de cinq. L'application a ravi les élèves tout en abordant phishing, chiffrement, mots de passe forts et OSINT.",
     objectives: [
       "Gérer des sessions de jeu et les équipes",
       "Proposer des énigmes chronométrées avec suivi de progression",
       "Stocker les scores et générer un classement",
-      "Disposer d’une interface d’admin simple pour gérer le contenu"
+      "Disposer d'une interface d'administration simple pour gérer le contenu"
     ],
-    architectureImage: "/images/projets/architecture/cyber-escapegame.svg",
+    architectureImage: "/images/projets/architecture/archi-escape-game.drawio.png",
     architectureDescription:
-      "Architecture web classique: Front (HTML/CSS/JS) → API Node.js → PostgreSQL. Documentation des endpoints via OpenAPI/Swagger."
+      ""
   },
-  'jeu-labyrinthe': {
+  "jeu-labyrinthe": {
     context:
-      "Mini‑jeu en Python (terminal) réalisé en 1re année. Le joueur choisit un personnage, se déplace case par case, évite les pièges et dispose de 5 vies. Ce projet m’a permis d’appliquer la POO et la gestion d’une boucle de jeu",
+      "Mini‑jeu en Python (terminal) réalisé en 1re année. Le joueur choisit un personnage, se déplace case par case, évite les pièges et dispose de 5 vies. Ce projet m'a permis d'appliquer la POO et la gestion d'une boucle de jeu.",
     objectives: [
       "Mettre en place une boucle de jeu avec rendu terminal",
       "Gérer les collisions, les vies et la fin de partie",
@@ -60,8 +60,30 @@ const PROJECT_DETAILS: Record<string, ProjectExtraDetails> = {
     ],
     architectureImage: "/images/projets/architecture/jeu-labyrinthe.svg",
     architectureDescription:
-      "Cycle: Entrées clavier → Moteur de jeu (règles) → Mise à jour de l’état → Affichage terminal."
-  }
+      "Cycle : Entrées clavier → Moteur de jeu (règles) → Mise à jur de l'état → Affichage terminal."
+  },
+  "telecabnc-space4nc": {
+  context:
+    "Projet né au hackathon Space4NC pour réduire les inégalités d’accès aux soins en Nouvelle-Calédonie. TélécabNC propose une cabine médicale connectée permettant une consultation à distance (visioconférence sécurisée) et la remontée des constantes via capteurs, même en zone blanche grâce à une liaison satellite.",
+  objectives: [
+    "Offrir des consultations à distance aux populations éloignées",
+    "Assurer la connectivité (satellite/4G) en l’absence d’infrastructure locale",
+    "Collecter et transmettre les constantes vitales en temps réel",
+    "Fournir une interface simple pour patients et professionnels",
+    "Cartographier les zones prioritaires d’implantation via données spatiales"
+  ],
+  architectureImage: "/images/projets/architecture/telecabnc.svg",
+  architectureDescription:
+    "Chaîne fonctionnelle : Capteurs (tension, FC, SpO₂, température) → Passerelle cabine → Visioconférence chiffrée → Stockage sécurisé → Tableau de bord médical. Connectivité : priorité 4G, bascule satellite en zone blanche. Cartographie décisionnelle pour le choix des sites."
+}
+};
+
+// Helpers de normalisation + détection événements
+const normalizeType = (type: string) =>
+  type.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase();
+const isEventsType = (type: Project["type"]) => {
+  const t = normalizeType(String(type));
+  return t === "evenements" || t === "evenement" || t === "events" || t === "event";
 };
 
 const ProjectDetail = () => {
@@ -100,13 +122,10 @@ const ProjectDetail = () => {
         <div className="container mx-auto px-6 py-20">
           <p className="mb-6 text-sm">
             <RouterLink to="/" className="text-primary hover:underline">
-              ← Retour à l’accueil
+              Retour à l’accueil
             </RouterLink>
           </p>
-          <h1 className="text-3xl font-bold mb-4">Projet introuvable</h1>
-          <p className="text-muted-foreground">
-            Le projet demandé n’existe pas ou a été masqué.
-          </p>
+          <h1 className="text-3xl font-semibold">Projet introuvable</h1>
         </div>
       </div>
     );
@@ -115,25 +134,9 @@ const ProjectDetail = () => {
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-6 py-12">
-        <p className="mb-6 text-sm">
-          <RouterLink to="/" className="text-primary hover:underline">
-            ← Retour aux projets
-          </RouterLink>
-          <span className="text-muted-foreground"> • </span>
-          <RouterLink to="/#projets" className="text-primary hover:underline">
-            Voir la liste
-          </RouterLink>
-        </p>
-
-        <div className="grid lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2 space-y-6">
-            <div>
-              <h1 className="text-3xl md:text-4xl font-bold mb-2">{project.title}</h1>
-              <p className="text-muted-foreground">
-                {project.description}
-              </p>
-            </div>
-
+        <div className="grid md:grid-cols-3 gap-8">
+          <div className="md:col-span-2 space-y-6">
+            {/* Visuel */}
             {project.visual && (
               <Card className="overflow-hidden border-border">
                 <img
@@ -144,7 +147,8 @@ const ProjectDetail = () => {
               </Card>
             )}
 
-            {project.features?.length > 0 && (
+            {/* Fonctionnalités (masquées pour Événements) */}
+            {!isEventsType(project.type) && project.features?.length > 0 && (
               <Card className="p-6 card-gradient border-border">
                 <h2 className="text-xl font-semibold mb-3">Fonctionnalités principales</h2>
                 <ul className="list-disc pl-6 space-y-1 text-sm text-muted-foreground">
@@ -260,3 +264,4 @@ const ProjectDetail = () => {
 };
 
 export default ProjectDetail;
+
