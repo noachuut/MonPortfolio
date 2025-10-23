@@ -1,7 +1,11 @@
-import { useEffect, useMemo, useState } from "react";
+﻿import { useEffect, useMemo, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Tooltip, TooltipProvider, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
+import { HoverCard, HoverCardTrigger, HoverCardContent } from "@/components/ui/hover-card";
 import { defaultTechWatchProfile, type SocialPlatform, type TechWatchProfile } from "@/data/portfolio";
 import {
   loadCustomTechWatchProfile,
@@ -50,21 +54,65 @@ const TechWatchBlog = () => {
     return map;
   }, [profile.socialAccounts]);
 
+  
+
+  const renderAccountsGrid = (accounts: NonNullable<TechWatchProfile["socialAccounts"]>) => (
+    <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-8">
+      {accounts.map((acc) => (
+        <a
+          key={acc.id}
+          href={acc.link}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="block h-full group focus:outline-none focus:ring-2 focus:ring-primary/60 rounded-lg"
+        >
+          <Card className="p-5 h-full card-gradient border-border hover:shadow-lg hover:shadow-primary/10 transition-all duration-300 cursor-pointer overflow-hidden">
+            <div className="flex flex-col gap-3 items-start">
+              <div className="w-20 h-20 rounded bg-muted/20 border border-border/60 overflow-hidden">
+                {acc.image ? (
+                  <img src={acc.image} alt={acc.name} className="w-full h-full object-cover" />
+                ) : null}
+              </div>
+              <div className="flex items-center gap-2 w-full">
+                <span className="font-semibold text-primary group-hover:underline break-words">
+                  {acc.name}
+                </span>
+                <Badge variant="secondary" className="ml-auto">
+                  {platformLabel(acc.platform)}
+                </Badge>
+              </div>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <p className="text-sm text-muted-foreground mt-1 whitespace-pre-line">
+                      {acc.description}
+                    </p>
+                  </TooltipTrigger>
+                  <TooltipContent>Ouvrir la chaîne</TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
+          </Card>
+        </a>
+      ))}
+    </div>
+  );
+
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen section-gradient techwatch-root">
       <div className="container mx-auto px-6 py-12">
         <div className="mb-8">
           <h1 className="text-3xl md:text-4xl font-bold">Ma veille technologique</h1>
           <p className="text-muted-foreground mt-2">
-            Comment je m’informe au quotidien: agrégateurs, réseaux sociaux et sujets de fond.
+            Comment je m'informe au quotidien : agrégateurs, réseaux sociaux et sujets de fond.
           </p>
         </div>
 
-                {/* daily.dev */}
+        {/* daily.dev */}
         <section className="mb-12">
-          <h2 className="text-2xl font-semibold mb-3">daily.dev</h2>
-          <Card className="p-6 card-gradient border-border">
-            <div className="grid md:grid-cols-3 gap-6 items-center">
+          <h2 className="text-2xl font-semibold mb-3 text-primary">daily.dev</h2>
+          <Card className="p-6 card-gradient border-border hover:glow-primary transition-shadow">
+            <div className="grid md:grid-cols-3 gap-8 items-center">
               <div className="md:col-span-1">
                 <div className="border border-border/60 rounded-lg overflow-hidden bg-muted/10 h-80 md:h-[32rem] flex items-center justify-center">
                   {profile.dailyDev?.devCardImage ? (
@@ -75,15 +123,15 @@ const TechWatchBlog = () => {
                     />
                   ) : (
                     <span className="text-sm text-muted-foreground p-4 text-center">
-                      Place pour inserer l'image de ma DevCard daily.dev
+                      Place pour insÃ©rer lâ€™image de ma DevCard daily.dev
                     </span>
                   )}
                 </div>
               </div>
               <div className="md:col-span-2">
-                <p className="text-sm text-muted-foreground whitespace-pre-line">
+                <p className="text-[15px] md:text-base leading-7 md:leading-7 text-muted-foreground whitespace-pre-line">
                   {profile.dailyDev?.description ||
-                    "Expliquez pourquoi vous utilisez daily.dev et ce que vous en tirez (tendances, articles de fond, veille front/back/IA�)."}
+                    "Expliquez pourquoi vous utilisez daily.dev et ce que vous en tirez (tendances, articles de fond, veille front/back/IA.)."}
                 </p>
                 {profile.dailyDev?.profileLink && (
                   <div className="mt-4">
@@ -97,47 +145,39 @@ const TechWatchBlog = () => {
           </Card>
         </section>
 
-        {/* Réseaux sociaux */}
+        {/* RÃ©seaux sociaux */}
         <section className="mb-12">
-          <h2 className="text-2xl font-semibold mb-3">Réseaux sociaux</h2>
+          <h2 className="text-2xl font-semibold mb-3 text-primary">Réseaux sociaux</h2>
           <p className="text-sm text-muted-foreground mb-4">
             Chaînes/comptes que je suis, avec une courte description de leur contenu.
           </p>
-          <div className="space-y-8">
-            {Array.from(accountsByPlatform.entries()).map(([platform, accounts]) => (
-              <div key={platform}>
-                <h3 className="text-xl font-semibold mb-3">{platformLabel(platform)}</h3>
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {accounts.map((acc) => (
-                    <Card key={acc.id} className="p-4 border-border">
-                      <div className="flex gap-4">
-                        <div className="w-16 h-16 rounded bg-muted/20 border border-border/60 overflow-hidden flex-shrink-0">
-                          {acc.image ? (
-                            <img src={acc.image} alt={acc.name} className="w-full h-full object-cover" />
-                          ) : null}
-                        </div>
-                        <div className="min-w-0">
-                          <a
-                            className="font-semibold text-primary hover:underline break-words"
-                            href={acc.link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            {acc.name}
-                          </a>
-                          <p className="text-xs text-muted-foreground mt-1 whitespace-pre-line">
-                            {acc.description}
-                          </p>
-                        </div>
-                      </div>
-                    </Card>
-                  ))}
-                </div>
-              </div>
-            ))}
+              />
+            </div>
+          )}
+
+          <div className="space-y-4">
+            <Tabs defaultValue="all">
+              <TabsList>
+                <TabsTrigger value="all">Tous</TabsTrigger>
+                {Array.from(accountsByPlatform.keys()).map((p) => (
+                  <TabsTrigger key={p} value={p}>{platformLabel(p)}</TabsTrigger>
+                ))}
+              </TabsList>
+
+              <TabsContent value="all">
+                {renderAccountsGrid(profile.socialAccounts || [])}
+              </TabsContent>
+
+              {Array.from(accountsByPlatform.entries()).map(([p, accounts]) => (
+                <TabsContent key={p} value={p}>
+                  {renderAccountsGrid(accounts)}
+                </TabsContent>
+              ))}
+            </Tabs>
+
             {accountsByPlatform.size === 0 && (
               <Card className="p-6 text-center text-muted-foreground border-dashed">
-                Ajoutez vos comptes suivis depuis l’admin (YouTube, TikTok, Instagram…).
+                Ajoutez vos comptes suivis depuis l'admin (YouTube, TikTok, Instagram...).
               </Card>
             )}
           </div>
@@ -147,25 +187,27 @@ const TechWatchBlog = () => {
 
         {/* Sujet favori */}
         <section>
-          <h2 className="text-2xl font-semibold mb-3">{profile.favoriteTopic.title}</h2>
-          <div className="grid md:grid-cols-3 gap-6 items-start">
-            <div className="md:col-span-2">
-              <p className="text-sm text-muted-foreground whitespace-pre-line">
-                {profile.favoriteTopic.content}
-              </p>
-            </div>
-            <div className="md:col-span-1">
-              <div className="border border-border/60 rounded-lg overflow-hidden bg-muted/10 h-48 flex items-center justify-center">
-                {profile.favoriteTopic.image ? (
-                  <img
-                    src={profile.favoriteTopic.image}
-                    alt={profile.favoriteTopic.title}
-                    className="w-full h-full object-cover"
-                  />
-                ) : null}
+          <Card className="p-6 card-gradient border-border">
+            <h2 className="text-2xl font-semibold mb-3">{profile.favoriteTopic.title}</h2>
+            <div className="grid md:grid-cols-3 gap-6 items-start">
+              <div className="md:col-span-2">
+                <p className="text-[15px] md:text-base leading-7 md:leading-7 text-muted-foreground whitespace-pre-line">
+                  {profile.favoriteTopic.content}
+                </p>
+              </div>
+              <div className="md:col-span-1">
+                <div className="border border-border/60 rounded-lg overflow-hidden bg-muted/10 h-48 flex items-center justify-center">
+                  {profile.favoriteTopic.image ? (
+                    <img
+                      src={profile.favoriteTopic.image}
+                      alt={profile.favoriteTopic.title}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : null}
+                </div>
               </div>
             </div>
-          </div>
+          </Card>
         </section>
       </div>
     </div>
@@ -173,4 +215,7 @@ const TechWatchBlog = () => {
 };
 
 export default TechWatchBlog;
+
+
+
 
