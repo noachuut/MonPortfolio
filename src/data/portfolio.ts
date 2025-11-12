@@ -197,7 +197,7 @@ export const skillCategories: SkillCategory[] = [
   },
   {
     id: "outils",
-    title: "Outils & Bases de donnÃ©es",
+    title: "Outils & Bases de données",
     skills: [
       { id: "docker", name: "Docker", icon: "/images/technologies/docker.png" },
       { id: "git", name: "Git", icon: "/images/technologies/git.png" },
