@@ -11,11 +11,6 @@ import {
   TooltipContent,
 } from "@/components/ui/tooltip";
 import {
-  HoverCard,
-  HoverCardTrigger,
-  HoverCardContent,
-} from "@/components/ui/hover-card";
-import {
   defaultTechWatchProfile,
   type SocialPlatform,
   type TechWatchProfile,
@@ -72,9 +67,7 @@ const TechWatchBlog = () => {
   ) => (
     <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-8 mt-6">
       {accounts.map((acc) => (
-        <HoverCard key={acc.id}>
-          <HoverCardTrigger asChild>
-            <a
+            <a key={acc.id}
               href={acc.link}
               target="_blank"
               rel="noopener noreferrer"
@@ -101,23 +94,6 @@ const TechWatchBlog = () => {
                 </div>
               </Card>
             </a>
-          </HoverCardTrigger>
-          <HoverCardContent>
-            <div className="flex gap-3 items-start">
-              <img
-                src={acc.image}
-                alt={acc.name}
-                className="w-12 h-12 rounded-lg object-cover border border-border/60"
-              />
-              <div>
-                <h4 className="font-semibold mb-1">{acc.name}</h4>
-                <p className="text-xs text-muted-foreground whitespace-pre-line">
-                  {acc.description}
-                </p>
-              </div>
-            </div>
-          </HoverCardContent>
-        </HoverCard>
       ))}
     </div>
   );

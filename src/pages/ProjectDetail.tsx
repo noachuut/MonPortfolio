@@ -86,6 +86,11 @@ const isEventsType = (type: Project["type"]) => {
   return t === "evenements" || t === "evenement" || t === "events" || t === "event";
 };
 
+const isWebType = (type: Project["type"]) => {
+  const t = normalizeType(String(type));
+  return t === "web";
+};
+
 const ProjectDetail = () => {
   const { slug } = useParams();
   const [customProjects, setCustomProjects] = useState<Project[]>([]);
@@ -239,7 +244,7 @@ const ProjectDetail = () => {
               </div>
             </Card>
 
-            {(project.github || project.primaryLink) && (
+            {(project.github || (project.primaryLink && (isWebType(project.type) || isEventsType(project.type)))) && (
               <Card className="p-6 border-border">
                 <h3 className="font-semibold mb-3">Liens</h3>
                 <div className="flex flex-col gap-2">
@@ -248,9 +253,11 @@ const ProjectDetail = () => {
                       <a href={project.github} target="_blank" rel="noopener noreferrer">GitHub</a>
                     </Button>
                   )}
-                  {project.primaryLink && (
+                  {project.primaryLink && (isWebType(project.type) || isEventsType(project.type)) && (
                     <Button asChild variant="outline" size="sm">
-                      <a href={project.primaryLink} target="_blank" rel="noopener noreferrer">Site</a>
+                      <a href={project.primaryLink} target="_blank" rel="noopener noreferrer">
+                        {project.primaryLinkLabel || (isEventsType(project.type) ? "Voir l'article" : "Site")}
+                      </a>
                     </Button>
                   )}
                 </div>
@@ -264,4 +271,3 @@ const ProjectDetail = () => {
 };
 
 export default ProjectDetail;
-

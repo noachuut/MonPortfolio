@@ -169,7 +169,7 @@ const ProjectsSection = () => {
                 </p>
 
                 {/* Features: hide for events */}
-                {!isEventsType(project.type) && project.features?.length > 0 && (
+                {false && !isEventsType(project.type) && project.features?.length > 0 && (
                   <div className="mb-4">
                     <h4 className="font-semibold mb-2 text-sm">Fonctionnalités :</h4>
                     <ul className="space-y-1">
@@ -183,17 +183,7 @@ const ProjectsSection = () => {
                   </div>
                 )}
 
-                {/* Technologies */}
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {project.technologies.map((tech) => (
-                    <span
-                      key={tech}
-                      className="px-2 py-1 bg-accent/10 text-accent text-xs rounded border border-accent/20"
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
+                {/* Technologies masquées sur les cards */}
 
                 {/* Details link */}
                 <div className="flex">
@@ -211,4 +201,3 @@ const ProjectsSection = () => {
 };
 
 export default ProjectsSection;
-

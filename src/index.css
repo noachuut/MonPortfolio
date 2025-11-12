@@ -91,6 +91,15 @@ All colors MUST be HSL.
 }
 
 @layer base {
+  /* Optional custom font: Craggy. Place files in public/fonts/ */
+  @font-face {
+    font-family: 'Craggy';
+    src: url('/fonts/Craggy.woff2') format('woff2'),
+         url('/fonts/Craggy.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
   * {
     @apply border-border;
   }
@@ -106,6 +115,9 @@ All colors MUST be HSL.
 }
 
 @layer components {
+  .font-craggy {
+    font-family: 'Craggy', ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  }
   .hero-gradient {
     background: var(--hero-gradient);
   }
