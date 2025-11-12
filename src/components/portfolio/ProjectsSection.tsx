@@ -1,4 +1,4 @@
-﻿import { Card } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useEffect, useMemo, useState } from "react";
@@ -15,15 +15,21 @@ import {
 import { Link } from "react-router-dom";
 import { slugify } from "@/lib/slug";
 
-const normalizeType = (type: string) => type.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase();
+const normalizeType = (type: string) =>
+  type.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase();
 
 const isEventsType = (type: Project["type"]) => {
-  const t = normalizeType(String(type));
+  const t = normalizeType(String(type)).trim();
   return t === "evenements" || t === "evenement" || t === "events" || t === "event";
 };
 
+const canonicalizeType = (type: Project["type"]) => {
+  const norm = normalizeType(String(type)).trim();
+  return isEventsType(type) ? "evenements" : norm;
+};
+
 const formatProjectType = (type: Project["type"]) => {
-  const t = normalizeType(String(type));
+  const t = normalizeType(String(type)).trim();
   switch (t) {
     case "ia":
       return "IA";
@@ -61,21 +67,29 @@ const ProjectsSection = () => {
   );
 
   const projectTypes = useMemo(() => {
-    const types = new Set<Project["type"]>([
+    // Fixed base order; ensures no duplicates
+    const baseOrder: Project["type"][] = [
       "web",
       "ia",
-      "Ã©venements",
       "reseaux",
+      "evenements",
       "autres"
-    ]);
-    combinedProjects.forEach((project) => types.add(project.type));
-    return Array.from(types);
+    ];
+
+    const baseSet = new Set(baseOrder);
+    const extras = new Set<string>();
+    combinedProjects.forEach((project) => {
+      const canonical = canonicalizeType(project.type);
+      if (!baseSet.has(canonical as Project["type"])) extras.add(canonical);
+    });
+
+    return [...baseOrder, ...Array.from(extras)] as Project["type"][];
   }, [combinedProjects]);
 
   const filteredProjects =
     selectedType === "tous"
       ? combinedProjects
-      : combinedProjects.filter((project) => normalizeType(String(project.type)) === selectedType);
+      : combinedProjects.filter((project) => canonicalizeType(project.type) === selectedType);
 
   return (
     <section id="projets" className="py-20 section-gradient">
@@ -87,7 +101,7 @@ const ProjectsSection = () => {
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
             Découvrez mes réalisations qui mettent en valeur mes compétences techniques
           </p>
-          
+
           <ToggleGroup
             type="single"
             value={selectedType}
@@ -108,7 +122,7 @@ const ProjectsSection = () => {
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 transition-all duration-700">
           {filteredProjects.length === 0 && (
             <div className="col-span-full text-center text-muted-foreground">
-              Aucun projet disponible pour cette catÃ©gorie pour le moment.
+              Aucun projet disponible pour cette catégorie pour le moment.
             </div>
           )}
           {filteredProjects.map((project, index) => (
@@ -134,7 +148,7 @@ const ProjectsSection = () => {
                   </span>
                 )}
               </div>
-              
+
               <div className="p-6">
                 {/* Skill highlight badge */}
                 <div className="mb-4">
@@ -145,35 +159,37 @@ const ProjectsSection = () => {
                     {project.skillHighlight}
                   </span>
                 </div>
-                
+
                 <h3 className="text-xl font-semibold mb-3 group-hover:text-primary transition-colors">
                   {project.title}
                 </h3>
-                
+
                 <p className="text-muted-foreground mb-4 text-sm leading-relaxed">
                   {project.description}
                 </p>
-                
-                
+
                 {/* Features: hide for events */}
                 {!isEventsType(project.type) && project.features?.length > 0 && (
-                <div className="mb-4">
-                  <h4 className="font-semibold mb-2 text-sm">Fonctionnalités :</h4>
-                  <ul className="space-y-1">
-                    {project.features.slice(0, 3).map((feature, i) => (
-                      <li key={i} className="text-xs text-muted-foreground flex items-center gap-2">
-                        <span className="text-primary">•</span>
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                  <div className="mb-4">
+                    <h4 className="font-semibold mb-2 text-sm">Fonctionnalités :</h4>
+                    <ul className="space-y-1">
+                      {project.features.slice(0, 3).map((feature, i) => (
+                        <li key={i} className="text-xs text-muted-foreground flex items-center gap-2">
+                          <span className="text-primary">•</span>
+                          {feature}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 )}
-                
+
                 {/* Technologies */}
                 <div className="flex flex-wrap gap-2 mb-4">
                   {project.technologies.map((tech) => (
-                    <span key={tech} className="px-2 py-1 bg-accent/10 text-accent text-xs rounded border border-accent/20">
+                    <span
+                      key={tech}
+                      className="px-2 py-1 bg-accent/10 text-accent text-xs rounded border border-accent/20"
+                    >
                       {tech}
                     </span>
                   ))}

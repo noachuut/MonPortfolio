@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
+﻿import { useEffect, useMemo, useState } from "react";
 import { Card } from "@/components/ui/card";
+import { HoverCard, HoverCardTrigger, HoverCardContent } from "@/components/ui/hover-card";
 import {
   certifications as defaultCertifications,
   mergeCertifications,
@@ -52,20 +53,21 @@ const CertificationsSection = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
           {certifications.length === 0 && (
-            <Card className="p-6 text-center text-muted-foreground border-dashed">
+            <Card className="p-4 text-center text-muted-foreground border-dashed">
               Ajoutez vos certifications depuis l'interface d'administration pour les afficher ici.
             </Card>
           )}
           {certifications.map((certification, index) => (
-            <Card
-              key={certification.id}
-              className="card-gradient border-border p-6 space-y-4 animate-[fade-in_0.6s_ease-out_forwards] opacity-0"
-              style={{ animationDelay: `${index * 0.1}s` }}
-            >
+            <HoverCard key={certification.id}>
+              <HoverCardTrigger asChild>
+                <Card
+                  className="card-gradient border-border p-4 space-y-3 max-w-md w-full mx-auto animate-[fade-in_0.6s_ease-out_forwards] opacity-0"
+                  style={{ animationDelay: `${index * 0.1}s` }}
+                >
               {certification.image && (
-                <div className="h-40 overflow-hidden rounded-lg border border-border/60">
+                <div className="h-28 overflow-hidden rounded-lg border border-border/60">
                   <img
                     src={certification.image}
                     alt={certification.name}
@@ -75,10 +77,10 @@ const CertificationsSection = () => {
                 </div>
               )}
               <div>
-                <h3 className="text-xl font-semibold text-primary mb-2">
+                <h3 className="text-lg font-semibold text-primary mb-2">
                   {certification.name}
                 </h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">
+                <p className="md:hidden text-xs text-muted-foreground leading-relaxed">
                   {certification.description}
                 </p>
               </div>
@@ -91,7 +93,7 @@ const CertificationsSection = () => {
                     {certification.skills.map((skill) => (
                       <span
                         key={skill}
-                        className="px-3 py-1 bg-primary/10 text-primary text-xs rounded-full border border-primary/20"
+                        className="px-2 py-0.5 bg-primary/10 text-primary text-xs rounded-full border border-primary/20"
                       >
                         {skill}
                       </span>
@@ -104,12 +106,22 @@ const CertificationsSection = () => {
                   href={certification.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center w-full px-4 py-2 text-sm font-semibold border border-primary/20 rounded-md hero-gradient text-white"
+                  className="inline-flex items-center justify-center w-full px-3 py-1.5 text-xs font-semibold border border-primary/20 rounded-md hero-gradient text-white"
                 >
                   Consulter la certification
                 </a>
               )}
-            </Card>
+                </Card>
+              </HoverCardTrigger>
+              <HoverCardContent className="w-80 hidden md:block">
+                <div className="space-y-2">
+                  <h4 className="text-sm font-semibold">{certification.name}</h4>
+                  <p className="text-xs text-muted-foreground leading-relaxed">
+                    {certification.description}
+                  </p>
+                </div>
+              </HoverCardContent>
+            </HoverCard>
           ))}
         </div>
       </div>
@@ -118,3 +130,8 @@ const CertificationsSection = () => {
 };
 
 export default CertificationsSection;
+
+
+
+
+

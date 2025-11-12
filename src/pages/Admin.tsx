@@ -63,8 +63,8 @@ import { syncServerData } from "@/lib/serverSync";
 const projectTypeOptions: { value: Project["type"]; label: string }[] = [
   { value: "web", label: "Web" },
   { value: "ia", label: "IA" },
-  { value: "Ã©venements", label: "Événements" },
-  { value: "reseaux", label: "RÃ©seaux" },
+  { value: "evenements", label: "Événements" },
+  { value: "reseaux", label: "Réseaux" },
   { value: "autres", label: "Autres" }
 ];
 

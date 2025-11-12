@@ -1,103 +1,228 @@
 ﻿import { useEffect, useMemo, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import {
-  mergeTechWatchArticles,
-  techWatchArticles as defaultArticles,
-  type TechWatchArticle
+  Tooltip,
+  TooltipProvider,
+  TooltipTrigger,
+  TooltipContent,
+} from "@/components/ui/tooltip";
+import {
+  HoverCard,
+  HoverCardTrigger,
+  HoverCardContent,
+} from "@/components/ui/hover-card";
+import {
+  defaultTechWatchProfile,
+  type SocialPlatform,
+  type TechWatchProfile,
 } from "@/data/portfolio";
 import {
-  loadCustomArticles,
-  loadHiddenArticleIds,
-  subscribeToArticleUpdates
+  loadCustomTechWatchProfile,
+  subscribeToTechWatchProfileUpdates,
 } from "@/lib/portfolioStorage";
 
-const TechWatchSection = () => {
-  const [customArticles, setCustomArticles] = useState<TechWatchArticle[]>([]);
-  const [hiddenArticleIds, setHiddenArticleIds] = useState<string[]>([]);
+const platformLabel = (p: SocialPlatform) => {
+  switch (p) {
+    case "youtube":
+      return "YouTube";
+    case "tiktok":
+      return "TikTok";
+    case "instagram":
+      return "Instagram";
+    default:
+      return "Autres";
+  }
+};
+
+const TechWatchBlog = () => {
+  const [custom, setCustom] = useState<TechWatchProfile | null>(null);
 
   useEffect(() => {
-    setCustomArticles(loadCustomArticles());
-    setHiddenArticleIds(loadHiddenArticleIds());
-
-    const unsubscribe = subscribeToArticleUpdates(() => {
-      setCustomArticles(loadCustomArticles());
-      setHiddenArticleIds(loadHiddenArticleIds());
+    setCustom(loadCustomTechWatchProfile());
+    const unsub = subscribeToTechWatchProfileUpdates(() => {
+      setCustom(loadCustomTechWatchProfile());
     });
-
-    return unsubscribe;
+    return unsub;
   }, []);
 
-  const articles = useMemo(
-    () =>
-      mergeTechWatchArticles(
-        defaultArticles,
-        customArticles,
-        hiddenArticleIds
-      ),
-    [customArticles, hiddenArticleIds]
+  const profile = useMemo<TechWatchProfile>(
+    () => ({
+      ...defaultTechWatchProfile,
+      ...(custom || {}),
+    }),
+    [custom]
+  );
+
+  const accountsByPlatform = useMemo(() => {
+    const map = new Map<SocialPlatform, typeof profile.socialAccounts>();
+    (profile.socialAccounts || []).forEach((acc) => {
+      const list = map.get(acc.platform) || [];
+      list.push(acc);
+      map.set(acc.platform, list);
+    });
+    return map;
+  }, [profile.socialAccounts]);
+
+  const renderAccountsGrid = (
+    accounts: NonNullable<TechWatchProfile["socialAccounts"]>
+  ) => (
+    <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-8 mt-6">
+      {accounts.map((acc) => (
+        <HoverCard key={acc.id}>
+          <HoverCardTrigger asChild>
+            <a
+              href={acc.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block group focus:outline-none focus:ring-2 focus:ring-primary/50 rounded-xl"
+            >
+              <Card className="p-6 h-full card-gradient border border-border/60 rounded-xl backdrop-blur-md hover:border-primary/40 hover:shadow-lg hover:shadow-primary/10 transition-all duration-300">
+                <div className="flex gap-5 items-start">
+                  <img
+                    src={acc.image}
+                    alt={acc.name}
+                    className="w-16 h-16 object-cover rounded-lg shadow-md shadow-primary/10 group-hover:scale-105 transition-transform duration-300"
+                  />
+                  <div className="flex flex-col gap-2 flex-1">
+                    <div className="flex justify-between items-center">
+                      <h3 className="font-semibold text-primary group-hover:text-primary/90">
+                        {acc.name}
+                      </h3>
+                      <Badge variant="secondary">{platformLabel(acc.platform)}</Badge>
+                    </div>
+                    <p className="text-sm text-muted-foreground leading-snug">
+                      {acc.description}
+                    </p>
+                  </div>
+                </div>
+              </Card>
+            </a>
+          </HoverCardTrigger>
+          <HoverCardContent>
+            <div className="flex gap-3 items-start">
+              <img
+                src={acc.image}
+                alt={acc.name}
+                className="w-12 h-12 rounded-lg object-cover border border-border/60"
+              />
+              <div>
+                <h4 className="font-semibold mb-1">{acc.name}</h4>
+                <p className="text-xs text-muted-foreground whitespace-pre-line">
+                  {acc.description}
+                </p>
+              </div>
+            </div>
+          </HoverCardContent>
+        </HoverCard>
+      ))}
+    </div>
   );
 
   return (
-    <section id="veille" className="py-20 section-gradient">
-      <div className="container mx-auto px-6">
-        <div className="text-center mb-16 fade-in">
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">
-            Ma <span className="hero-gradient bg-clip-text text-transparent">Veille technologique</span>
-          </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Articles, ressources et innovations qui nourrissent ma réflexion
+    <div className="min-h-screen section-gradient text-white">
+      <div className="container mx-auto px-6 py-16 max-w-6xl">
+        {/* HERO */}
+        <div className="text-center mb-14">
+          <h1 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary via-purple-500 to-indigo-400 drop-shadow-lg">
+            Ma veille technologique
+          </h1>
+          <p className="text-muted-foreground mt-3 text-lg">
+            Comment je m’informe, expérimente et reste à jour sur les tendances du numérique et de l’intelligence artificielle.
           </p>
-          <div className="mt-8 flex justify-center">
-            <Button asChild size="lg" className="hero-gradient text-white shadow-lg hover:shadow-primary/30"><a href="/veille-technologique">Ma méthode de veille</a></Button>
-          </div>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {/* Carte vide supprimée si aucun article */}
-          {articles.map((article, index) => (
-            <Card
-              key={article.id}
-              className="card-gradient border-border overflow-hidden flex flex-col animate-[fade-in_0.6s_ease-out_forwards] opacity-0"
-              style={{ animationDelay: `${index * 0.1}s` }}
-            >
-              {article.image && (
-                <div className="h-44 overflow-hidden border-b border-border/60">
+        {/* DAILY.DEV */}
+        <section className="mb-16">
+          <h2 className="text-2xl font-semibold mb-6 text-primary">daily.dev</h2>
+          <Card className="bg-gradient-to-br from-background/60 to-background/40 border border-border/50 rounded-2xl backdrop-blur-md hover:border-primary/40 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10">
+            <div className="grid md:grid-cols-3 gap-10 items-center p-8">
+              <div className="md:col-span-1 flex justify-center">
+                {profile.dailyDev?.devCardImage ? (
                   <img
-                    src={article.image}
-                    alt={article.title}
-                    className="w-full h-full object-cover"
-                    loading="lazy"
+                    src={profile.dailyDev.devCardImage}
+                    alt="Ma devCard daily.dev"
+                    className="rounded-xl w-full max-w-xs shadow-md shadow-primary/10 hover:scale-105 transition-transform duration-300"
                   />
-                </div>
-              )}
-              <div className="p-6 flex flex-col gap-4 flex-1">
-                <div>
-                  <p className="text-xs uppercase tracking-wide text-muted-foreground">
-                    {article.publishedAt || "Veille"}
-                  </p>
-                  <h3 className="text-xl font-semibold text-primary mt-2">
-                    {article.title}
-                  </h3>
-                </div>
-                <p className="text-sm text-muted-foreground leading-relaxed flex-1">
-                  {article.summary || "RÃ©sumÃ© Ã  ajouter via l'administration."}
-                </p>
-                <Button asChild size="sm" className="self-start hero-gradient text-white">
-                  <a href={article.link} target="_blank" rel="noopener noreferrer">
-                    Lire l'article
-                  </a>
-                </Button>
+                ) : (
+                  <span className="text-sm text-gray-500">
+                    Image daily.dev manquante
+                  </span>
+                )}
               </div>
-            </Card>
-          ))}
-        </div>
+              <div className="md:col-span-2 text-muted-foreground leading-relaxed">
+                <p>{profile.dailyDev?.description}</p>
+                {profile.dailyDev?.profileLink && (
+                  <div className="mt-5">
+                    <Button asChild size="sm" variant="outline">
+                      <a
+                        href={profile.dailyDev.profileLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Voir mon profil daily.dev
+                      </a>
+                    </Button>
+                  </div>
+                )}
+              </div>
+            </div>
+          </Card>
+        </section>
+
+        {/* RÉSEAUX SOCIAUX */}
+        <section className="mb-16">
+          <h2 className="text-2xl font-semibold mb-4 text-primary">
+            Réseaux sociaux
+          </h2>
+          <p className="text-sm text-muted-foreground mb-6">
+            Chaînes et comptes que je suis, avec une courte description de leur contenu.
+          </p>
+          <Tabs defaultValue="all">
+            <TabsList className="mb-6">
+              <TabsTrigger value="all">Tous</TabsTrigger>
+              {Array.from(accountsByPlatform.keys()).map((p) => (
+                <TabsTrigger key={p} value={p}>
+                  {platformLabel(p)}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+
+            <TabsContent value="all">
+              {renderAccountsGrid(profile.socialAccounts || [])}
+            </TabsContent>
+
+            {Array.from(accountsByPlatform.entries()).map(([p, accounts]) => (
+              <TabsContent key={p} value={p}>
+                {renderAccountsGrid(accounts)}
+              </TabsContent>
+            ))}
+          </Tabs>
+        </section>
+
+        <Separator className="my-14 bg-border/50" />
+
+        {/* SUJET FAVORI */}
+        <section>
+          <h2 className="text-2xl font-semibold mb-6 text-primary">
+            {profile.favoriteTopic.title}
+          </h2>
+          <Card className="p-8 card-gradient border border-border/60 rounded-2xl hover:border-primary/40 hover:shadow-primary/10 transition-all duration-300">
+            <p className="text-muted-foreground leading-relaxed whitespace-pre-line mb-6">
+              {profile.favoriteTopic.content}
+            </p>
+
+            <blockquote className="border-l-4 border-primary pl-4 italic text-primary/80 text-sm">
+              “Comprendre comment l’IA s’intègre dans nos usages m’aide à garder un regard critique : l’objectif n’est pas de remplacer l’humain, mais de le renforcer.”
+            </blockquote>
+          </Card>
+        </section>
       </div>
-    </section>
+    </div>
   );
 };
 
-export default TechWatchSection;
-
-
-
+export default TechWatchBlog;

@@ -55,7 +55,7 @@ export type Project = {
   title: string;
   description: string;
   visual?: string;
-  type: "web" | "ia" | "évenements" | "reseaux" | "autres";
+  type: "web" | "ia" | "reseaux" | "evenements" | "autres";
   technologies: string[];
   skillHighlight: string;
   github?: string;
@@ -314,7 +314,7 @@ export const projects: Project[] = [
     description:
       "Space4NC, c’est 24 heures pour prototyper un projet entrepreneurial à impact, en mobilisant les données et technologies spatiales avec l’accompagnement de coachs, d’experts du CNES et de partenaires locaux. Nous avons eu l’honneur de participer à ce hackathon et d’y remporter la première place avec notre projet TélécabNC.",
     visual: "/images/projets/hackathon.webp",
-    type: "évenements",
+    type: "evenements",
     technologies: ["Travail d'équipe", "Prototypage rapide", "Présentation"],
     skillHighlight: "Innovation",
     github: "#",
@@ -332,7 +332,7 @@ export const projects: Project[] = [
     description:
       "Cet événement réunit les passionnés et les curieux du numérique lors d’une journée exceptionnelle, rythmée par des défis de cybersécurité, des conférences inspirantes et des échanges enrichissants avec des professionnels du secteur. Nous y avons participé en équipe et avons remporté le 3ème prix du challenge de cybersécurité dans la catégorie étudiant.",
     visual: "/images/projets/hackagou.jpg",
-    type: "évenements",
+    type: "evenements",
     technologies: ["Travail d'équipe", "Résolution de problèmes cybersécurité"],
     skillHighlight: "Cybersécurité",
     github: "#",
