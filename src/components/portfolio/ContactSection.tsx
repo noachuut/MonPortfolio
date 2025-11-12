@@ -53,7 +53,7 @@ const ContactSection = () => {
       return;
     }
     if (formData.website) {
-      setStatus({ type: "success", message: "Message envoyÃ©. Merci !" });
+      setStatus({ type: "success", message: "Message envoyé©. Merci !" });
       setFormData({ name: "", email: "", message: "", website: "" });
       return;
     }
@@ -102,13 +102,13 @@ const ContactSection = () => {
       }
 
       if (ok) {
-        setStatus({ type: "success", message: "Message envoyÃ©. Merci !" });
+        setStatus({ type: "success", message: "Message envoyé©. Merci !" });
         setFormData({ name: "", email: "", message: "", website: "" });
       } else {
         setStatus({ type: "error", message: "Une erreur est survenue. RÃ©essayez plus tard." });
       }
     } catch (err) {
-      setStatus({ type: "error", message: "Impossible d'envoyer le message pour le moment." });
+      setStatus({ type: "error", message: "Impossible d'envoyér le message pour le moment." });
     } finally {
       setSubmitting(false);
     }
@@ -302,3 +302,4 @@ const ContactSection = () => {
 };
 
 export default ContactSection;
+

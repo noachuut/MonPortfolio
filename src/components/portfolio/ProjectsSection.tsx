@@ -35,9 +35,9 @@ const formatProjectType = (type: Project["type"]) => {
       return "IA";
     case "evenements":
     case "evenement":
-      return "Événements";
+      return "?v?nements";
     case "reseaux":
-      return "Réseaux";
+      return "R?seaux";
     case "autres":
       return "Autres";
     default:
@@ -99,9 +99,8 @@ const ProjectsSection = () => {
             Mes <span className="hero-gradient bg-clip-text text-transparent">Projets</span>
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
-            Découvrez mes réalisations qui mettent en valeur mes compétences techniques
+            D?couvrez mes r?alisations qui mettent en valeur mes comp?tences techniques
           </p>
-
           <ToggleGroup
             type="single"
             value={selectedType}
@@ -201,3 +200,6 @@ const ProjectsSection = () => {
 };
 
 export default ProjectsSection;
+
+
+

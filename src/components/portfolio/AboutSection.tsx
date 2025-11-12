@@ -14,28 +14,31 @@ const AboutSection = () => {
   const initials = useMemo(() => getInitials(displayName), [displayName]);
 
   // You can replace this with your own photo in public/images/profile.jpg
-  const photo = "/images/profile.jpg";
+  const photo = "/images/profile.png";
   const aboutText = heroContent?.tagline;
 
   return (
     <section id="qui-suis-je" className="py-20 section-gradient">
       <div className="container mx-auto px-6 max-w-4xl text-center">
-        <h2 className="text-4xl md:text-5xl font-bold mb-10">
-          Qui <span className="hero-gradient bg-clip-text text-transparent">suis‑je ?</span>
-        </h2>
+        <h2 className="text-4xl md:text-5xl font-bold mb-10">Qui <span className="hero-gradient bg-clip-text text-transparent">suis-je ?</span></h2>
 
         <div className="flex flex-col items-center gap-6">
-          <div className="relative w-40 h-40 rounded-full ring-4 ring-primary/40 shadow-xl overflow-hidden bg-gradient-to-br from-primary/20 via-purple-500/20 to-indigo-400/20 flex items-center justify-center">
-            <img
-              src={photo}
-              alt={displayName}
-              className={`w-full h-full object-cover ${imageOk ? "block" : "hidden"}`}
-              loading="lazy"
-              onError={() => setImageOk(false)}
-            />
-            {!imageOk && (
-              <span className="text-4xl font-bold text-primary/80 select-none">{initials}</span>
-            )}
+          <div className="inline-block mx-auto">
+            <div className="w-44 h-44 md:w-56 md:h-56 rounded-full p-[6px] bg-gradient-to-tr from-violet-500 via-indigo-400 to-fuchsia-500 shadow-[0_10px_30px_hsl(240_76%_65%_/_0.35)]">
+              <div className="w-full h-full rounded-full overflow-hidden bg-background/80 ring-1 ring-border/60 flex items-center justify-center">
+                <img
+                  src={photo}
+                  alt={displayName}
+                  className={`w-full h-full object-cover ${imageOk ? "block" : "hidden"}`}
+                  style={{ objectPosition: "center 40%" }}
+                  loading="lazy"
+                  onError={() => setImageOk(false)}
+                />
+                {!imageOk && (
+                  <span className="text-4xl md:text-5xl font-bold text-primary/80 select-none">{initials}</span>
+                )}
+              </div>
+            </div>
           </div>
 
           <div className="max-w-2xl text-muted-foreground leading-relaxed text-lg md:text-xl">
@@ -48,3 +51,7 @@ const AboutSection = () => {
 };
 
 export default AboutSection;
+
+
+
+

@@ -61,7 +61,11 @@ const SkillsSection = () => {
             </p>
           )}
           {categories.map((category, categoryIndex) => (
-            <Card key={category.title} className={`card-gradient border-border p-6 hover:shadow-lg hover:shadow-primary/10 transition-all duration-500 scale-in`} style={{ animationDelay: `${categoryIndex * 0.2}s` }}>
+            <Card
+              key={category.title}
+              className={`card-gradient border-border p-6 hover:shadow-lg hover:shadow-primary/10 transition-all duration-500 scale-in`}
+              style={{ animationDelay: `${categoryIndex * 0.2}s` }}
+            >
               <h3 className="text-2xl font-semibold mb-6 text-center text-primary">
                 {category.title}
               </h3>
@@ -91,3 +95,5 @@ const SkillsSection = () => {
 };
 
 export default SkillsSection;
+
+
