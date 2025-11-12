@@ -15,7 +15,8 @@ const AboutSection = () => {
 
   // You can replace this with your own photo in public/images/profile.jpg
   const photo = "/images/profile.png";
-  const aboutText = heroContent?.tagline;
+  const aboutText = (heroContent as any)?.about || heroContent?.tagline ||
+    "Passionné par le développement et les nouvelles technologies, je suis actuellement alternant au sein de la DSI de l’OPT, où je mets en pratique mes compétences sur des projets concrets. Après un baccalauréat général (Maths et NSI) et une année en Licence d’Informatique, j’ai choisi de me réorienter vers le BTS SIO, une formation plus pratique et orientée métier. Ce parcours m’a permis de découvrir la richesse du domaine informatique, alliant développement, réseau, sécurité et gestion de projet. Curieux, rigoureux et toujours désireux d’apprendre, j’aime concevoir des solutions adaptées aux besoins réels et relever de nouveaux défis techniques.";
 
   return (
     <section id="qui-suis-je" className="py-20 section-gradient">

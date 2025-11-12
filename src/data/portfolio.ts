@@ -1,7 +1,9 @@
-/**
- * Contenu centralisé du portfolio.
- * Remplacez ces valeurs par celles de https://nmorandeau.btsinfo.nc lorsque vous y avez accès.
+﻿/**
+ * Contenu centralisÃ© du portfolio.
+ * Remplacez ces valeurs par celles de https://nmorandeau.btsinfo.nc lorsque vous y avez accÃ¨s.
  */
+
+
 
 export type NavigationLink = {
   id: string;
@@ -13,10 +15,7 @@ export type HeroContent = {
   name: string;
   highlight: string;
   tagline: string;
-  cvDownload: {
-    label: string;
-    href: string;
-  };
+  about?: string;
   primaryCta: {
     label: string;
     targetId: string;
@@ -26,6 +25,7 @@ export type HeroContent = {
     targetId: string;
   };
 };
+
 
 export type Skill = {
   id: string;
@@ -125,15 +125,15 @@ export type SocialLink = {
 
 export const siteMeta = {
   brand: "Noa Morandeau",
-  role: "Alternant Développeur",
-  location: "Nouméa, Nouvelle-Calédonie",
+  role: "Alternant DÃ©veloppeur",
+  location: "NoumÃ©a, Nouvelle-CalÃ©donie",
   email: "noamorandeau@gmail.com"
 };
 
 export const navigationLinks: NavigationLink[] = [
   { id: "accueil", label: "Accueil" },
-  { id: "competences", label: "Compétences" },
-  { id: "experience", label: "Expérience" },
+  { id: "competences", label: "CompÃ©tences" },
+  { id: "experience", label: "ExpÃ©rience" },
   { id: "projets", label: "Projets" },
   { id: "certifications", label: "Certifications" },
   { id: "veille", label: "Veille" },
@@ -145,7 +145,8 @@ export const heroContent: HeroContent = {
   name: "Noa Morandeau",
   highlight: "Alternant Développeur",
   tagline:
-    "Étudiant en BTS SIO option SLAM, je conçois et développe des solutions adaptées aux besoins métiers tout en consolidant mes compétences techniques.",
+    "étudiant en BTS SIO option SLAM, je conçois et développe des solutions adaptées aux besoins métiers tout en consolidant mes compétences techniques.",
+  about: "Passionné par le développement et les nouvelles technologies, je suis actuellement alternant au sein de la DSI de l’OPT, où je mets en pratique mes compétences sur des projets concrets. Après un baccalauréat général (Maths et NSI) et une année en Licence d’Informatique, j’ai choisi de me réorienter vers le BTS SIO, une formation plus pratique et orientée métier. Ce parcours m’a permis de découvrir la richesse du domaine informatique, alliant développement, réseau, sécurité et gestion de projet. Curieux, rigoureux et toujours désireux d’apprendre, j’aime concevoir des solutions adaptées aux besoins réels et relever de nouveaux défis techniques.",
   cvDownload: {
     label: "Télécharger mon CV",
     href: "/CV_NOA_MORANDEAU.pdf"
@@ -161,7 +162,7 @@ export const heroContent: HeroContent = {
 };
 
 export const referentialDownload = {
-  label: "Télécharger le référentiel BTS SIO",
+  label: "TÃ©lÃ©charger le rÃ©fÃ©rentiel BTS SIO",
   href: "/Noa_MORANDEAU_Referentiel_E4.pdf"
 };
 
@@ -196,7 +197,7 @@ export const skillCategories: SkillCategory[] = [
   },
   {
     id: "outils",
-    title: "Outils & Bases de données",
+    title: "Outils & Bases de donnÃ©es",
     skills: [
       { id: "docker", name: "Docker", icon: "/images/technologies/docker.png" },
       { id: "git", name: "Git", icon: "/images/technologies/git.png" },
@@ -212,11 +213,11 @@ export const skillCategories: SkillCategory[] = [
 export const experiences: Experience[] = [
   {
     id: "sio-stage-1",
-    title: "Stagiaire développeur",
-    company: "DINUM NC – Direction du Numérique et de la modernisation",
-    period: "04 novembre 2024 – 06 décembre 2024",
+    title: "Stagiaire dÃ©veloppeur",
+    company: "DINUM NC â€“ Direction du NumÃ©rique et de la modernisation",
+    period: "04 novembre 2024 â€“ 06 dÃ©cembre 2024",
     description:
-      "Réalisation d’un POC intégrant NC Connect pour offrir une authentification unifiée (SSO) et faciliter la connexion de fournisseurs de données aux applications internes.",
+      "RÃ©alisation dâ€™un POC intÃ©grant NC Connect pour offrir une authentification unifiÃ©e (SSO) et faciliter la connexion de fournisseurs de donnÃ©es aux applications internes.",
     technologies: [
       "Python",
       "Flask",
@@ -226,24 +227,24 @@ export const experiences: Experience[] = [
       "API REST"
     ],
     achievements: [
-      "Conception et réalisation d’un POC fonctionnel avec Flask",
-      "Intégration de l’authentification unifiée via NC Connect (SSO)",
-      "Mise à disposition d’endpoints REST pour l’accès aux données fournisseurs"
+      "Conception et rÃ©alisation dâ€™un POC fonctionnel avec Flask",
+      "IntÃ©gration de lâ€™authentification unifiÃ©e via NC Connect (SSO)",
+      "Mise Ã  disposition dâ€™endpoints REST pour lâ€™accÃ¨s aux donnÃ©es fournisseurs"
     ],
     image: undefined
   },
   {
     id: "opt-alternance",
-    title: "Alternant Développeur",
-    company: "Office des postes et  télécommunications NC",
-    period: "08 janvier - 31 décembre",
+    title: "Alternant DÃ©veloppeur",
+    company: "Office des postes et  tÃ©lÃ©communications NC",
+    period: "08 janvier - 31 dÃ©cembre",
     description:
-      "Participation à la conception et à l’évolution d’applications internes. réalisation d'un POC IA-Docubase (fiabilisation des données de factures) et travaux de réflexion/POC sur la détection d’anomalies (qualité des données, écarts, doublons, cas atypiques) pour soutenir les équipes métier.",
+      "Participation Ã  la conception et Ã  lâ€™Ã©volution dâ€™applications internes. rÃ©alisation d'un POC IA-Docubase (fiabilisation des donnÃ©es de factures) et travaux de rÃ©flexion/POC sur la dÃ©tection dâ€™anomalies (qualitÃ© des donnÃ©es, Ã©carts, doublons, cas atypiques) pour soutenir les Ã©quipes mÃ©tier.",
     technologies: ["Java", "SpringBoot", "SpringBatch", "LLM"],
     achievements: [
-      "Réalisation POC IA-Docubase : extraction de champs, rapprochement avec les métadonnées, contrôle/validation.",
-      "Conception d’un POC de détection d’anomalies : critères règles-based + pistes statistiques/LLM",
-      "Mise en place de jeux de tests et suivi de la qualité des données sur lots de factures."
+      "RÃ©alisation POC IA-Docubase : extraction de champs, rapprochement avec les mÃ©tadonnÃ©es, contrÃ´le/validation.",
+      "Conception dâ€™un POC de dÃ©tection dâ€™anomalies : critÃ¨res rÃ¨gles-based + pistes statistiques/LLM",
+      "Mise en place de jeux de tests et suivi de la qualitÃ© des donnÃ©es sur lots de factures."
     ],
     image: undefined
   }
@@ -254,7 +255,7 @@ export const projects: Project[] = [
     id: "1",
     title: "IA-Docubase",
     description:
-      "Docubase automatise le traitement des factures : centralisation, extraction des champs clés (Nom, Prénom, BP, n° de contrat, n° client), comparaison aux métadonnées et signalement des écarts en rouge. Validation/correction rapide, puis mise à jour de la GED avec des données fiables.",
+      "Docubase automatise le traitement des factures : centralisation, extraction des champs clÃ©s (Nom, PrÃ©nom, BP, nÂ° de contrat, nÂ° client), comparaison aux mÃ©tadonnÃ©es et signalement des Ã©carts en rouge. Validation/correction rapide, puis mise Ã  jour de la GED avec des donnÃ©es fiables.",
     visual: "/images/projets/docubase.png",
     type: "ia",
     technologies: ["Spring Boot","Spring Batch","Vaadin","Docker"],
@@ -264,9 +265,9 @@ export const projects: Project[] = [
     primaryLink: "#",
     primaryLinkLabel: "Voir le projet",
     features: [
-      "Extraire automatiquement les champs clés",
-      "Mettre en évidence les écarts avec la GED",
-      "Mettre à jour la GED avec les données vérifiées"
+      "Extraire automatiquement les champs clÃ©s",
+      "Mettre en Ã©vidence les Ã©carts avec la GED",
+      "Mettre Ã  jour la GED avec les donnÃ©es vÃ©rifiÃ©es"
     ],
     hidePrimaryButton: true 
   },
@@ -274,7 +275,7 @@ export const projects: Project[] = [
     id: "2",
     title: "Cyber EscapeGame",
     description:
-      "jeu pédagogique de cybersécurité pour lycéens : propose des parcours d’énigmes chronométrés portées sur la cybersécurité. Classement finale pour mettre en compétitions. Projet de sensibilisation réaliser pour la semaine du Numérique au Lycée Dick Ukeiwe ",
+      "jeu pÃ©dagogique de cybersÃ©curitÃ© pour lycÃ©ens : propose des parcours dâ€™Ã©nigmes chronomÃ©trÃ©s portÃ©es sur la cybersÃ©curitÃ©. Classement finale pour mettre en compÃ©titions. Projet de sensibilisation rÃ©aliser pour la semaine du NumÃ©rique au LycÃ©e Dick Ukeiwe ",
     visual: "/images/projets/escape-game.png",
     type: "web",
     technologies: ["Node.js",  "PostgreSQL", "OpenAPI/Swagger", "HTML,CSS,JavaScript"],
@@ -284,8 +285,8 @@ export const projects: Project[] = [
     primaryLink: "https://escape-game.btsinfo.nc/",
     primaryLinkLabel: "Voir le projet",
     features: [
-      "Créer des sessions et gérer les énigmes",
-      "Chronométrer les parcours (timer)",
+      "CrÃ©er des sessions et gÃ©rer les Ã©nigmes",
+      "ChronomÃ©trer les parcours (timer)",
       "Enregistrer la progression et les scores"
     ]
   },
@@ -293,7 +294,7 @@ export const projects: Project[] = [
     id: "3",
     title: "Jeu Labyrinthe",
     description:
-      "Mini-jeu de labyrinthe en Python (terminal) réalisé en 1ʳᵉ année de BTS SIO. Le joueur doit trouver la sortie en naviguant case par case dans un labyrinthe . le joueur choisis son personnage et a 5 vies pour terminer ce labbyrinthe facile en apparence mais remplis de piège. Un agent vocale est mis a disposition pour lire les consignes.",
+      "Mini-jeu de labyrinthe en Python (terminal) rÃ©alisÃ© en 1Ê³áµ‰ annÃ©e de BTS SIO. Le joueur doit trouver la sortie en naviguant case par case dans un labyrinthe . le joueur choisis son personnage et a 5 vies pour terminer ce labbyrinthe facile en apparence mais remplis de piÃ¨ge. Un agent vocale est mis a disposition pour lire les consignes.",
     visual: "/images/projets/labyrinthGame.png",
     type: "autres",
     technologies: ["Python"],
@@ -303,19 +304,19 @@ export const projects: Project[] = [
     primaryLink: "https://github.com/noachuut/LabyrinthGame",
     primaryLinkLabel: "Voir le Github",
     features: [
-      "Déplacements clavier (z q s d) et affichage en temps réel dans le terminal",
-      "Création du labyrinthe",
-      "Menus avec règles, lancement du jeu et choix du personnage"
+      "DÃ©placements clavier (z q s d) et affichage en temps rÃ©el dans le terminal",
+      "CrÃ©ation du labyrinthe",
+      "Menus avec rÃ¨gles, lancement du jeu et choix du personnage"
     ]
   },
   {
     id: "4",
-    title: "TélécabNc - Space4NC",
+    title: "TÃ©lÃ©cabNc - Space4NC",
     description:
-      "Space4NC, c’est 24 heures pour prototyper un projet entrepreneurial à impact, en mobilisant les données et technologies spatiales avec l’accompagnement de coachs, d’experts du CNES et de partenaires locaux. Nous avons eu l’honneur de participer à ce hackathon et d’y remporter la première place avec notre projet TélécabNC.",
+      "Space4NC, câ€™est 24 heures pour prototyper un projet entrepreneurial Ã  impact, en mobilisant les donnÃ©es et technologies spatiales avec lâ€™accompagnement de coachs, dâ€™experts du CNES et de partenaires locaux. Nous avons eu lâ€™honneur de participer Ã  ce hackathon et dâ€™y remporter la premiÃ¨re place avec notre projet TÃ©lÃ©cabNC.",
     visual: "/images/projets/hackathon.webp",
     type: "evenements",
-    technologies: ["Travail d'équipe", "Prototypage rapide", "Présentation"],
+    technologies: ["Travail d'Ã©quipe", "Prototypage rapide", "PrÃ©sentation"],
     skillHighlight: "Innovation",
     github: "#",
     demo: "#",
@@ -330,11 +331,11 @@ export const projects: Project[] = [
     id: "5",
     title: "Hackagou 2024",
     description:
-      "Cet événement réunit les passionnés et les curieux du numérique lors d’une journée exceptionnelle, rythmée par des défis de cybersécurité, des conférences inspirantes et des échanges enrichissants avec des professionnels du secteur. Nous y avons participé en équipe et avons remporté le 3ème prix du challenge de cybersécurité dans la catégorie étudiant.",
+      "Cet Ã©vÃ©nement rÃ©unit les passionnÃ©s et les curieux du numÃ©rique lors dâ€™une journÃ©e exceptionnelle, rythmÃ©e par des dÃ©fis de cybersÃ©curitÃ©, des confÃ©rences inspirantes et des Ã©changes enrichissants avec des professionnels du secteur. Nous y avons participÃ© en Ã©quipe et avons remportÃ© le 3Ã¨me prix du challenge de cybersÃ©curitÃ© dans la catÃ©gorie Ã©tudiant.",
     visual: "/images/projets/hackagou.jpg",
     type: "evenements",
-    technologies: ["Travail d'équipe", "Résolution de problèmes cybersécurité"],
-    skillHighlight: "Cybersécurité",
+    technologies: ["Travail d'Ã©quipe", "RÃ©solution de problÃ¨mes cybersÃ©curitÃ©"],
+    skillHighlight: "CybersÃ©curitÃ©",
     github: "#",
     demo: "#",
     primaryLink: "",
@@ -348,13 +349,13 @@ export const projects: Project[] = [
 
 export const contactDetails: ContactDetail[] = [
   {
-    icon: "📧",
+    icon: "ðŸ“§",
     title: "Email",
     value: siteMeta.email,
     link: `mailto:${siteMeta.email}`
   },
   {
-    icon: "📍",
+    icon: "ðŸ“",
     title: "Localisation",
     value: siteMeta.location,
     link: "#"
@@ -369,11 +370,11 @@ export const socialLinks: SocialLink[] = [
 export const certifications: Certification[] = [
   {
     id: "skills-for-all-cybersecurity",
-    name: "Introduction à la cybersécurité — Skills for All",
+    name: "Introduction Ã  la cybersÃ©curitÃ© â€” Skills for All",
     description:
-      "Formation (6h) d’initiation aux fondamentaux de la cybersécurité : risques courants, bonnes pratiques et hygiène numérique. Attestation de suivi (pas de certification officielle).",
+      "Formation (6h) dâ€™initiation aux fondamentaux de la cybersÃ©curitÃ© : risques courants, bonnes pratiques et hygiÃ¨ne numÃ©rique. Attestation de suivi (pas de certification officielle).",
     skills: [
-      "Cybersécurité de base",
+      "CybersÃ©curitÃ© de base",
       "Menaces et risques",
       "Bonnes pratiques",
       "Sensibilisation"
@@ -382,26 +383,26 @@ export const certifications: Certification[] = [
   },
   {
     id: "openclassrooms-comprendre-web",
-    name: "Comprendre le Web — OpenClassrooms",
+    name: "Comprendre le Web â€” OpenClassrooms",
     description:
-      "Formation (6h) qui explique le fonctionnement du Web : HTTP, DNS, navigateurs, hébergement et déploiement simple. Attestation de suivi.",
+      "Formation (6h) qui explique le fonctionnement du Web : HTTP, DNS, navigateurs, hÃ©bergement et dÃ©ploiement simple. Attestation de suivi.",
     skills: [
       "HTTP/DNS",
       "Architecture web",
-      "Hébergement",
-      "Déploiement",
+      "HÃ©bergement",
+      "DÃ©ploiement",
       "Culture web"
     ],
     image: "/images/certifications/openclassrooms.png"
   },
   {
     id: "skills-for-all-networks",
-    name: "Notions de base sur les réseaux — Skills for All",
+    name: "Notions de base sur les rÃ©seaux â€” Skills for All",
     description:
-      "Formation (20h) sur les fondamentaux réseaux : modèles OSI/TCP-IP, adressage IP, commutation/routage de base. Attestation de suivi.",
+      "Formation (20h) sur les fondamentaux rÃ©seaux : modÃ¨les OSI/TCP-IP, adressage IP, commutation/routage de base. Attestation de suivi.",
     skills: [
-      "Réseaux",
-      "Modèle OSI",
+      "RÃ©seaux",
+      "ModÃ¨le OSI",
       "TCP/IP",
       "Adressage IP",
       "Routage de base"
@@ -410,24 +411,24 @@ export const certifications: Certification[] = [
   },
   {
     id: "openclassrooms-html-css",
-    name: "Créez votre site web avec HTML5 et CSS3 — OpenClassrooms",
+    name: "CrÃ©ez votre site web avec HTML5 et CSS3 â€” OpenClassrooms",
     description:
-      "Formation (14h) aux bases du front-end : sémantique HTML5, mise en page CSS (Flexbox/Grid), responsive et accessibilité. Attestation de suivi.",
+      "Formation (14h) aux bases du front-end : sÃ©mantique HTML5, mise en page CSS (Flexbox/Grid), responsive et accessibilitÃ©. Attestation de suivi.",
     skills: [
       "HTML5",
       "CSS3",
       "Responsive design",
       "Flexbox",
       "Grid",
-      "Accessibilité"
+      "AccessibilitÃ©"
     ],
     image: "/images/certifications/openclassrooms.png"
   },
   {
     id: "cisco-netacad-linux-unhatched",
-    name: "Linux Unhatched — Cisco NetAcad",
+    name: "Linux Unhatched â€” Cisco NetAcad",
     description:
-      "Formation (6h) d’initiation à Linux : ligne de commande, arborescence, permissions, gestion de paquets. Attestation de suivi.",
+      "Formation (6h) dâ€™initiation Ã  Linux : ligne de commande, arborescence, permissions, gestion de paquets. Attestation de suivi.",
     skills: [
       "Linux",
       "CLI",
@@ -439,20 +440,20 @@ export const certifications: Certification[] = [
   },
   {
     id: "openclassrooms-php-mysql",
-    name: "Concevez votre site web avec PHP et MySQL — OpenClassrooms",
+    name: "Concevez votre site web avec PHP et MySQL â€” OpenClassrooms",
     description:
-      "Formation (≈20h) pour réaliser un site dynamique : PHP côté serveur, MySQL, CRUD, sécurité et bonnes pratiques. Formation suivie (certification non obtenue).",
-    skills: ["PHP", "MySQL", "SQL/CRUD", "Sécurité web", "MVC basique"],
+      "Formation (â‰ˆ20h) pour rÃ©aliser un site dynamique : PHP cÃ´tÃ© serveur, MySQL, CRUD, sÃ©curitÃ© et bonnes pratiques. Formation suivie (certification non obtenue).",
+    skills: ["PHP", "MySQL", "SQL/CRUD", "SÃ©curitÃ© web", "MVC basique"],
     image: "/images/certifications/openclassrooms.png"
   },
   {
     id: "openclassrooms-java",
-    name: "Apprenez à programmer en Java — OpenClassrooms",
+    name: "Apprenez Ã  programmer en Java â€” OpenClassrooms",
     description:
-      "Formation (10h) d’introduction à Java : bases du langage, POO, exceptions, collections et tests simples. Attestation de suivi.",
+      "Formation (10h) dâ€™introduction Ã  Java : bases du langage, POO, exceptions, collections et tests simples. Attestation de suivi.",
     skills: [
       "Java",
-      "Programmation orientée objet",
+      "Programmation orientÃ©e objet",
       "Exceptions",
       "Collections",
       "Tests"
@@ -461,9 +462,9 @@ export const certifications: Certification[] = [
   },
   {
     id: "openclassrooms-spring-boot",
-    name: "Créez une application Java avec Spring Boot — OpenClassrooms",
+    name: "CrÃ©ez une application Java avec Spring Boot â€” OpenClassrooms",
     description:
-      "Formation (8–11h réelles) : création d’une API REST avec Spring Boot, persistance JPA/Hibernate et tests. Attestation de suivi.",
+      "Formation (8â€“11h rÃ©elles) : crÃ©ation dâ€™une API REST avec Spring Boot, persistance JPA/Hibernate et tests. Attestation de suivi.",
     skills: ["Spring Boot", "REST API", "JPA/Hibernate", "Maven", "Tests"],
     image: "/images/certifications/openclassrooms.png"
   }
@@ -476,7 +477,7 @@ export const techWatchArticles: TechWatchArticle[] = [
 export const defaultTechWatchProfile: TechWatchProfile = {
   dailyDev: {
     description:
-      "Daily.dev est une plateforme gratuite et open-source qui centralise l’actu tech. C’est un peu comme un flux RSS, sauf que je n’ai rien à configurer : le contenu vient à moi et devient plus pertinent avec mes clics. J’utilise surtout leur extension Chrome : à chaque nouvel onglet, j’ai ma veille sous les yeux. Je lis direct ou j’enregistre pour plus tard, je choisis mes thèmes… ou je me laisse surprendre.J’aime aussi le côté communauté : les articles sont notés, commentés, et les discussions sont souvent utiles. On peut même afficher une DevCard sur GitHub avec les sujets qu’on a lus. Je n’ai pas encore testé la partie forum/entraide, mais l’idée est de faciliter le partage entre devs.",
+      "Daily.dev est une plateforme gratuite et open-source qui centralise lâ€™actu tech. Câ€™est un peu comme un flux RSS, sauf que je nâ€™ai rien Ã  configurer : le contenu vient Ã  moi et devient plus pertinent avec mes clics. Jâ€™utilise surtout leur extension Chrome : Ã  chaque nouvel onglet, jâ€™ai ma veille sous les yeux. Je lis direct ou jâ€™enregistre pour plus tard, je choisis mes thÃ¨mesâ€¦ ou je me laisse surprendre.Jâ€™aime aussi le cÃ´tÃ© communautÃ© : les articles sont notÃ©s, commentÃ©s, et les discussions sont souvent utiles. On peut mÃªme afficher une DevCard sur GitHub avec les sujets quâ€™on a lus. Je nâ€™ai pas encore testÃ© la partie forum/entraide, mais lâ€™idÃ©e est de faciliter le partage entre devs.",
     devCardImage: "/images/veille/devcard.png",
     profileLink: "https://app.daily.dev/morandeaunoa"
   },
@@ -486,22 +487,22 @@ export const defaultTechWatchProfile: TechWatchProfile = {
       name: "Underscore", 
       link: "https://www.youtube.com/@Underscore_", 
       image: "/images/projets/underscore.jpg", 
-      description: "Décodage des tendances numériques : enjeux, usages et impacts sans buzz ni raccourcis. Cette chaine youtube, fais énormément d'interview, de vidéos l'actualité numérique (et surtout sur l'Ia) en vulgarisant le plus possible. Très agréable a régarder " 
+      description: "DÃ©codage des tendances numÃ©riques : enjeux, usages et impacts sans buzz ni raccourcis. Cette chaine youtube, fais Ã©normÃ©ment d'interview, de vidÃ©os l'actualitÃ© numÃ©rique (et surtout sur l'Ia) en vulgarisant le plus possible. TrÃ¨s agrÃ©able a rÃ©garder " 
     },
     { id: "yt-2", 
       platform: "youtube", 
       name: "Tech IA News", 
       link: "https://www.youtube.com/@Tech_IA_news", 
       image: "/images/projets/technews.jpg", 
-      description: "C’est une chaîne que je regarde souvent pour rester à jour sur l’actualité de l’intelligence artificielle. J’aime le fait que les vidéos soient claires et sans jargon : on comprend rapidement ce qui change, pourquoi c’est important, et ce que ça implique pour les développeurs. Le format est court, concret, et me permet de suivre les grandes tendances IA sans devoir passer des heures à lire des articles." 
+      description: "Câ€™est une chaÃ®ne que je regarde souvent pour rester Ã  jour sur lâ€™actualitÃ© de lâ€™intelligence artificielle. Jâ€™aime le fait que les vidÃ©os soient claires et sans jargon : on comprend rapidement ce qui change, pourquoi câ€™est important, et ce que Ã§a implique pour les dÃ©veloppeurs. Le format est court, concret, et me permet de suivre les grandes tendances IA sans devoir passer des heures Ã  lire des articles." 
     }
 
     
   ],
   favoriteTopic: {
-    title: "La place de l’IA dans notre quotidien",
+    title: "La place de lâ€™IA dans notre quotidien",
     content:
-      "Je m’intéresse beaucoup à la façon dont l’intelligence artificielle s’intègre dans nos usages au quotidien. Que ce soit pour automatiser certaines tâches, améliorer la rédaction ou l’analyse de code, ou encore proposer des recommandations plus pertinentes, l’IA transforme peu à peu notre manière de travailler et d’apprendre.C'est un sujet que j'ai choisis dû aux misions qui m'ont été confiées en alternance, toutes ce porter sur l'IA, j'ai donc du me former et c'est un sujet qui m'a séduis par son évolution constante. Ce qui me passionne, c’est de comprendre comment ces outils fonctionnent et jusqu’où ils peuvent nous aider sans remplacer la réflexion humaine. À travers ma veille, j’essaie de rester attentif aux enjeux éthiques et techniques : les biais, la sécurité des données, la conformité RGPD ou encore l’impact sur nos métiers.Cette approche me permet de garder un regard critique, d’expérimenter les nouveaux outils avec recul, et de choisir ceux qui apportent une vraie valeur ajoutée selon les besoins réels d’un projet.",
+      "Je mâ€™intÃ©resse beaucoup Ã  la faÃ§on dont lâ€™intelligence artificielle sâ€™intÃ¨gre dans nos usages au quotidien. Que ce soit pour automatiser certaines tÃ¢ches, amÃ©liorer la rÃ©daction ou lâ€™analyse de code, ou encore proposer des recommandations plus pertinentes, lâ€™IA transforme peu Ã  peu notre maniÃ¨re de travailler et dâ€™apprendre.C'est un sujet que j'ai choisis dÃ» aux misions qui m'ont Ã©tÃ© confiÃ©es en alternance, toutes ce porter sur l'IA, j'ai donc du me former et c'est un sujet qui m'a sÃ©duis par son Ã©volution constante. Ce qui me passionne, câ€™est de comprendre comment ces outils fonctionnent et jusquâ€™oÃ¹ ils peuvent nous aider sans remplacer la rÃ©flexion humaine. Ã€ travers ma veille, jâ€™essaie de rester attentif aux enjeux Ã©thiques et techniques : les biais, la sÃ©curitÃ© des donnÃ©es, la conformitÃ© RGPD ou encore lâ€™impact sur nos mÃ©tiers.Cette approche me permet de garder un regard critique, dâ€™expÃ©rimenter les nouveaux outils avec recul, et de choisir ceux qui apportent une vraie valeur ajoutÃ©e selon les besoins rÃ©els dâ€™un projet.",
     image: undefined
   }
 };
@@ -525,8 +526,8 @@ const dedupeBy = <T>(items: T[], getKey: (item: T) => string) => {
 };
 
 /**
- * Fusionne les expériences par clef "poste + entreprise" en privilégiant les entrées
- * personnalisées lorsqu'elles existent déjà côté vitrine.
+ * Fusionne les expÃ©riences par clef "poste + entreprise" en privilÃ©giant les entrÃ©es
+ * personnalisÃ©es lorsqu'elles existent dÃ©jÃ  cÃ´tÃ© vitrine.
  */
 export const mergeExperiences = (
   defaults: Experience[],
@@ -538,8 +539,8 @@ export const mergeExperiences = (
   );
 
 /**
- * Fusionne les projets par clef "titre" afin d'éviter les doublons entre le contenu
- * fourni par défaut et les projets ajoutés via l'interface d'administration.
+ * Fusionne les projets par clef "titre" afin d'Ã©viter les doublons entre le contenu
+ * fourni par dÃ©faut et les projets ajoutÃ©s via l'interface d'administration.
  */
 export const mergeProjects = (
   defaults: Project[],
