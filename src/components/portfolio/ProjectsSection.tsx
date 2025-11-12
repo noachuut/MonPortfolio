@@ -1,4 +1,4 @@
-import { Card } from "@/components/ui/card";
+﻿import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useEffect, useMemo, useState } from "react";
@@ -35,9 +35,9 @@ const formatProjectType = (type: Project["type"]) => {
       return "IA";
     case "evenements":
     case "evenement":
-      return "?v?nements";
+      return "événements";
     case "reseaux":
-      return "R?seaux";
+      return "Réseaux";
     case "autres":
       return "Autres";
     default:
@@ -99,7 +99,7 @@ const ProjectsSection = () => {
             Mes <span className="hero-gradient bg-clip-text text-transparent">Projets</span>
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
-            D?couvrez mes r?alisations qui mettent en valeur mes comp?tences techniques
+            Découvrez mes réalisations qui mettent en valeur mes compétences techniques
           </p>
           <ToggleGroup
             type="single"
